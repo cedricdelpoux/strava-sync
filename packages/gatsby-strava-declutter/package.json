@@ -1,0 +1,52 @@
+{
+  "name": "gatsby-strava-declutter",
+  "version": "0.1.0",
+  "description": "Gatsby plugin to draw each road of your Strava activities only once on a map",
+  "repository": "https://github.com/cedricdelpoux/gatsby-strava-declutter",
+  "author": "Cédric Delpoux",
+  "license": "MIT",
+  "private": false,
+  "keywords": [
+    "gatsby",
+    "gatsby-plugin",
+    "strava",
+    "map",
+    "declutter"
+  ],
+  "main": "index.js",
+  "files": [
+    "gatsby-node.js",
+    "index.js",
+    "utils",
+    "docs"
+  ],
+  "devDependencies": {
+    "eslint": "^8.2.0",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^4.3.0",
+    "lint-staged": "^11.2.6",
+    "prettier": "2.4.1"
+  },
+  "peerDependencies": {
+    "gatsby": ">=3.0.0",
+    "gatsby-source-strava": "^4.3.0"
+  },
+  "scripts": {
+    "lint": "eslint *.js utils test example/src example/*.js",
+    "test": "node --test",
+    "prepublishOnly": "yarn lint && yarn test"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint"
+    ],
+    "*.{css,js,md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  }
+}
