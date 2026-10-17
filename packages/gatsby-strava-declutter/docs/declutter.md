@@ -22,7 +22,8 @@ along its own track to where it meets the line it leaves or joins, so the
 track stays connected to the rest of the map.
 
 It takes a while, about 30 seconds for 3500 activities, but the result is
-cached, see below.
+kept between builds, and a new activity takes less than a second. See
+[Store](#store).
 
 ## Options
 
@@ -45,11 +46,12 @@ module.exports = {
 }
 ```
 
-| Option    | Default             | What it is                                                           |
-| --------- | ------------------- | -------------------------------------------------------------------- |
-| `filter`  | every activity kept | `(activity) => boolean`, the `StravaActivity` nodes to compare       |
-| `minZoom` | `6`                 | The lowest zoom generalized, the lower ones draw its lines           |
-| `maxZoom` | `12`                | The highest zoom generalized, the full tracks show from the next one |
+| Option     | Default               | What it is                                                           |
+| ---------- | --------------------- | -------------------------------------------------------------------- |
+| `filter`   | every activity kept   | `(activity) => boolean`, the `StravaActivity` nodes to compare       |
+| `minZoom`  | `6`                   | The lowest zoom generalized, the lower ones draw its lines           |
+| `maxZoom`  | `12`                  | The highest zoom generalized, the full tracks show from the next one |
+| `storeDir` | `".strava-declutter"` | Where the result is kept between builds, see [Store](#store)         |
 
 Only activities with at least two points are ever compared. An activity left
 out by `filter` gets no `declutter` (`null`).
@@ -122,9 +124,33 @@ layer filters on the zoom:
 activity: Gatsby runs a page query again when a node it read changes, not when
 a field added to another node does.
 
-The result is kept in Gatsby's cache, and only computed again when the
-plugin changes, when an activity is added, removed or changed, when `minZoom`
-or `maxZoom` change, or when `filter` picks other activities.
+## Store
+
+The result is kept in a `.strava-declutter` directory next to your
+`gatsby-config.js`, rather than in Gatsby's cache, which is emptied whenever
+any plugin changes. Add it to your `.gitignore`, and keep it in your continuous
+integration cache along with the `.strava` store of `gatsby-source-strava`.
+Use the `storeDir` option to put it somewhere else.
+
+```
+.strava-declutter/
+├── results.json
+└── state.json
+```
+
+Unlike `.strava`, it can be deleted at any time: the next build declutters
+every activity again.
+
+Since an activity only depends on the earlier ones, only the activities from
+the first one added, changed or removed since the last build are decluttered
+again. The roads drawn by the earlier ones are rebuilt from `state.json`, only
+around the activities to declutter. A new activity, after the others, takes
+less than a second. An activity changed or added a year back declutters again
+everything after it. Removing a hidden activity declutters nothing again.
+
+`filter` picking other activities works the same way. Changing `minZoom`,
+`maxZoom` or the declutter itself, with a new version of the plugin,
+declutters every activity again.
 
 ## Full tracks
 

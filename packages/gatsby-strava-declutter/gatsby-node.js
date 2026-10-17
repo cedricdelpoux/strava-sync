@@ -2,11 +2,12 @@ const fs = require("fs")
 const path = require("path")
 
 const {checkPlugins} = require("./utils/plugins.js")
+const {createStore} = require("./utils/store.js")
 
 const DECLUTTER_PATH = require.resolve("./utils/declutter.js")
 
 // Loaded again when it changes in development, see `watchDeclutter`. Its
-// source is part of the cache digest, since it can change under the same
+// source is part of the store digest, since it can change under the same
 // version, in development or with yalc.
 let declutterModule = require(DECLUTTER_PATH)
 let declutterSource = fs.readFileSync(DECLUTTER_PATH, "utf8")
@@ -16,6 +17,7 @@ exports.pluginOptionsSchema = ({Joi}) =>
     filter: Joi.function(),
     minZoom: Joi.number().integer().min(0),
     maxZoom: Joi.number().integer().min(0),
+    storeDir: Joi.string(),
   })
 
 exports.onPreInit = ({store, reporter}) => {
@@ -66,11 +68,10 @@ exports.createResolvers = ({createResolvers}) => {
 
 let hasBootstrapped = false
 
-// Gatsby clears this cache when the plugin's version changes
 async function getDeclutterResults(
   activities,
-  {minZoom, maxZoom},
-  {cache, createContentDigest, reporter}
+  {minZoom, maxZoom, storeDir = ".strava-declutter"},
+  {createContentDigest, reporter, store}
 ) {
   const timer = reporter.activityTimer(
     "strava-declutter: declutter the activities"
@@ -78,37 +79,34 @@ async function getDeclutterResults(
 
   timer.start()
 
-  const digest = createContentDigest([
-    declutterSource,
-    minZoom,
-    maxZoom,
-    activities.map((node) => [
-      node.id,
-      node.start_date,
-      node.coordinates.length,
-      node.coordinates[0],
-      node.coordinates[node.coordinates.length - 1],
-    ]),
-  ])
-  const cached = await cache.get("declutter")
+  const declutterStore = createStore({
+    dir: path.resolve(store.getState().program.directory, storeDir),
+  })
+  const digest = createContentDigest([declutterSource, minZoom, maxZoom])
+  const previous = await declutterStore.read(digest)
+  const {results, entries, reused} = declutterModule.declutterWithState(
+    activities,
+    {minZoom, maxZoom},
+    previous
+  )
 
-  let results
-
-  if (cached && cached.digest === digest) {
-    results = new Map(cached.results)
-  } else {
-    results = declutterModule.declutter(activities, {
-      minZoom,
-      maxZoom,
-    })
-    await cache.set("declutter", {digest, results: [...results]})
+  if (
+    !previous ||
+    reused < entries.length ||
+    entries.length < previous.entries.length
+  ) {
+    await declutterStore.write(digest, {entries, results})
   }
 
   const hiddenCount = [...results.values()].filter(
     (result) => result.hidden
   ).length
 
-  timer.setStatus(`${results.size - hiddenCount} shown, ${hiddenCount} hidden`)
+  timer.setStatus(
+    `${results.size - hiddenCount} shown, ${hiddenCount} hidden, ${
+      entries.length - reused
+    } decluttered`
+  )
   timer.end()
 
   return results
@@ -118,14 +116,14 @@ async function getDeclutterResults(
 // Gatsby's cache kept, it only sees the new or changed ones. Nodes rather than
 // `createNodeField`, whose changes don't rerun the queries. Stateful nodes, so
 // the obsolete ones are deleted here.
-async function updateDeclutter(args, options) {
+async function runUpdate(args, options) {
   const {
     node,
     actions: {createNode, deleteNode},
     createContentDigest,
     getNodesByType,
   } = args
-  const {filter = () => true, minZoom, maxZoom} = options
+  const {filter = () => true} = options
   const activityNodesById = new Map(
     getNodesByType("StravaActivity").map((activity) => [activity.id, activity])
   )
@@ -133,20 +131,13 @@ async function updateDeclutter(args, options) {
   // A dev-mode refetch, the latest version of the node
   if (node) activityNodesById.set(node.id, node)
 
-  // Sorted, so the cache digest doesn't depend on the sourcing order
-  const activities = [...activityNodesById.values()]
-    .filter(
-      (activity) =>
-        activity.coordinates &&
-        activity.coordinates.length > 1 &&
-        filter(activity)
-    )
-    .sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
-  const results = await getDeclutterResults(
-    activities,
-    {minZoom, maxZoom},
-    args
+  const activities = [...activityNodesById.values()].filter(
+    (activity) =>
+      activity.coordinates &&
+      activity.coordinates.length > 1 &&
+      filter(activity)
   )
+  const results = await getDeclutterResults(activities, options, args)
   const nodeIds = new Set()
 
   results.forEach((value, activityId) => {
@@ -163,6 +154,15 @@ async function updateDeclutter(args, options) {
   getNodesByType("Declutter")
     .filter((declutterNode) => !nodeIds.has(declutterNode.id))
     .forEach((declutterNode) => deleteNode(declutterNode))
+}
+
+let lastUpdate = Promise.resolve()
+
+// Serialized, since each one writes the store
+function updateDeclutter(args, options) {
+  lastUpdate = lastUpdate.catch(() => {}).then(() => runUpdate(args, options))
+
+  return lastUpdate
 }
 
 // Created after sourcing, the `Declutter` nodes would otherwise be deleted as
