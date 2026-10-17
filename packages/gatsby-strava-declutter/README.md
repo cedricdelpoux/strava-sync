@@ -53,11 +53,12 @@ module.exports = {
 
 ## Options
 
-| Option    | Default             | What it is                                                           |
-| --------- | ------------------- | -------------------------------------------------------------------- |
-| `filter`  | every activity kept | `(activity) => boolean`, the `StravaActivity` nodes to compare       |
-| `minZoom` | `6`                 | The lowest zoom generalized, the lower ones draw its lines           |
-| `maxZoom` | `12`                | The highest zoom generalized, the full tracks show from the next one |
+| Option     | Default               | What it is                                                                      |
+| ---------- | --------------------- | ------------------------------------------------------------------------------- |
+| `filter`   | every activity kept   | `(activity) => boolean`, the `StravaActivity` nodes to compare                  |
+| `minZoom`  | `6`                   | The lowest zoom generalized, the lower ones draw its lines                      |
+| `maxZoom`  | `12`                  | The highest zoom generalized, the full tracks show from the next one            |
+| `storeDir` | `".strava-declutter"` | Where the result is kept between builds, see [Store](./docs/declutter.md#store) |
 
 ## Data
 

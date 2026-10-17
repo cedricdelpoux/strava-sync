@@ -1,5 +1,6 @@
 .env
 .cache
 .strava
+.strava-declutter
 node_modules
 public
