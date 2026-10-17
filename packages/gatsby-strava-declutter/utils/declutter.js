@@ -1,3 +1,5 @@
+const crypto = require("crypto")
+
 const DENSIFY_STEP_METERS = 20
 const NEAR_METERS = 40 // Wider than GPS drift, narrower than two parallel roads
 const JOIN_REACH_FACTOR = 3
@@ -11,7 +13,6 @@ const GENERALIZE_PIXELS = 1.5
 const SIMPLIFY_PIXELS = 0.5
 const METERS_PER_PIXEL_Z0 = 78271.5 // With 512 px Mapbox tiles
 const SIMPLIFY_METERS = 3 // Invisible, and `latlng` streams drop to ~300 points
-
 const METERS_PER_DEGREE = 111320
 
 const toMeters = ([lng, lat]) => [
@@ -25,8 +26,10 @@ const round = (value) => Math.round(value * 1e5) / 1e5
 
 const roundCoord = ([lng, lat]) => [round(lng), round(lat)]
 
+const compare = (a, b) => (a < b ? -1 : a > b ? 1 : 0)
+
 const byStartDate = (a, b) =>
-  a.start_date < b.start_date ? -1 : a.start_date > b.start_date ? 1 : 0
+  compare(a.start_date, b.start_date) || compare(a.id, b.id)
 
 // `seg` ties each point to its original segment, to cut without losing vertices
 function densify(coordinates) {
@@ -425,20 +428,42 @@ function getJoins(track, pieces, trace) {
 const metersPerPixel = (latitude, zoom) =>
   (METERS_PER_PIXEL_Z0 * Math.cos((latitude * Math.PI) / 180)) / 2 ** zoom
 
-function generalizeTracks(tracks, piecesOf, zoom) {
-  // Sized for the equator, where the near distance in meters is the widest
-  const cellSize = Math.max(
-    NEAR_METERS,
-    (GENERALIZE_PIXELS * METERS_PER_PIXEL_Z0) / 2 ** zoom
-  )
-  const trace = createTrace(cellSize)
-  // Thousands of points per cell at zoom 3 otherwise
-  const every = Math.max(1, Math.floor(cellSize / 4 / DENSIFY_STEP_METERS))
+// Sized for the equator, where the near distance in meters is the widest
+const generalizeNearAtEquator = (zoom) =>
+  Math.max(NEAR_METERS, (GENERALIZE_PIXELS * METERS_PER_PIXEL_Z0) / 2 ** zoom)
+
+function createZoomTrace(zoom) {
+  const cellSize = generalizeNearAtEquator(zoom)
+
+  return {
+    trace: createTrace(cellSize),
+    // Thousands of points per cell at zoom 3 otherwise
+    every: Math.max(1, Math.floor(cellSize / 4 / DENSIFY_STEP_METERS)),
+  }
+}
+
+function addToTrace(trace, {activity, points, rank}, ranges) {
+  ranges.forEach(([start, end]) => {
+    for (let i = start; i <= end; i++) {
+      trace.add({...points[i], owner: activity.id, rank, index: i})
+    }
+  })
+}
+
+function addToZoomTrace({trace, every}, {activity, points}, ranges) {
+  ranges.forEach(([start, end]) => {
+    for (let i = start; i <= end; i += every) {
+      trace.add({...points[i], owner: activity.id})
+    }
+  })
+}
+
+function generalizeTracks(tracks, piecesOf, zoom, zoomTrace) {
+  const {trace, every} = zoomTrace
 
   return new Map(
     tracks.map((track) => {
-      const {activity, points} = track
-      const latitude = points[0].coord[1]
+      const latitude = track.points[0].coord[1]
       const near = Math.max(
         NEAR_METERS,
         GENERALIZE_PIXELS * metersPerPixel(latitude, zoom)
@@ -449,11 +474,11 @@ function generalizeTracks(tracks, piecesOf, zoom) {
         dropBumps: true,
       })
 
-      pieces.forEach(({range: [start, end]}) => {
-        for (let i = start; i <= end; i += every) {
-          trace.add({...points[i], owner: activity.id})
-        }
-      })
+      addToZoomTrace(
+        zoomTrace,
+        track,
+        pieces.map(({range}) => range)
+      )
 
       return [track, pieces]
     })
@@ -522,12 +547,100 @@ function drawTrack(track, networkPieces, piecesByZoom, zooms) {
   }
 }
 
+function createTrack(activity, rank) {
+  const points = densify(activity.coordinates)
+
+  return {activity, points, cumulative: getCumulativeDistances(points), rank}
+}
+
+const fingerprintOf = ({start_date, coordinates}) =>
+  crypto
+    .createHash("sha1")
+    .update(String(start_date))
+    .update(new Float64Array(coordinates.flat()))
+    .digest("base64")
+
+function boundsOf(coordinates) {
+  const bounds = {
+    minX: Infinity,
+    minY: Infinity,
+    maxX: -Infinity,
+    maxY: -Infinity,
+  }
+
+  coordinates.forEach((coord) => {
+    const [x, y] = toMeters(coord)
+
+    bounds.minX = Math.min(bounds.minX, x)
+    bounds.minY = Math.min(bounds.minY, y)
+    bounds.maxX = Math.max(bounds.maxX, x)
+    bounds.maxY = Math.max(bounds.maxY, y)
+  })
+
+  return bounds
+}
+
+const isWithin = (a, b, distance) =>
+  a.minX <= b.maxX + distance &&
+  a.maxX >= b.minX - distance &&
+  a.minY <= b.maxY + distance &&
+  a.maxY >= b.minY - distance
+
+const farthestLookupDistance = (minZoom) =>
+  Math.max(
+    JOIN_REACH_FACTOR * NEAR_METERS,
+    Math.max(1, BUMP_FACTOR) * generalizeNearAtEquator(minZoom)
+  )
+
+// A hidden activity draws nothing: one removed or changed doesn't change the
+// next ones
+function getUnchangedEntries(previous, candidates, fingerprints) {
+  const unchanged = []
+
+  if (!previous) return unchanged
+
+  const isSame = (entry, c) =>
+    entry.id === candidates[c].id && entry.fingerprint === fingerprints[c]
+  let index = 0
+
+  for (let c = 0; c < candidates.length; c++) {
+    while (
+      index < previous.entries.length &&
+      previous.entries[index].ranges === null &&
+      !isSame(previous.entries[index], c)
+    ) {
+      index++
+    }
+
+    const entry = previous.entries[index]
+
+    if (
+      !entry ||
+      !isSame(entry, c) ||
+      !previous.results.has(candidates[c].id)
+    ) {
+      break
+    }
+
+    unchanged.push(entry)
+    index++
+  }
+
+  return unchanged
+}
+
 // Walks the activities by start date: a road is drawn by the first activity
 // going through it, and an activity only depends on the earlier ones. See
 // docs/declutter.md.
-function declutter(
+function declutter(activities, options) {
+  return declutterWithState(activities, options).results
+}
+
+// `previous`: the `entries` and `results` of an earlier call with the same zooms
+function declutterWithState(
   activities,
-  {minZoom = DEFAULT_MIN_ZOOM, maxZoom = DEFAULT_MAX_ZOOM} = {}
+  {minZoom = DEFAULT_MIN_ZOOM, maxZoom = DEFAULT_MAX_ZOOM} = {},
+  previous = null
 ) {
   if (
     !Number.isInteger(minZoom) ||
@@ -549,12 +662,47 @@ function declutter(
     .filter(
       (activity) => activity.coordinates && activity.coordinates.length > 1
     )
-    .map((activity) => ({activity}))
-    .sort((a, b) => byStartDate(a.activity, b.activity))
+    .sort(byStartDate)
+  const fingerprints = candidates.map(fingerprintOf)
+  const unchanged = getUnchangedEntries(previous, candidates, fingerprints)
+  const changed = candidates.slice(unchanged.length)
 
   const results = new Map()
+  const entries = []
   const trace = createTrace()
+  const zoomTraces = zooms.map(createZoomTrace)
+  const changedBounds = changed.map(({coordinates}) => boundsOf(coordinates))
+  const lookupDistance = farthestLookupDistance(minZoom)
+  let rank = 0
+
+  unchanged.forEach((entry, c) => {
+    const activity = candidates[c]
+
+    results.set(activity.id, previous.results.get(activity.id))
+    entries.push(entry)
+
+    if (entry.ranges === null) return
+
+    const bounds = changedBounds.length > 0 && boundsOf(activity.coordinates)
+
+    // Nothing farther can change the activities decluttered again
+    if (
+      !changedBounds.some((other) => isWithin(bounds, other, lookupDistance))
+    ) {
+      rank++
+      return
+    }
+
+    const track = createTrack(activity, rank++)
+
+    addToTrace(trace, track, entry.ranges)
+    zoomTraces.forEach((zoomTrace, z) =>
+      addToZoomTrace(zoomTrace, track, entry.zoomRanges[z])
+    )
+  })
+
   const kept = []
+  const hidden = new Set()
 
   const hide = ({activity}) =>
     results.set(activity.id, {
@@ -564,30 +712,22 @@ function declutter(
       stubs: null,
     })
 
-  candidates.forEach((selected) => {
-    const points = densify(selected.activity.coordinates)
-    const track = {
-      ...selected,
-      points,
-      cumulative: getCumulativeDistances(points),
-      rank: kept.length,
-    }
-    const whole = {range: [0, points.length - 1], join: {}}
+  changed.forEach((activity) => {
+    const track = createTrack(activity, rank)
+    const whole = {range: [0, track.points.length - 1], join: {}}
     const pieces = cutPieces(track, [whole], trace, {near: NEAR_METERS})
 
-    if (pieces.length === 0) return hide(selected)
+    if (pieces.length === 0) {
+      hidden.add(activity)
+      return hide(track)
+    }
 
-    pieces.forEach(({range: [start, end]}) => {
-      for (let i = start; i <= end; i++) {
-        trace.add({
-          ...points[i],
-          owner: selected.activity.id,
-          rank: track.rank,
-          index: i,
-        })
-      }
-    })
-
+    rank++
+    addToTrace(
+      trace,
+      track,
+      pieces.map(({range}) => range)
+    )
     kept.push({...track, pieces})
   })
 
@@ -599,8 +739,39 @@ function declutter(
 
   zooms.forEach((zoom, z) => {
     piecesByZoom.push(
-      generalizeTracks(drawn, z === 0 ? piecesOf : piecesByZoom[z - 1], zoom)
+      generalizeTracks(
+        drawn,
+        z === 0 ? piecesOf : piecesByZoom[z - 1],
+        zoom,
+        zoomTraces[z]
+      )
     )
+  })
+
+  const keptByActivity = new Map(kept.map((track) => [track.activity, track]))
+
+  changed.forEach((activity, i) => {
+    const fingerprint = fingerprints[unchanged.length + i]
+    const track = keptByActivity.get(activity)
+
+    if (hidden.has(activity)) {
+      entries.push({
+        id: activity.id,
+        fingerprint,
+        ranges: null,
+        zoomRanges: null,
+      })
+      return
+    }
+
+    entries.push({
+      id: activity.id,
+      fingerprint,
+      ranges: track.pieces.map(({range}) => range),
+      zoomRanges: piecesByZoom.map((pieces) =>
+        pieces.get(track).map(({range}) => range)
+      ),
+    })
   })
 
   kept.forEach((track) => {
@@ -618,7 +789,7 @@ function declutter(
     })
   })
 
-  return results
+  return {results, entries, reused: unchanged.length}
 }
 
-module.exports = {declutter, simplify}
+module.exports = {declutter, declutterWithState, simplify}
