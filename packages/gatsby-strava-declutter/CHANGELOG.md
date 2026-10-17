@@ -1,5 +1,26 @@
 # Changelog
 
+## [0.2.0] - 2026-10-17
+
+### Added
+
+-   The declutter is kept in a `.strava-declutter` directory next to
+    `gatsby-config.js` rather than in Gatsby's cache, which is emptied whenever
+    any plugin changes. Add it to your `.gitignore`, and keep it in your
+    continuous integration cache. See [Store](./docs/declutter.md#store).
+-   `storeDir` option, to put the store somewhere else.
+-   Only the activities from the first one added, changed or removed since the
+    last build are decluttered again. A new activity takes less than a second
+    instead of about 40 seconds for 3600 activities. Removing a hidden
+    activity declutters nothing again.
+-   `declutterWithState` in `utils/declutter.js`, the declutter resumed from
+    the result of an earlier call.
+
+### Changed
+
+-   Activities with the same `start_date` are walked by id, whatever the order
+    they are given in.
+
 ## [0.1.0] - 2026-10-15
 
 ### Added
