@@ -1,7 +1,7 @@
 const assert = require("node:assert/strict")
 const {describe, it} = require("node:test")
 
-const {declutter, simplify} = require("../utils/declutter")
+const {declutter, declutterWithState, simplify} = require("../utils/declutter")
 
 const LAT = 43.6
 
@@ -254,6 +254,51 @@ describe("declutter", () => {
     ])
 
     assert.deepEqual([...results.keys()], ["walk"])
+  })
+})
+
+describe("declutterWithState", () => {
+  const readBack = ({entries, results}) => ({
+    entries: JSON.parse(JSON.stringify(entries)),
+    results: new Map(JSON.parse(JSON.stringify([...results]))),
+  })
+  const far = track("far", "2024-04-01T08:00:00Z", 5.4, 5.45)
+  const assertSame = (list, previous, reused) => {
+    const next = declutterWithState(list, {}, readBack(previous))
+
+    assert.deepEqual(next.results, declutter(list))
+    assert.equal(next.reused, reused)
+  }
+
+  it("only declutters the activities after the last one", () => {
+    assertSame(activities, declutterWithState([walk, secondWalk]), 2)
+    assertSame([...activities, far], declutterWithState(activities), 3)
+  })
+
+  it("declutters again from an activity inserted before", () => {
+    assertSame(activities, declutterWithState([walk, ride]), 1)
+  })
+
+  it("declutters again from a changed activity", () => {
+    const shorterWalk = track("walk", "2024-01-10T08:00:00Z", 1.4, 1.405)
+
+    assertSame(
+      [ride, secondWalk, shorterWalk],
+      declutterWithState(activities),
+      0
+    )
+  })
+
+  it("declutters again from a deleted activity", () => {
+    assertSame([ride, secondWalk], declutterWithState(activities), 0)
+  })
+
+  it("keeps the next activities when a hidden one is deleted", () => {
+    assertSame([ride, walk], declutterWithState(activities), 2)
+  })
+
+  it("keeps every activity when none changed", () => {
+    assertSame(activities, declutterWithState(activities), 3)
   })
 })
 
