@@ -1,5 +1,14 @@
 # Changelog
 
+## [0.3.0] - 2026-10-19
+
+### Added
+
+-   `getDeclutterNodeId` is exported, to read the `Declutter` node of an
+    activity from your own `gatsby-node.js` with
+    `getNode(getDeclutterNodeId(activityNode.id))`. See the
+    [declutter](./docs/declutter.md#stravaactivitydeclutter) documentation.
+
 ## [0.2.0] - 2026-10-17
 
 ### Added
