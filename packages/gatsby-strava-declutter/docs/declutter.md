@@ -124,6 +124,23 @@ layer filters on the zoom:
 activity: Gatsby runs a page query again when a node it read changes, not when
 a field added to another node does.
 
+From your own `gatsby-node.js`, in `onPostBootstrap` or later, read it with
+`getDeclutterNodeId`:
+
+```js
+const {getDeclutterNodeId} = require("gatsby-strava-declutter")
+
+exports.onPostBootstrap = ({getNode, getNodesByType}) => {
+    getNodesByType("StravaActivity").forEach((activityNode) => {
+        const declutterNode = getNode(getDeclutterNodeId(activityNode.id))
+        const isHidden = declutterNode ? declutterNode.hidden : false
+    })
+}
+```
+
+The plugin creates the `Declutter` nodes in its own `onPostBootstrap`, which
+runs before your site's. An activity without a track has none.
+
 ## Store
 
 The result is kept in a `.strava-declutter` directory next to your

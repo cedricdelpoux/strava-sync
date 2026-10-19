@@ -78,6 +78,15 @@ The declutter and the track simplification can also be called from your own
 const {declutter, simplify} = require("gatsby-strava-declutter")
 ```
 
+To read the declutter of an activity in your own `gatsby-node.js`, get its
+`Declutter` node:
+
+```js
+const {getDeclutterNodeId} = require("gatsby-strava-declutter")
+
+const declutterNode = getNode(getDeclutterNodeId(activityNode.id))
+```
+
 ## Contributing
 
 -   ⇄ Pull/Merge requests and ★ Stars are always welcome.

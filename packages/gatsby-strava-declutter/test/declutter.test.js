@@ -2,6 +2,7 @@ const assert = require("node:assert/strict")
 const {describe, it} = require("node:test")
 
 const {declutter, declutterWithState, simplify} = require("../utils/declutter")
+const {getDeclutterNodeId} = require("../utils/nodes")
 
 const LAT = 43.6
 
@@ -312,7 +313,7 @@ describe("simplify", () => {
 })
 
 describe("package entry point", () => {
-  it("exports declutter and simplify", () => {
-    assert.deepEqual(require(".."), {declutter, simplify})
+  it("exports declutter, getDeclutterNodeId and simplify", () => {
+    assert.deepEqual(require(".."), {declutter, getDeclutterNodeId, simplify})
   })
 })
