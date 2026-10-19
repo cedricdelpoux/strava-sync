@@ -1,6 +1,7 @@
 const fs = require("fs")
 const path = require("path")
 
+const {getDeclutterNodeId} = require("./utils/nodes.js")
 const {checkPlugins} = require("./utils/plugins.js")
 const {createStore} = require("./utils/store.js")
 
@@ -46,8 +47,6 @@ exports.createSchemaCustomization = ({actions: {createTypes}}) => {
   `)
 }
 
-const declutterNodeId = (activityId) => `declutter-${activityId}`
-
 // Not `createTypes`: `StravaActivity` belongs to gatsby-source-strava, and
 // redefining it logs a conflict warning. `nodeModel` makes the page query
 // depend on the `Declutter` node.
@@ -58,7 +57,7 @@ exports.createResolvers = ({createResolvers}) => {
         type: "Declutter",
         resolve: (source, args, context) =>
           context.nodeModel.getNodeById({
-            id: declutterNodeId(source.id),
+            id: getDeclutterNodeId(source.id),
             type: "Declutter",
           }),
       },
@@ -141,7 +140,7 @@ async function runUpdate(args, options) {
   const nodeIds = new Set()
 
   results.forEach((value, activityId) => {
-    const id = declutterNodeId(activityId)
+    const id = getDeclutterNodeId(activityId)
 
     nodeIds.add(id)
     createNode({
