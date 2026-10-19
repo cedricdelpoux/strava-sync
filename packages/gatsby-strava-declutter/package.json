@@ -1,6 +1,6 @@
 {
   "name": "gatsby-strava-declutter",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Gatsby plugin to draw each road of your Strava activities only once on a map",
   "repository": "https://github.com/cedricdelpoux/gatsby-strava-declutter",
   "author": "Cédric Delpoux",
