@@ -17,7 +17,11 @@
 
 Gatsby plugin to use Strava as a data source
 
-> Requires Node 20 or later.
+The fetching, the rate limits and the [store](./docs/store.md) are done by
+[strava-sync](https://github.com/cedricdelpoux/strava-sync), which works without Gatsby too. This plugin turns
+what it stores into Gatsby nodes.
+
+> Requires Node 22.12 or later.
 
 ## Usage
 
@@ -95,6 +99,9 @@ continuous integration checkout.
 | `gatsby-source-strava-token`         | Generates the token the plugin needs                           |
 | `gatsby-source-strava-activity <id>` | Fetches one activity again, with as much detail as asked       |
 | `gatsby-source-strava-activities`    | Deletes the activities gone from Strava, adds the missing ones |
+
+They are wrappers of the `strava-sync` command line, which reads the plugin
+options from your `gatsby-config.js`. The flags and the store are the same.
 
 ## Documentation
 

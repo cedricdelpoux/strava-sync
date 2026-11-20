@@ -114,58 +114,23 @@ could, and logs a warning.
 
 ## Rebuilding when a route changes
 
-The plugin exports the function it uses to list the routes, so that code
-running outside Gatsby can compare the routes on Strava with the ones of your
-deployed site, for instance a scheduled Netlify function that triggers a build
-hook when they differ:
+The routes are listed by [strava-sync](https://github.com/cedricdelpoux/strava-sync),
+which the plugin builds on. Its functions also run outside Gatsby, so that code
+can compare the routes on Strava with the ones of your deployed site, for
+instance a scheduled Netlify function that triggers a build hook when they
+differ.
 
-```js
-const {strava} = require("gatsby-source-strava/utils/strava.js")
-const {getRoutes} = require("gatsby-source-strava/utils/routes.js")
-
-await strava.init({
-    clientId: process.env.STRAVA_CLIENT_ID,
-    clientSecret: process.env.STRAVA_CLIENT_SECRET,
-    token: process.env.STRAVA_TOKEN,
-})
-
-const routes = await getRoutes()
-```
-
-`getRoutes` returns the routes exactly as the `StravaRoute` nodes hold them.
-Comparing the `id` and `updated_at` of each route is enough to tell whether one
-was added, edited or deleted.
-
-`coordinates` comes from `map.summary_polyline`, unless you pass the same
-`withRouteStreams` option. Pass a store as well, so that only the streams of
-the new and edited routes are fetched:
-
-```js
-const {createStore} = require("gatsby-source-strava/utils/store.js")
-
-const routes = await getRoutes({
-    store: createStore({dir: ".strava"}),
-    withRouteStreams: true,
-})
-```
-
-It also takes `rateLimit`, the `waitOnRateLimit` and `stopOnRateLimit`
-options, and `reporter`, which defaults to `console`.
-
-`fetchRoutes` returns them as Strava sends them, `addRouteStreams` adds their
-stream, and `normalizeRoute` turns one of those into a node.
-
-`getRoutesVersion` compares the `id` and `updated_at` for you. It turns a list
-of routes into a short hash, the same for the `StravaRoute` nodes and for
-`getRoutes` as long as no route was added, edited or deleted. Write it to a
-file at build time:
+`getRoutesVersion` turns a list of routes into a short hash, the same for the
+`StravaRoute` nodes and for the routes listed by `fetchRoutes` as long as no
+route was added, edited or deleted. Write it to a file at build time:
 
 ```js
 // gatsby-node.js
 const fs = require("fs")
-const {getRoutesVersion} = require("gatsby-source-strava/utils/routes.js")
 
-exports.onPostBuild = ({getNodesByType}) => {
+exports.onPostBuild = async ({getNodesByType}) => {
+    const {getRoutesVersion} = await import("strava-sync")
+
     fs.writeFileSync(
         "public/routes-version.json",
         JSON.stringify(getRoutesVersion(getNodesByType("StravaRoute")))
@@ -177,16 +142,25 @@ Then compare it with the routes on Strava, and trigger a build when they
 differ:
 
 ```js
-const {
-    getRoutes,
-    getRoutesVersion,
-} = require("gatsby-source-strava/utils/routes.js")
+const {createClient, fetchRoutes, getRoutesVersion, normalizeRoute} =
+    await import("strava-sync")
+
+const client = createClient({
+    clientId: process.env.STRAVA_CLIENT_ID,
+    clientSecret: process.env.STRAVA_CLIENT_SECRET,
+    token: process.env.STRAVA_TOKEN,
+})
 
 const deployedVersion = await fetch(
     `${process.env.URL}/routes-version.json`
 ).then((response) => response.json())
 
-if (getRoutesVersion(await getRoutes()) !== deployedVersion) {
+const routes = (await fetchRoutes({client})).map(normalizeRoute)
+
+if (getRoutesVersion(routes) !== deployedVersion) {
     await fetch(process.env.BUILD_HOOK_URL, {method: "POST"})
 }
 ```
+
+`syncRoutes({client, store, withRouteStreams})` also fetches the full stream of
+the new and edited routes, see the strava-sync documentation.
