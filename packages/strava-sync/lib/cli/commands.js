@@ -33,14 +33,14 @@ const getSharedUsage = (
   --help             Show this message`
 
 const getUsages = (name, configFile) => ({
-  token: `Usage: ${name} token
+  token: `Usage: ${name}
 
 Asks for the Client ID and Client Secret of your Strava application, opens
 Strava to authorize it, and writes STRAVA_CLIENT_ID, STRAVA_CLIENT_SECRET and
 STRAVA_TOKEN to your .env files. The token can read your private activities,
 your full profile, and your private routes.
 `,
-  activities: `Usage: ${name} activities [options]
+  activities: `Usage: ${name} [options]
 
 Fetches the activities started since the last complete run and writes them to
 the store. Costs one request every ${ACTIVITIES_PER_PAGE} activities, plus the
@@ -60,7 +60,7 @@ ${DETAILS_USAGE}
                       tenth of the store
 ${getSharedUsage(configFile)}
 `,
-  activity: `Usage: ${name} activity <activityId> [options]
+  activity: `Usage: ${name} <activityId> [options]
 
 Fetches one activity from Strava and replaces its file in the store, to pick up
 an activity edited on strava.com or to add details to it. Never drops what an
@@ -73,7 +73,7 @@ ${DETAILS_USAGE}
                       activity is fetched, and by --all
 ${getSharedUsage(configFile)}
 `,
-  routes: `Usage: ${name} routes [options]
+  routes: `Usage: ${name} [options]
 
 Fetches your routes and writes them to the store.
 
@@ -324,7 +324,7 @@ export const COMMAND_NAMES = Object.keys(RUNNERS)
 
 /**
  * Runs a command of the CLI. `loadConfigFile` replaces the reading of
- * `strava-sync.config.js`, `name` and `configFile` are shown in the usage.
+ * `strava-sync.config.js`, `name`, the command as typed, and `configFile` are shown in the usage.
  * @param {"token" | "activities" | "activity" | "routes"} command
  * @param {string[]} argv
  * @param {{name?: string, configFile?: string, loadConfigFile?: Function}} [options]
@@ -334,7 +334,7 @@ export const runCommand = (
   command,
   argv,
   {
-    name = "strava-sync",
+    name = `strava-sync ${command}`,
     configFile = "strava-sync.config.js",
     loadConfigFile = loadConfig,
   } = {}
