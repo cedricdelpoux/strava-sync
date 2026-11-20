@@ -17,7 +17,7 @@
   ],
   "main": "index.js",
   "engines": {
-    "node": ">=20.0.0"
+    "node": ">=22.12"
   },
   "files": [
     "gatsby-node.js",
@@ -26,14 +26,8 @@
     "docs"
   ],
   "dependencies": {
-    "@mapbox/polyline": "^1.2.1",
     "chokidar": "^3.5.3",
-    "express": "^5.2.1",
-    "glob": "^13.0.6",
-    "inquirer": "^8.2.0",
-    "json-bigint": "^1.0.0",
-    "open": "^8.4.0",
-    "strava-v3": "^4.0.1"
+    "strava-sync": "file:../strava-sync"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.5",

@@ -1,8 +1,6 @@
 const fs = require("fs")
 const path = require("path")
 
-const {to10DigitTimestamp} = require("../utils/timestamp.js")
-
 const CONFIG_FILES = [
   "gatsby-config.js",
   "gatsby-config.cjs",
@@ -79,8 +77,8 @@ const loadPluginOptions = ({configPath} = {}) => {
   const {after, before, ...details} = options.activities || {}
 
   return {
-    after: to10DigitTimestamp(after),
-    before: to10DigitTimestamp(before),
+    after,
+    before,
     // Only the options `buildActivity` reads, `extend` being applied to the
     // nodes rather than to what is stored
     details: {
