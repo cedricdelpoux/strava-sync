@@ -26,6 +26,7 @@ export {
   addRouteStreams,
   fetchRoutes,
   getRouteId,
+  getRoutesVersion,
   normalizeRoute,
   syncRoutes,
 } from "./lib/routes.js"

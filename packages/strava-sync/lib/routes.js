@@ -1,3 +1,5 @@
+import crypto from "node:crypto"
+
 import {getCoordinates} from "./coordinates.js"
 import {silentLogger} from "./logger.js"
 import {normalizeIds} from "./normalize.js"
@@ -159,3 +161,19 @@ export const normalizeRoute = ({streams, ...route}) => {
     ...(coordinates.length > 0 && {coordinates}),
   }
 }
+
+/**
+ * A short hash of the ids and `updated_at` of the routes, the same whatever
+ * their order, and changed by any route added, edited or deleted.
+ */
+export const getRoutesVersion = (routes) =>
+  crypto
+    .createHash("sha1")
+    .update(
+      routes
+        .map(({id, updated_at}) => `${id}:${updated_at}`)
+        .sort()
+        .join("\n")
+    )
+    .digest("hex")
+    .slice(0, 10)

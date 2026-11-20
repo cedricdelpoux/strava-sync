@@ -1,7 +1,12 @@
 import {expect, test} from "vitest"
 
 import {StravaError} from "../lib/errors.js"
-import {addRouteStreams, normalizeRoute, syncRoutes} from "../lib/routes.js"
+import {
+  addRouteStreams,
+  getRoutesVersion,
+  normalizeRoute,
+  syncRoutes,
+} from "../lib/routes.js"
 import {createFakeClient, createMemoryStore} from "./helpers.js"
 
 const route = {id: 1, id_str: "1", updated_at: 10}
@@ -84,4 +89,15 @@ test("normalizes a route to string ids and coordinates", () => {
     updated_at: 10,
     coordinates: [[5.2, 44.1]],
   })
+})
+
+test("hashes the routes the same whatever their order", () => {
+  const other = {id: 2, updated_at: 20}
+
+  expect(getRoutesVersion([route, other])).toBe(
+    getRoutesVersion([other, route])
+  )
+  expect(getRoutesVersion([route])).not.toBe(
+    getRoutesVersion([{...route, updated_at: 11}])
+  )
 })
