@@ -100,6 +100,7 @@ const {activities, fetchedCount} = await syncActivities({
 | `reconcileActivities({client, store, …})` | Deletes, additions and missing details. Changes nothing without `write`, and brakes past 10% of deletions |
 | `fetchActivity({client, store, id, ...})` | Fetches one activity with the details asked, merged into the stored one                                   |
 | `syncRoutes({client, store, ...})`        | Lists the routes, and fetches the streams of the new and edited ones                                      |
+| `getRoutesVersion(routes)`                | A short hash that changes when a route is added, edited or deleted                                        |
 | `fetchAthlete({client, details})`         | The athlete, with koms, stats and zones on demand                                                         |
 | `verifyChallenge`, `handleEvent`          | Webhook helpers                                                                                           |
 
