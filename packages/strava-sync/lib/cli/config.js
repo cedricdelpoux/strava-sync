@@ -12,7 +12,8 @@ const CONFIG_FILES = [
 
 /**
  * Reads `strava-sync.config.js`, or the file `--config` points to:
- * `{storeDir, after, before, details, withRouteStreams, waitOnRateLimit}`.
+ * `{storeDir, after, before, details, withRouteStreams, waitOnRateLimit}`,
+ * `after` and `before` being a timestamp or a date.
  * Returns null when there is none.
  */
 export const loadConfig = async (
@@ -38,23 +39,21 @@ export const loadConfig = async (
     )
   }
 
-  const bounds = {
-    after: toSeconds(exported.after),
-    before: toSeconds(exported.before),
-  }
-
-  for (const [name, value] of Object.entries(bounds)) {
-    if (Number.isNaN(value)) {
-      throw new Error(`\`${name}\` of ${path.basename(file)} is not a date`)
-    }
-  }
-
   return {
     ...exported,
-    ...bounds,
     file,
     storeDir: path.resolve(path.dirname(file), exported.storeDir || ".strava"),
   }
+}
+
+const toBound = (name, value) => {
+  const seconds = toSeconds(value)
+
+  if (Number.isNaN(seconds)) {
+    throw new Error(`\`${name}\` of the config is not a date`)
+  }
+
+  return seconds
 }
 
 // The config options with the command line ones on top: a detail option adds
@@ -65,8 +64,8 @@ export const resolveOptions = async (args, loadConfigFile = loadConfig) => {
     : await loadConfigFile({configPath: args.configPath})
 
   return {
-    after: args.after || config?.after,
-    before: args.before || config?.before,
+    after: args.after || toBound("after", config?.after),
+    before: args.before || toBound("before", config?.before),
     config,
     configDetails: config?.details || {},
     details: {...config?.details, ...args.details},
