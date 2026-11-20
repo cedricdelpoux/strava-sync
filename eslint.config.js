@@ -7,7 +7,7 @@ module.exports = [
   js.configs.recommended,
   {
     languageOptions: {
-      ecmaVersion: 2019,
+      ecmaVersion: 2020,
       sourceType: "commonjs",
       globals: {
         ...globals.node,

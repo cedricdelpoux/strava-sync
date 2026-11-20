@@ -1,18 +1,15 @@
 const path = require("path")
 
-const getActivities = require("./utils/activities.js")
-const getAthlete = require("./utils/athlete.js")
-const {normalizeActivity, normalizeAthlete} = require("./utils/normalize.js")
-const {fetchWithRateLimit} = require("./utils/rate-limit.js")
-const {
-  addRouteStreams,
-  fetchRoutes,
-  normalizeRoute,
-} = require("./utils/routes.js")
-const {createStore} = require("./utils/store.js")
-const {strava} = require("./utils/strava.js")
+const {createNormalizers} = require("./utils/normalize.js")
+const {restoreFromGatsbyCache} = require("./utils/restore-cache.js")
 const {types} = require("./utils/types.js")
 const {watchStore} = require("./utils/watch.js")
+
+const createLogger = ({reporter, debug}) => ({
+  debug: (message) => debug && reporter.info(`source-strava: ${message}`),
+  info: (message) => reporter.info(`source-strava: ${message}`),
+  warn: (message) => reporter.warn(`source-strava: ${message}`),
+})
 
 exports.createSchemaCustomization = ({actions}) => {
   actions.createTypes(types)
@@ -38,16 +35,27 @@ exports.sourceNodes = async (
   }
 
   try {
-    await strava.init({
+    const stravaSync = await import("strava-sync")
+    const {
+      createClient,
+      createFileStore,
+      fetchAthlete,
+      isRateLimitError,
+      normalizeRoute,
+      syncActivities,
+      syncRoutes,
+    } = stravaSync
+    const {normalizeActivity, normalizeAthlete} = createNormalizers(stravaSync)
+    const logger = createLogger({reporter, debug: pluginOptions.debug})
+    const {stopOnRateLimit} = pluginOptions
+    const activitiesOptions = pluginOptions.activities || {}
+    const client = createClient({
       clientId: pluginOptions.stravaClientId,
       clientSecret: pluginOptions.stravaClientSecret,
       token: pluginOptions.stravaToken,
+      waitOnRateLimit: pluginOptions.waitOnRateLimit === true,
+      logger,
     })
-
-    const rateLimit = {
-      stopOnRateLimit: pluginOptions.stopOnRateLimit,
-      waitOnRateLimit: pluginOptions.waitOnRateLimit,
-    }
 
     // Kept out of the Gatsby cache, which Gatsby empties on its own
     const {directory} = store.getState().program
@@ -55,7 +63,7 @@ exports.sourceNodes = async (
       directory,
       pluginOptions.storeDir || ".strava"
     )
-    const stravaStore = createStore({dir: storeDir})
+    const stravaStore = createFileStore({dir: storeDir})
 
     // The activity is normalized before `extend` runs, so that a site adding
     // its own fields reads it in the shape it will query it in, and so that
@@ -77,13 +85,27 @@ exports.sourceNodes = async (
       })
     }
 
-    const {activities, fetchedCount} = await getActivities({
-      debug: pluginOptions.debug,
-      options: pluginOptions.activities,
-      rateLimit,
-      cache,
-      reporter,
+    if ((await stravaStore.readActivities()).length === 0) {
+      const movedCount = await restoreFromGatsbyCache({
+        cache,
+        store: stravaStore,
+      })
+
+      if (movedCount > 0) {
+        reporter.info(
+          `source-strava: ${movedCount} activities moved to ${path.relative(process.cwd(), storeDir)}`
+        )
+      }
+    }
+
+    const {activities, fetchedCount} = await syncActivities({
+      client,
       store: stravaStore,
+      details: activitiesOptions,
+      after: activitiesOptions.after,
+      before: activitiesOptions.before,
+      stopOnRateLimit,
+      logger,
     })
 
     if (activities && activities.length > 0) {
@@ -97,59 +119,37 @@ exports.sourceNodes = async (
     // `gatsby-source-strava-activity`, refetching one activity while the dev
     // server is running, would otherwise need a full restart to show up
     if (store.getState().program._[0] === "develop") {
-      watchStore({storeDir, actions, createActivityNode, getNode, reporter})
+      watchStore({
+        store: stravaStore,
+        actions,
+        createActivityNode,
+        getNode,
+        reporter,
+      })
     }
 
-    const withRoutes = Boolean(
-      pluginOptions.athlete && pluginOptions.athlete.withRoutes
-    )
+    const {withRoutes, withRouteStreams} = pluginOptions.athlete || {}
     let routes = null
 
     if (withRoutes) {
-      try {
-        routes = await fetchWithRateLimit({
-          fetch: fetchRoutes,
-          options: rateLimit,
-          reporter,
-        })
-      } catch (e) {
-        if (e.code !== "network") throw e
+      const synced = await syncRoutes({
+        client,
+        store: stravaStore,
+        withRouteStreams,
+        stopOnRateLimit,
+        logger,
+      })
 
-        reporter.warn(`source-strava: ${e.message}`)
-      }
+      routes = synced.routes
 
       if (routes) {
-        await stravaStore.writeRoutes(routes)
-
         reporter.success(`source-strava: ${routes.length} routes fetched`)
-      } else {
-        routes = await stravaStore.readRoutes()
-
-        reporter.warn(
-          routes
-            ? "source-strava: Routes not fetched, using cached version"
-            : "source-strava: Routes not fetched"
-        )
       }
 
-      const {withRouteStreams} = pluginOptions.athlete
-
-      if (routes && withRouteStreams) {
-        const routesWithStreams = await addRouteStreams({
-          rateLimit,
-          reporter,
-          routes,
-          store: stravaStore,
-          withRouteStreams,
-        })
-
-        routes = routesWithStreams.routes
-
-        if (routesWithStreams.fetchedCount > 0) {
-          reporter.success(
-            `source-strava: ${routesWithStreams.fetchedCount} route streams fetched`
-          )
-        }
+      if (synced.fetchedCount > 0) {
+        reporter.success(
+          `source-strava: ${synced.fetchedCount} route streams fetched`
+        )
       }
     }
 
@@ -167,11 +167,13 @@ exports.sourceNodes = async (
       }
     }
 
-    let athlete = await fetchWithRateLimit({
-      fetch: () => getAthlete({options: pluginOptions.athlete}),
-      options: rateLimit,
-      reporter,
-    })
+    let athlete = null
+
+    try {
+      athlete = await fetchAthlete({client, details: pluginOptions.athlete})
+    } catch (e) {
+      if (!isRateLimitError(e) || stopOnRateLimit) throw e
+    }
 
     if (athlete) {
       await stravaStore.writeAthlete(athlete)

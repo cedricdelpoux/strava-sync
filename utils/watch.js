@@ -1,7 +1,5 @@
 const path = require("path")
 
-const {createStore} = require("./store.js")
-
 // Only useful in `gatsby develop`: a change made outside Gatsby's own file
 // watching, typically `gatsby-source-strava-activity` refetching one activity
 // while the dev server is running, would otherwise need a full restart to
@@ -12,7 +10,7 @@ const {createStore} = require("./store.js")
 const REPLAY_DEBOUNCE_MS = 300
 
 const watchStore = ({
-  storeDir,
+  store,
   actions,
   createActivityNode,
   getNode,
@@ -22,7 +20,7 @@ const watchStore = ({
   // build` — which never calls this function — does not need it resolvable
   const chokidar = require("chokidar")
 
-  const store = createStore({dir: storeDir})
+  const {dir: storeDir} = store
   const pattern = path.join(storeDir, "activities", "*.json")
 
   let timer = null
