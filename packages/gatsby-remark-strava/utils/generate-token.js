@@ -19,7 +19,7 @@ const writeToEnvFiles = (name, value) => {
       fs.appendFileSync(file, `${name}=${value}\n`)
     })
   } catch (e) {
-    throw new Error(e)
+    throw new Error(e.message, {cause: e})
   }
 }
 

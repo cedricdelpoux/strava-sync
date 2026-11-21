@@ -13,7 +13,7 @@ exports.isStravaEmbedLink = (node) => {
       node.children[0].value.toLowerCase().includes("embed")
 
     return isLink && isEmbedLink && isStravaActivityLink
-  } catch (e) {
+  } catch {
     return false
   }
 }

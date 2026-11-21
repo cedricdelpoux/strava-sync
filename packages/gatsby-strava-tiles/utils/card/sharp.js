@@ -7,7 +7,8 @@ function getSharp() {
       "gatsby-strava-tiles: drawing activity cards needs `sharp`, which " +
         "could not be resolved from " +
         __dirname +
-        ". Install it in your site: yarn add sharp"
+        ". Install it in your site: yarn add sharp",
+      {cause: error}
     )
   }
 }

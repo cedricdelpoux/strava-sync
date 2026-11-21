@@ -107,7 +107,7 @@ class Strava {
       })
     } catch (e) {
       // An HTTP error carries Strava's own message in its body
-      throw new Error((e.error && e.error.message) || e.message)
+      throw new Error((e.error && e.error.message) || e.message, {cause: e})
     } finally {
       this.release()
     }

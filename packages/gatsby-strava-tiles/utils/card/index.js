@@ -121,10 +121,10 @@ async function renderActivityCard({
     ],
   })
 
-  const image = await sharp(background.image)
-    .composite([{input: Buffer.from(overlay)}])
-    [format.type](format.options)
-    .toBuffer()
+  const composite = sharp(background.image).composite([
+    {input: Buffer.from(overlay)},
+  ])
+  const image = await composite[format.type](format.options).toBuffer()
 
   return {image, zoom, backgroundTiles: background.tiles}
 }

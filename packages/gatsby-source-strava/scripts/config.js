@@ -57,7 +57,8 @@ const loadPluginOptions = ({configPath} = {}) => {
   } catch (e) {
     throw new Error(
       `Could not read ${path.basename(file)}: ${e.message}\n` +
-        "Pass --no-config to rely on the command line options alone."
+        "Pass --no-config to rely on the command line options alone.",
+      {cause: e}
     )
   }
 
