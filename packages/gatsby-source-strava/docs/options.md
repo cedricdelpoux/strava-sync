@@ -6,16 +6,16 @@
 require("dotenv").config()
 
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                stravaClientId: process.env.STRAVA_CLIENT_ID,
-                stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
-                stravaToken: process.env.STRAVA_TOKEN,
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        stravaClientId: process.env.STRAVA_CLIENT_ID,
+        stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
+        stravaToken: process.env.STRAVA_TOKEN,
+      },
+    },
+  ],
 }
 ```
 
@@ -33,14 +33,14 @@ them somewhere else:
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                storeDir: ".strava",
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        storeDir: ".strava",
+      },
+    },
+  ],
 }
 ```
 
@@ -52,71 +52,70 @@ To add data to activities objects, try the following options:
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                activities: {
-                    //
-                    // Extending options
-                    // --------------------------------
-                    //
-                    // When using extending options, it's recommanded to reduce the activities count per page
-                    perPage: 200, // 200 is max. You will get error with more.
-                    // Add comments to every activity
-                    withComments: true,
-                    // Add kudos to every activity
-                    withKudos: true,
-                    // Add laps to every activity
-                    withLaps: true,
-                    // Add photos to every activity, 1800 pixels wide
-                    withPhotos: true,
-                    // --- OR
-                    // Add them at another size, capped at the photo's own
-                    // resolution. Strava answers one size per photo, and
-                    // keys the url by it: `urls { _600 }` here
-                    withPhotos: 600,
-                    // Add zones to every activity (need Strava Summit Analysis Pack)
-                    withZones: true,
-                    // Add streams to every activity (see streamTypes)
-                    withStreams: true,
-                    // --- OR
-                    withStreams: (activity) => activity.id === ID,
-                    //
-                    // Add analyzed data to every activity
-                    // withStreams option must be true or a function to works
-                    // See https://developers.strava.com/docs/reference/#api-models-StreamSet
-                    streamsTypes: [
-                        "time",
-                        "cadence",
-                        "distance",
-                        "latlng",
-                        "heartrate",
-                        "temp",
-                        "moving",
-                        "grade_smooth",
-                        "watts",
-                        "velocity_smooth",
-                        "altitude",
-                    ],
-                    // Filtering options
-                    // --------------------------------
-                    //
-                    // Timestamp for filtering activities that have taken place BEFORE a certain time
-                    before: "1539500400",
-                    // Timestamp for filtering activities that have taken place AFTER a certain time
-                    after: "1539500400",
-                    //
-                    // Add custom data
-                    // ------
-                    extend: ({activity}) => {
-                        activity.isMountainBike =
-                            activity.gear_id === "MY_BIKE_ID"
-                    },
-                },
-            },
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        activities: {
+          //
+          // Extending options
+          // --------------------------------
+          //
+          // When using extending options, it's recommanded to reduce the activities count per page
+          perPage: 200, // 200 is max. You will get error with more.
+          // Add comments to every activity
+          withComments: true,
+          // Add kudos to every activity
+          withKudos: true,
+          // Add laps to every activity
+          withLaps: true,
+          // Add photos to every activity, 1800 pixels wide
+          withPhotos: true,
+          // --- OR
+          // Add them at another size, capped at the photo's own
+          // resolution. Strava answers one size per photo, and
+          // keys the url by it: `urls { _600 }` here
+          withPhotos: 600,
+          // Add zones to every activity (need Strava Summit Analysis Pack)
+          withZones: true,
+          // Add streams to every activity (see streamTypes)
+          withStreams: true,
+          // --- OR
+          withStreams: (activity) => activity.id === ID,
+          //
+          // Add analyzed data to every activity
+          // withStreams option must be true or a function to works
+          // See https://developers.strava.com/docs/reference/#api-models-StreamSet
+          streamsTypes: [
+            "time",
+            "cadence",
+            "distance",
+            "latlng",
+            "heartrate",
+            "temp",
+            "moving",
+            "grade_smooth",
+            "watts",
+            "velocity_smooth",
+            "altitude",
+          ],
+          // Filtering options
+          // --------------------------------
+          //
+          // Timestamp for filtering activities that have taken place BEFORE a certain time
+          before: "1539500400",
+          // Timestamp for filtering activities that have taken place AFTER a certain time
+          after: "1539500400",
+          //
+          // Add custom data
+          // ------
+          extend: ({activity}) => {
+            activity.isMountainBike = activity.gear_id === "MY_BIKE_ID"
+          },
         },
-    ],
+      },
+    },
+  ],
 }
 ```
 
@@ -129,51 +128,48 @@ To add data to athlete object, try the following options in your `gatsby-config.
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                athlete: {
-                    //
-                    // Extending options
-                    // --------------------------------
-                    //
-                    // Add athlete koms
-                    withKoms: true,
-                    // Add a StravaRoute node per route, private ones
-                    // included with a `read_all` token
-                    withRoutes: true,
-                    // Build the routes coordinates from their full track,
-                    // one request per new or edited route
-                    withRouteStreams: true,
-                    // or only for some routes
-                    withRouteStreams: (route) => route.type === 1,
-                    // Add athlete stats
-                    withStats: true,
-                    // Add athlete zones
-                    withZones: true,
-                    //
-                    // Add custom data
-                    // ------
-                    extend: ({activities, athlete}) => {
-                        let heartrateMax
-                        activities.forEach((activity) => {
-                            if (activity.has_heartrate) {
-                                if (
-                                    !heartrateMax ||
-                                    activity.max_heartrate > heartrateMax
-                                ) {
-                                    heartrateMax = activity.max_heartrate
-                                }
-                            }
-                        })
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        athlete: {
+          //
+          // Extending options
+          // --------------------------------
+          //
+          // Add athlete koms
+          withKoms: true,
+          // Add a StravaRoute node per route, private ones
+          // included with a `read_all` token
+          withRoutes: true,
+          // Build the routes coordinates from their full track,
+          // one request per new or edited route
+          withRouteStreams: true,
+          // or only for some routes
+          withRouteStreams: (route) => route.type === 1,
+          // Add athlete stats
+          withStats: true,
+          // Add athlete zones
+          withZones: true,
+          //
+          // Add custom data
+          // ------
+          extend: ({activities, athlete}) => {
+            let heartrateMax
+            activities.forEach((activity) => {
+              if (activity.has_heartrate) {
+                if (!heartrateMax || activity.max_heartrate > heartrateMax) {
+                  heartrateMax = activity.max_heartrate
+                }
+              }
+            })
 
-                        athlete.heartrateMax = heartrateMax
-                    },
-                },
-            },
+            athlete.heartrateMax = heartrateMax
+          },
         },
-    ],
+      },
+    },
+  ],
 }
 ```
 
@@ -187,14 +183,14 @@ For a better stack trace and more information, try the following option in your 
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                debug: true,
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        debug: true,
+      },
+    },
+  ],
 }
 ```
 

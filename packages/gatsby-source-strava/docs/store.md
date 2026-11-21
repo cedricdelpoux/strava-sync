@@ -36,14 +36,14 @@ Use the `storeDir` option to put it somewhere else:
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                storeDir: ".strava",
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        storeDir: ".strava",
+      },
+    },
+  ],
 }
 ```
 

@@ -17,14 +17,14 @@ an earlier activity already covered.
 
 ```graphql
 {
-    allStravaActivity {
-        nodes {
-            tiles {
-                x
-                y
-            }
-        }
+  allStravaActivity {
+    nodes {
+      tiles {
+        x
+        y
+      }
     }
+  }
 }
 ```
 
@@ -38,21 +38,21 @@ with the tiles of the Strava activities in both cases.
 
 ```graphql
 {
-    allStravaRoute {
-        nodes {
-            id
-            tiles {
-                all {
-                    x
-                    y
-                }
-                new {
-                    x
-                    y
-                }
-            }
+  allStravaRoute {
+    nodes {
+      id
+      tiles {
+        all {
+          x
+          y
         }
+        new {
+          x
+          y
+        }
+      }
     }
+  }
 }
 ```
 
@@ -76,52 +76,52 @@ covered square, the cluster around it, and the rest.
 
 ```graphql
 {
-    stravaAthlete {
-        tiles {
-            parts {
-                squareSize
-                squareBorder {
-                    x
-                    y
-                    size
-                }
-                rowSize
-                rowBorder {
-                    x
-                    y
-                    width
-                    height
-                }
-                columnSize
-                columnBorder {
-                    x
-                    y
-                    width
-                    height
-                }
-                square {
-                    x
-                    y
-                }
-                row {
-                    x
-                    y
-                }
-                column {
-                    x
-                    y
-                }
-                cluster {
-                    x
-                    y
-                }
-                rest {
-                    x
-                    y
-                }
-            }
+  stravaAthlete {
+    tiles {
+      parts {
+        squareSize
+        squareBorder {
+          x
+          y
+          size
         }
+        rowSize
+        rowBorder {
+          x
+          y
+          width
+          height
+        }
+        columnSize
+        columnBorder {
+          x
+          y
+          width
+          height
+        }
+        square {
+          x
+          y
+        }
+        row {
+          x
+          y
+        }
+        column {
+          x
+          y
+        }
+        cluster {
+          x
+          y
+        }
+        rest {
+          x
+          y
+        }
+      }
     }
+  }
 }
 ```
 
@@ -156,17 +156,17 @@ coordinates ready to drop into a `geometry`.
 
 ```graphql
 {
-    stravaAthlete {
-        tiles {
-            parts {
-                outlines {
-                    square
-                    cluster
-                    rest
-                }
-            }
+  stravaAthlete {
+    tiles {
+      parts {
+        outlines {
+          square
+          cluster
+          rest
         }
+      }
     }
+  }
 }
 ```
 
@@ -174,13 +174,13 @@ Both shapes are always computed, so which one you use is decided by what you
 query, not by an option -- query the tiles to draw a grid of squares, the
 outline to draw one continuous shape. The outline is what you want when:
 
--   **the grid lines are noise.** One shape per area instead of a border around
-    every tile.
--   **you are drawing a lot of tiles.** A whole history of 13882 tiles is 3
-    features to outline instead of 13882 -- a 72x72 max square is a single
-    rectangle, 5 points.
--   **the shape has to fit in a URL.** A static map image carries its overlay in
-    the URL, and a few rings fit where thousands of squares never could.
+- **the grid lines are noise.** One shape per area instead of a border around
+  every tile.
+- **you are drawing a lot of tiles.** A whole history of 13882 tiles is 3
+  features to outline instead of 13882 -- a 72x72 max square is a single
+  rectangle, 5 points.
+- **the shape has to fit in a URL.** A static map image carries its overlay in
+  the URL, and a few rings fit where thousands of squares never could.
 
 Do not expect it to save bytes on its own. An area that is compact shrinks a
 lot, but scattered tiles do not: an isolated tile is 5 outline points where it
@@ -196,44 +196,44 @@ that month.
 
 ```graphql
 {
-    stravaAthlete {
-        tiles {
-            monthly {
-                yearMonth
-                year
-                month
-                parts {
-                    squareSize
-                    rowSize
-                    columnSize
-                    square {
-                        x
-                        y
-                    }
-                    row {
-                        x
-                        y
-                    }
-                    column {
-                        x
-                        y
-                    }
-                    cluster {
-                        x
-                        y
-                    }
-                    rest {
-                        x
-                        y
-                    }
-                    new {
-                        x
-                        y
-                    }
-                }
-            }
+  stravaAthlete {
+    tiles {
+      monthly {
+        yearMonth
+        year
+        month
+        parts {
+          squareSize
+          rowSize
+          columnSize
+          square {
+            x
+            y
+          }
+          row {
+            x
+            y
+          }
+          column {
+            x
+            y
+          }
+          cluster {
+            x
+            y
+          }
+          rest {
+            x
+            y
+          }
+          new {
+            x
+            y
+          }
         }
+      }
     }
+  }
 }
 ```
 

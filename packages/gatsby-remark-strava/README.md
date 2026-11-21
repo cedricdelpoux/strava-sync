@@ -39,28 +39,27 @@ gatsby-remark-strava-token
 require("dotenv").config()
 
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-transformer-remark",
+  plugins: [
+    {
+      resolve: "gatsby-transformer-remark",
+      options: {
+        plugins: [
+          {
+            resolve: "gatsby-remark-strava",
             options: {
-                plugins: [
-                    {
-                        resolve: "gatsby-remark-strava",
-                        options: {
-                            stravaClientId: process.env.STRAVA_CLIENT_ID,
-                            stravaClientSecret:
-                                process.env.STRAVA_CLIENT_SECRET,
-                            stravaToken: process.env.STRAVA_TOKEN,
-                            // OPTIONAL
-                            render: (activity) => `<div>${activity.name}</div>`,
-                            output: "html",
-                            debug: false,
-                        },
-                    },
-                ],
+              stravaClientId: process.env.STRAVA_CLIENT_ID,
+              stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
+              stravaToken: process.env.STRAVA_TOKEN,
+              // OPTIONAL
+              render: (activity) => `<div>${activity.name}</div>`,
+              output: "html",
+              debug: false,
             },
-        },
-    ],
+          },
+        ],
+      },
+    },
+  ],
 }
 ```
 
@@ -89,25 +88,24 @@ module.exports = {
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-plugin-mdx",
+  plugins: [
+    {
+      resolve: "gatsby-plugin-mdx",
+      options: {
+        gatsbyRemarkPlugins: [
+          {
+            resolve: "gatsby-remark-strava",
             options: {
-                gatsbyRemarkPlugins: [
-                    {
-                        resolve: "gatsby-remark-strava",
-                        options: {
-                            stravaClientId: process.env.STRAVA_CLIENT_ID,
-                            stravaClientSecret:
-                                process.env.STRAVA_CLIENT_SECRET,
-                            stravaToken: process.env.STRAVA_TOKEN,
-                            output: "mdx",
-                        },
-                    },
-                ],
+              stravaClientId: process.env.STRAVA_CLIENT_ID,
+              stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
+              stravaToken: process.env.STRAVA_TOKEN,
+              output: "mdx",
             },
-        },
-    ],
+          },
+        ],
+      },
+    },
+  ],
 }
 ```
 
@@ -123,8 +121,8 @@ Please add your website to the [Showcase](./showcase.yml)
 
 ## Contributing
 
--   ⇄ Pull/Merge requests and ★ Stars are always welcome.
--   For bugs and feature requests, please [create an issue][github-issue].
+- ⇄ Pull/Merge requests and ★ Stars are always welcome.
+- For bugs and feature requests, please [create an issue][github-issue].
 
 ## Changelog
 

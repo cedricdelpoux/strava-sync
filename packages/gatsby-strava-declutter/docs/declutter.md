@@ -5,14 +5,14 @@ roads drawn tens of times, double lines a few meters apart, and small
 activities buried under big ones. The declutter decides, for each activity,
 what a map should draw of it, so that each road is drawn only once:
 
--   each activity loses the parts following a road already drawn, by an
-    earlier activity or by itself, like the way back of an out and back. An
-    activity is hidden when nothing is left of it. Zoomed in, every street you
-    went through is drawn, once.
--   zoomed out, from zoom 12 to 6 by default, the same is done again at each
-    zoom, with roads 1.5 pixels apart counting as the same road. However many
-    times you went through a place, the lines stay as fine and as far apart as
-    anywhere else.
+- each activity loses the parts following a road already drawn, by an
+  earlier activity or by itself, like the way back of an out and back. An
+  activity is hidden when nothing is left of it. Zoomed in, every street you
+  went through is drawn, once.
+- zoomed out, from zoom 12 to 6 by default, the same is done again at each
+  zoom, with roads 1.5 pixels apart counting as the same road. However many
+  times you went through a place, the lines stay as fine and as far apart as
+  anywhere else.
 
 A drawn track never has a gap: only what another line already draws is left
 out, within 1.5 pixels at that zoom. Zoomed out, the small loops and spurs, less
@@ -30,19 +30,19 @@ kept between builds, and a new activity takes less than a second. See
 ```js
 // gatsby-config.js
 module.exports = {
-    plugins: [
-        "gatsby-source-strava",
-        {
-            resolve: "gatsby-strava-declutter",
-            options: {
-                // Only the activities the map shows are compared: a private
-                // or an indoor activity must not hide a public one
-                filter: (activity) =>
-                    ["Run", "Ride", "Hike"].includes(activity.type) &&
-                    activity.visibility === "everyone",
-            },
-        },
-    ],
+  plugins: [
+    "gatsby-source-strava",
+    {
+      resolve: "gatsby-strava-declutter",
+      options: {
+        // Only the activities the map shows are compared: a private
+        // or an indoor activity must not hide a public one
+        filter: (activity) =>
+          ["Run", "Ride", "Hike"].includes(activity.type) &&
+          activity.visibility === "everyone",
+      },
+    },
+  ],
 }
 ```
 
@@ -77,20 +77,20 @@ a replay of your history month by month, possible.
 
 ```graphql
 {
-    allStravaActivity {
-        nodes {
-            declutter {
-                hidden
-                reason
-                parts
-                stubs {
-                    hideUntil
-                    showUntil
-                    coordinates
-                }
-            }
+  allStravaActivity {
+    nodes {
+      declutter {
+        hidden
+        reason
+        parts
+        stubs {
+          hideUntil
+          showUntil
+          coordinates
         }
+      }
     }
+  }
 }
 ```
 
@@ -101,7 +101,7 @@ a replay of your history month by month, possible.
 | `parts`  | [[[Float]]]     | Pieces of track drawn the same at every zoom, as `[lng, lat]` lines |
 | `stubs`  | [DeclutterStub] | Pieces of track depending on the zoom, see below                    |
 
--   `"already-traced"`: its whole track follows roads already drawn.
+- `"already-traced"`: its whole track follows roads already drawn.
 
 A stub is hidden under `hideUntil` and from `showUntil`, `0` meaning never.
 
@@ -110,13 +110,13 @@ layer filters on the zoom:
 
 ```js
 ;[
-    "all",
-    ["<=", ["get", "hideUntil"], ["zoom"]],
-    [
-        "any",
-        ["==", ["get", "showUntil"], 0],
-        [">", ["get", "showUntil"], ["zoom"]],
-    ],
+  "all",
+  ["<=", ["get", "hideUntil"], ["zoom"]],
+  [
+    "any",
+    ["==", ["get", "showUntil"], 0],
+    [">", ["get", "showUntil"], ["zoom"]],
+  ],
 ]
 ```
 
@@ -131,10 +131,10 @@ From your own `gatsby-node.js`, in `onPostBootstrap` or later, read it with
 const {getDeclutterNodeId} = require("gatsby-strava-declutter")
 
 exports.onPostBootstrap = ({getNode, getNodesByType}) => {
-    getNodesByType("StravaActivity").forEach((activityNode) => {
-        const declutterNode = getNode(getDeclutterNodeId(activityNode.id))
-        const isHidden = declutterNode ? declutterNode.hidden : false
-    })
+  getNodesByType("StravaActivity").forEach((activityNode) => {
+    const declutterNode = getNode(getDeclutterNodeId(activityNode.id))
+    const isHidden = declutterNode ? declutterNode.hidden : false
+  })
 }
 ```
 

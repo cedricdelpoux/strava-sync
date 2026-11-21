@@ -34,14 +34,14 @@ To wait for the window to open again and resume instead, use the
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                waitOnRateLimit: true,
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        waitOnRateLimit: true,
+      },
+    },
+  ],
 }
 ```
 
@@ -64,14 +64,14 @@ instead of building a site with partial data:
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                stopOnRateLimit: true,
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        stopOnRateLimit: true,
+      },
+    },
+  ],
 }
 ```
 
