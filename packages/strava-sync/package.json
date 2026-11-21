@@ -4,7 +4,8 @@
   "description": "Keep a local copy of your Strava activities and routes up to date, within the rate limits",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cedricdelpoux/strava-sync.git"
+    "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
+    "directory": "packages/strava-sync"
   },
   "author": "Cédric Delpoux <cedric.delpoux@gmail.com>",
   "license": "MIT",
@@ -41,20 +42,9 @@
     "json-bigint": "^1.0.0",
     "open": "^8.4.0"
   },
-  "devDependencies": {
-    "@eslint/js": "^10.0.1",
-    "@types/node": "^26.6.6",
-    "@vitest/coverage-v8": "^5.1.0",
-    "eslint": "^10.14.0",
-    "globals": "^17.14.0",
-    "prettier": "^3.10.1",
-    "typescript": "^7.0.2",
-    "vitest": "^5.1.0"
-  },
   "scripts": {
     "build": "tsc",
-    "format": "prettier --write .",
-    "lint": "eslint . && prettier --check . && tsc --noEmit",
+    "lint": "eslint . && tsc --noEmit",
     "test": "vitest run --coverage",
     "prepack": "npm run build",
     "prepublishOnly": "npm run lint && npm test"

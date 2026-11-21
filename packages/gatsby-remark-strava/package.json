@@ -2,7 +2,11 @@
   "name": "gatsby-remark-strava",
   "version": "1.6.0",
   "description": "Gatsby remark plugin to embed Strava activities and profile by their URL",
-  "repository": "https://github.com/cedricdelpoux/gatsby-remark-strava",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
+    "directory": "packages/gatsby-remark-strava"
+  },
   "author": {
     "name": "Cédric Delpoux",
     "email": "cedric.delpoux@gmail.com"
@@ -33,11 +37,6 @@
     "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
-    "eslint": "^8.13.0",
-    "eslint-config-prettier": "^8.5.0",
-    "husky": "^4.2.1",
-    "lint-staged": "^11.2.6",
-    "prettier": "2.6.2",
     "react": "^18.0.0",
     "react-dom": "^18.0.0"
   },
@@ -45,23 +44,10 @@
     "gatsby": "^3.0.0 || ^4.0.0 || ^5.0.0"
   },
   "scripts": {
-    "lint": "eslint index.js utils examples",
-    "prepublishOnly": "yarn lint"
+    "lint": "eslint .",
+    "prepublishOnly": "npm run lint"
   },
   "bin": {
     "gatsby-remark-strava-token": "./utils/generate-token.js"
-  },
-  "lint-staged": {
-    "*.js": [
-      "eslint"
-    ],
-    "*.{css,js,md}": [
-      "prettier --write"
-    ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged"
-    }
   }
 }
