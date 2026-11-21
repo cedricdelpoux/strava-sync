@@ -55,16 +55,16 @@ gatsby-source-strava-token
 require("dotenv").config()
 
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                stravaClientId: process.env.STRAVA_CLIENT_ID,
-                stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
-                stravaToken: process.env.STRAVA_TOKEN,
-            },
-        },
-    ],
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        stravaClientId: process.env.STRAVA_CLIENT_ID,
+        stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
+        stravaToken: process.env.STRAVA_TOKEN,
+      },
+    },
+  ],
 }
 ```
 

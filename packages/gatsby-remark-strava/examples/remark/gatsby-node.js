@@ -17,19 +17,17 @@ exports.onCreateNode = ({node, getNode, actions}) => {
 }
 
 exports.createPages = async ({graphql, actions: {createPage}, reporter}) => {
-  const result = await graphql(
-    `
-      {
-        allMarkdownRemark {
-          nodes {
-            fields {
-              slug
-            }
+  const result = await graphql(`
+    {
+      allMarkdownRemark {
+        nodes {
+          fields {
+            slug
           }
         }
       }
-    `
-  )
+    }
+  `)
 
   if (result.errors) {
     reporter.panic(result.errors)

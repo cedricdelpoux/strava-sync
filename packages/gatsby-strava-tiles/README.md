@@ -31,12 +31,12 @@ yarn add gatsby-source-strava gatsby-strava-tiles
 require("dotenv").config()
 
 module.exports = {
-    plugins: [
-        "gatsby-source-strava", // MANDATORY
-        //
-        // It MUST be after `gatsby-source-strava` source plugin
-        "gatsby-strava-tiles",
-    ],
+  plugins: [
+    "gatsby-source-strava", // MANDATORY
+    //
+    // It MUST be after `gatsby-source-strava` source plugin
+    "gatsby-strava-tiles",
+  ],
 }
 ```
 
@@ -48,17 +48,17 @@ module.exports = {
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-strava-tiles",
-            options: {
-                routes: {
-                    strava: true,
-                    rideWithGps: false,
-                },
-            },
+  plugins: [
+    {
+      resolve: "gatsby-strava-tiles",
+      options: {
+        routes: {
+          strava: true,
+          rideWithGps: false,
         },
-    ],
+      },
+    },
+  ],
 }
 ```
 
@@ -89,16 +89,16 @@ between coordinates and tiles, and the outlines of a set of tiles.
 
 ```js
 const {
-    getActivityTiles,
-    pointsToTiles,
-    getTileActivities,
-    tilesToOutline,
-    tileToCoords,
-    lngToX,
-    latToY,
-    xToLng,
-    yToLat,
-    distanceInMeters,
+  getActivityTiles,
+  pointsToTiles,
+  getTileActivities,
+  tilesToOutline,
+  tileToCoords,
+  lngToX,
+  latToY,
+  xToLng,
+  yToLat,
+  distanceInMeters,
 } = require("gatsby-strava-tiles")
 ```
 
@@ -116,8 +116,8 @@ closed in, and the track.
 
 ```js
 const {
-    getActivityCards,
-    renderActivityCard,
+  getActivityCards,
+  renderActivityCard,
 } = require("gatsby-strava-tiles/card")
 ```
 
@@ -126,13 +126,13 @@ const {
 
 ## Documentation
 
--   [Data](./docs/data.md), the GraphQL fields this plugin adds and what they mean
--   [Cards](./docs/cards.md), drawing an activity as an image at build time
+- [Data](./docs/data.md), the GraphQL fields this plugin adds and what they mean
+- [Cards](./docs/cards.md), drawing an activity as an image at build time
 
 ## Contributing
 
--   ⇄ Pull/Merge requests and ★ Stars are always welcome.
--   For bugs and feature requests, please [create an issue][github-issue].
+- ⇄ Pull/Merge requests and ★ Stars are always welcome.
+- For bugs and feature requests, please [create an issue][github-issue].
 
 ## License
 

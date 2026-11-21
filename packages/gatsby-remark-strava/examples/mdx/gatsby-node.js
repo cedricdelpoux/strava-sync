@@ -17,22 +17,20 @@ exports.onCreateNode = ({node, getNode, actions}) => {
 }
 
 exports.createPages = async ({graphql, actions: {createPage}, reporter}) => {
-  const result = await graphql(
-    `
-      {
-        allMdx {
-          nodes {
-            fields {
-              slug
-            }
-            internal {
-              contentFilePath
-            }
+  const result = await graphql(`
+    {
+      allMdx {
+        nodes {
+          fields {
+            slug
+          }
+          internal {
+            contentFilePath
           }
         }
       }
-    `
-  )
+    }
+  `)
 
   if (result.errors) {
     reporter.panic(result.errors)

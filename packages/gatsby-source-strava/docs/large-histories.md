@@ -19,7 +19,7 @@ nodes from `gatsby-node.js` is fast, the slow part is the page query.
 ```js
 // gatsby-node.js
 exports.createSchemaCustomization = ({actions}) => {
-    actions.createTypes(`
+  actions.createTypes(`
         type ActivitySummary {
             id: ID!
             name: String
@@ -35,38 +35,38 @@ exports.createSchemaCustomization = ({actions}) => {
 }
 
 const toActivitySummary = (activityNode) => ({
-    id: activityNode.id,
-    name: activityNode.name,
-    sport_type: activityNode.sport_type,
-    start_date: activityNode.start_date,
-    distance: activityNode.distance,
+  id: activityNode.id,
+  name: activityNode.name,
+  sport_type: activityNode.sport_type,
+  start_date: activityNode.start_date,
+  distance: activityNode.distance,
 })
 
 exports.onPostBootstrap = ({actions, createContentDigest, getNodesByType}) => {
-    const activities = getNodesByType("StravaActivity").map(toActivitySummary)
+  const activities = getNodesByType("StravaActivity").map(toActivitySummary)
 
-    actions.createNode({
-        id: "activity-summaries",
-        activities,
-        internal: {
-            type: "ActivitySummaries",
-            contentDigest: createContentDigest(activities),
-        },
-    })
+  actions.createNode({
+    id: "activity-summaries",
+    activities,
+    internal: {
+      type: "ActivitySummaries",
+      contentDigest: createContentDigest(activities),
+    },
+  })
 }
 ```
 
 ```graphql
 query {
-    activitySummaries {
-        activities {
-            id
-            name
-            sport_type
-            start_date
-            distance
-        }
+  activitySummaries {
+    activities {
+      id
+      name
+      sport_type
+      start_date
+      distance
     }
+  }
 }
 ```
 

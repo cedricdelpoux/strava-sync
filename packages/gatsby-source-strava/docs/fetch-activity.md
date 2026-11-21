@@ -118,9 +118,9 @@ Presetting the options you always use leaves only the activity id to type:
 
 ```json
 {
-    "scripts": {
-        "fetch-activity": "gatsby-source-strava-activity --streams latlng"
-    }
+  "scripts": {
+    "fetch-activity": "gatsby-source-strava-activity --streams latlng"
+  }
 }
 ```
 
@@ -140,18 +140,18 @@ holds exactly:
 
 ```graphql
 {
-    stravaActivity(id: {eq: "4291234567"}) {
-        name
-        calories
-        coordinates
-        gear {
-            name
-        }
-        segment_efforts {
-            name
-            elapsed_time
-        }
+  stravaActivity(id: {eq: "4291234567"}) {
+    name
+    calories
+    coordinates
+    gear {
+      name
     }
+    segment_efforts {
+      name
+      elapsed_time
+    }
+  }
 }
 ```
 

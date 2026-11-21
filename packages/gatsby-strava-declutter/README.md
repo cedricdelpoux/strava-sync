@@ -38,12 +38,12 @@ yarn add gatsby-source-strava gatsby-strava-declutter
 require("dotenv").config()
 
 module.exports = {
-    plugins: [
-        "gatsby-source-strava", // MANDATORY
-        //
-        // It MUST be after `gatsby-source-strava`
-        "gatsby-strava-declutter",
-    ],
+  plugins: [
+    "gatsby-source-strava", // MANDATORY
+    //
+    // It MUST be after `gatsby-source-strava`
+    "gatsby-strava-declutter",
+  ],
 }
 ```
 
@@ -89,8 +89,8 @@ const declutterNode = getNode(getDeclutterNodeId(activityNode.id))
 
 ## Contributing
 
--   ⇄ Pull/Merge requests and ★ Stars are always welcome.
--   For bugs and feature requests, please [create an issue][github-issue].
+- ⇄ Pull/Merge requests and ★ Stars are always welcome.
+- For bugs and feature requests, please [create an issue][github-issue].
 
 ## License
 

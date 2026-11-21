@@ -51,8 +51,8 @@ function badges(counts, size, badge, badgeText) {
       return `
         <g>
           <rect x="${x}" y="10" width="${width}" height="${height}" rx="${
-        height / 2
-      }" fill="${badge}"/>
+            height / 2
+          }" fill="${badge}"/>
           <circle cx="${x + 14}" cy="23" r="6" fill="${color}"/>
           <text x="${x + width - 10}" y="28" text-anchor="end"
                 font-family="system-ui, sans-serif" font-size="15"

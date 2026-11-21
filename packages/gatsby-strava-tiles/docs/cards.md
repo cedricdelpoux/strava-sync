@@ -20,8 +20,8 @@ drawn onto the image.
 ```js
 // gatsby-node.js
 const {
-    getActivityCards,
-    renderActivityCard,
+  getActivityCards,
+  renderActivityCard,
 } = require("gatsby-strava-tiles/card")
 ```
 
@@ -41,30 +41,30 @@ a multi-day trip you want drawn as a single card rather than one per day:
 
 ```js
 const history = await graphql(`
-    {
-        allStravaActivity(filter: {coordinates: {ne: null}}) {
-            nodes {
-                id
-                start_date
-                tiles {
-                    x
-                    y
-                }
-            }
+  {
+    allStravaActivity(filter: {coordinates: {ne: null}}) {
+      nodes {
+        id
+        start_date
+        tiles {
+          x
+          y
         }
+      }
     }
+  }
 `)
 
 // One activity per card...
 const cards = getActivityCards({
-    activities: history.data.allStravaActivity.nodes,
-    groups: [["12345"], ["12346"]],
+  activities: history.data.allStravaActivity.nodes,
+  groups: [["12345"], ["12346"]],
 })
 
 // ...or several merged into one, for a trip spanning a few days
 const [trip] = getActivityCards({
-    activities: history.data.allStravaActivity.nodes,
-    groups: [["12345", "12346", "12347"]],
+  activities: history.data.allStravaActivity.nodes,
+  groups: [["12345", "12346", "12347"]],
 })
 ```
 
@@ -96,12 +96,12 @@ buffer for you to write wherever your site serves files from.
 
 ```js
 const {image} = await renderActivityCard({
-    ...card,
-    coordinates: activity.coordinates,
-    tileUrl: ({z, x, y}) =>
-        `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/256/${z}/${x}/${y}@2x` +
-        `?access_token=${process.env.MAPBOX_TOKEN}`,
-    cacheDir: "./.cache/card-background-tiles",
+  ...card,
+  coordinates: activity.coordinates,
+  tileUrl: ({z, x, y}) =>
+    `https://api.mapbox.com/styles/v1/mapbox/light-v11/tiles/256/${z}/${x}/${y}@2x` +
+    `?access_token=${process.env.MAPBOX_TOKEN}`,
+  cacheDir: "./.cache/card-background-tiles",
 })
 ```
 
@@ -141,12 +141,12 @@ provider works; the plugin never assumes one.
 
 Two things worth knowing:
 
--   **The zoom is chosen for you**, and it is not 14. The overlay is drawn from
-    geometry, so the background only has to match the card's own resolution. A
-    card showing 15 km of ground needs zoom 12, where the same frame costs 6 tiles
-    instead of the 40 zoom 14 would spend to be thrown away in the resize.
--   **Pick a neutral style.** Coverage is drawn as a translucent fill; on a green,
-    shaded basemap it disappears. A flat style also compresses better.
+- **The zoom is chosen for you**, and it is not 14. The overlay is drawn from
+  geometry, so the background only has to match the card's own resolution. A
+  card showing 15 km of ground needs zoom 12, where the same frame costs 6 tiles
+  instead of the 40 zoom 14 would spend to be thrown away in the resize.
+- **Pick a neutral style.** Coverage is drawn as a translucent fill; on a green,
+  shaded basemap it disappears. A flat style also compresses better.
 
 Leaving `tileUrl` out draws the tiles on a flat colour instead: no request, no
 token, no provider -- and no place names either, which is usually too high a

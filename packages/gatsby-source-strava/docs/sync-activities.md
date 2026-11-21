@@ -124,18 +124,17 @@ every recorded point:
 const preciseActivities = new Set(require("./precise-activities.json"))
 
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                activities: {
-                    withStreams: (activity) =>
-                        preciseActivities.has(String(activity.id)),
-                    streamsTypes: ["latlng"],
-                },
-            },
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        activities: {
+          withStreams: (activity) => preciseActivities.has(String(activity.id)),
+          streamsTypes: ["latlng"],
         },
-    ],
+      },
+    },
+  ],
 }
 ```
 

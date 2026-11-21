@@ -5,16 +5,16 @@ per route of your Strava account, on every build:
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                athlete: {
-                    withRoutes: true,
-                },
-            },
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        athlete: {
+          withRoutes: true,
         },
-    ],
+      },
+    },
+  ],
 }
 ```
 
@@ -27,17 +27,17 @@ for. Without it, Strava leaves them out without any error.
 
 ```graphql
 query {
-    allStravaRoute(sort: {updated_at: DESC}) {
-        nodes {
-            id
-            name
-            distance
-            elevation_gain
-            private
-            starred
-            coordinates
-        }
+  allStravaRoute(sort: {updated_at: DESC}) {
+    nodes {
+      id
+      name
+      distance
+      elevation_gain
+      private
+      starred
+      coordinates
     }
+  }
 }
 ```
 
@@ -78,19 +78,19 @@ on a straight line:
 
 ```js
 module.exports = {
-    plugins: [
-        {
-            resolve: "gatsby-source-strava",
-            options: {
-                athlete: {
-                    withRoutes: true,
-                    withRouteStreams: true,
-                    // Or only for some routes
-                    withRouteStreams: (route) => route.type === 1,
-                },
-            },
+  plugins: [
+    {
+      resolve: "gatsby-source-strava",
+      options: {
+        athlete: {
+          withRoutes: true,
+          withRouteStreams: true,
+          // Or only for some routes
+          withRouteStreams: (route) => route.type === 1,
         },
-    ],
+      },
+    },
+  ],
 }
 ```
 
@@ -129,12 +129,12 @@ route was added, edited or deleted. Write it to a file at build time:
 const fs = require("fs")
 
 exports.onPostBuild = async ({getNodesByType}) => {
-    const {getRoutesVersion} = await import("strava-sync")
+  const {getRoutesVersion} = await import("strava-sync")
 
-    fs.writeFileSync(
-        "public/routes-version.json",
-        JSON.stringify(getRoutesVersion(getNodesByType("StravaRoute")))
-    )
+  fs.writeFileSync(
+    "public/routes-version.json",
+    JSON.stringify(getRoutesVersion(getNodesByType("StravaRoute")))
+  )
 }
 ```
 
@@ -143,22 +143,22 @@ differ:
 
 ```js
 const {createClient, fetchRoutes, getRoutesVersion, normalizeRoute} =
-    await import("strava-sync")
+  await import("strava-sync")
 
 const client = createClient({
-    clientId: process.env.STRAVA_CLIENT_ID,
-    clientSecret: process.env.STRAVA_CLIENT_SECRET,
-    token: process.env.STRAVA_TOKEN,
+  clientId: process.env.STRAVA_CLIENT_ID,
+  clientSecret: process.env.STRAVA_CLIENT_SECRET,
+  token: process.env.STRAVA_TOKEN,
 })
 
 const deployedVersion = await fetch(
-    `${process.env.URL}/routes-version.json`
+  `${process.env.URL}/routes-version.json`
 ).then((response) => response.json())
 
 const routes = (await fetchRoutes({client})).map(normalizeRoute)
 
 if (getRoutesVersion(routes) !== deployedVersion) {
-    await fetch(process.env.BUILD_HOOK_URL, {method: "POST"})
+  await fetch(process.env.BUILD_HOOK_URL, {method: "POST"})
 }
 ```
 
