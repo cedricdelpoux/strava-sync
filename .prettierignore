@@ -1,0 +1,8 @@
+CHANGELOG.md
+types
+.changeset/*.md
+**/example/.cache
+**/example/public
+**/examples/*/.cache
+**/examples/*/public
+package-lock.json
