@@ -1,43 +1,43 @@
-const js = require("@eslint/js")
-const react = require("eslint-plugin-react")
-const prettierConfig = require("eslint-config-prettier")
-const globals = require("globals")
+import js from "@eslint/js"
+import globals from "globals"
 
-module.exports = [
+export default [
+  {
+    ignores: [
+      ".claude/**",
+      "**/types/**",
+      "**/node_modules/**",
+      "**/example/.cache/**",
+      "**/example/public/**",
+      "**/examples/*/.cache/**",
+      "**/examples/*/public/**",
+    ],
+  },
   js.configs.recommended,
   {
     languageOptions: {
-      ecmaVersion: 2020,
       sourceType: "commonjs",
-      globals: {
-        ...globals.node,
-        ...globals.es2017,
-      },
+      globals: globals.node,
     },
   },
   {
-    files: ["example/src/**/*.js"],
-    ...react.configs.flat.recommended,
+    files: ["packages/strava-sync/**/*.js"],
     languageOptions: {
-      ...react.configs.flat.recommended.languageOptions,
-      ecmaVersion: 2019,
       sourceType: "module",
-      globals: {
-        ...globals.node,
-        ...globals.es2017,
-        ...globals.browser,
-      },
-    },
-    settings: {
-      react: {
-        version: "detect",
-      },
     },
     rules: {
-      ...react.configs.flat.recommended.rules,
-      "react/prop-types": "off",
-      "react/display-name": "off",
+      "no-control-regex": "off",
     },
   },
-  prettierConfig,
+  {
+    files: ["packages/*/example/**/*.js", "packages/*/examples/**/*.js"],
+    languageOptions: {
+      sourceType: "module",
+      parserOptions: {ecmaFeatures: {jsx: true}},
+      globals: {...globals.node, ...globals.browser},
+    },
+    rules: {
+      "no-unused-vars": ["error", {varsIgnorePattern: "^React$"}],
+    },
+  },
 ]

@@ -1,1 +1,9 @@
 node_modules
+types
+*.log
+.env*
+.strava
+**/example/.cache
+**/example/public
+**/examples/*/.cache
+**/examples/*/public
