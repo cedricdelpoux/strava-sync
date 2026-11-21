@@ -1,0 +1,34 @@
+# strava-sync monorepo
+
+npm workspaces monorepo. The core `strava-sync` is ESM checked with tsc (JSDoc types), the Gatsby packages are CommonJS JavaScript. Node >= 22.12.
+
+## Layout
+
+- `packages/strava-sync`: the core, ESM with JSDoc types built into the git-ignored `types/`, tested with vitest.
+- `packages/gatsby-source-strava`: the Gatsby plugin (depends on `strava-sync`). Its `example/` is a Gatsby site with its own tooling, it is not a workspace.
+- `packages/gatsby-strava-declutter` and `packages/gatsby-strava-tiles`: plugins that read the nodes of `gatsby-source-strava` (peer dependency `^4.3.0`), tested with `node --test`. Each has an `example/` site.
+- `packages/gatsby-remark-strava`: remark plugin, with `examples/` sites. It does not use `strava-sync` yet.
+- Shared at the root: `eslint.config.js` (one flat config with per-package overrides), `.prettierrc`, `.prettierignore`, `.editorconfig`, `.npmrc`, `.github/`, `.changeset/`, and the single `package-lock.json`.
+- The dev dependencies shared by the packages (eslint, prettier, typescript, vitest, coverage, `@types/node`, globals) live in the root `package.json`. A package declares only its own (react, sharp).
+- Each package keeps its own `LICENCE.md` copy because npm packs it from the package folder.
+- Internal dependency ranges (`strava-sync: ^0.1.0`) stay as they are: npm links the workspace packages while the versions satisfy the ranges.
+
+## Commands
+
+Run from the root.
+
+- `npm install`: install everything and link the packages. With npm 10, a fresh resolution without a lock fails on the gatsby peer dependencies (npm bug): use npm 11 (`npx npm@11 install`) when the lock needs to be regenerated.
+- `npm run lint`: builds the types first, then runs `eslint` in each package (and `tsc --noEmit` in `strava-sync`), then `prettier --check .` at the root.
+- `npm test`: runs each package test script.
+- `npm run build`: `tsc` in `strava-sync`, it writes the git-ignored `types/` folder.
+- `npm run format`: `prettier --write .`.
+- `npm pack --dry-run -w <package>`: check the published files.
+
+## Releases
+
+Independent versions with changesets (`.changeset/config.json`, base branch `master`).
+
+- A change to a package comes with a changeset: `npm run changeset`.
+- `.github/workflows/release.yml` runs `changesets/action` on `master`: it opens the "Version packages" pull request (`npm run version-packages`, which also refreshes the lock), and when that is merged it publishes (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token).
+- Tags are `<package>@<version>`. The ones imported before the merge are `gatsby-strava-declutter@0.1.0`, `gatsby-strava-declutter@0.2.0` and `gatsby-remark-strava@1.0.0`, the gatsby plugin keeps its old `v1.0.0` tag.
+- `.github/workflows/ci.yml` runs lint and tests on Node 22 and 24 (Gatsby 5 does not support Node 26).
