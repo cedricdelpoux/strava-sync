@@ -1,0 +1,8 @@
+.env
+.cache
+.strava
+node_modules
+public
+precise-activities.json
+.yalc
+yalc.lock
