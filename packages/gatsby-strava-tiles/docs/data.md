@@ -270,5 +270,5 @@ coverage, with the tiles it would earn.
 The [`cards`](./cards.md) documentation covers drawing an activity as an image
 at build time, which uses `tiles` and `outlines` from above.
 
-[gatsby-source-strava]: https://github.com/cedricdelpoux/gatsby-source-strava
+[gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava
 [gatsby-source-ridewithgps]: https://github.com/cedricdelpoux/gatsby-source-ridewithgps

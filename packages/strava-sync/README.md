@@ -6,7 +6,7 @@
 
 `strava-sync` keeps a local copy of your [Strava](https://www.strava.com/) activities and routes up to date, within the rate limits.
 
-It powers [gatsby-source-strava](https://github.com/cedricdelpoux/gatsby-source-strava), and it works without Gatsby too, for any static site generator or script.
+It powers [gatsby-source-strava](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava), and it works without Gatsby too, for any static site generator or script.
 
 Strava allows 100 requests every 15 minutes and 1000 a day. A history fetched over and over burns that quota, so `strava-sync` fetches each activity once, writes it to a store you own, and only asks Strava for what is new.
 
@@ -177,10 +177,10 @@ An activity created or updated is fetched and written to the store, a deleted on
 
 The tests mock the HTTP layer and never call Strava. The code is plain JavaScript. The types of the public API are written as [JSDoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) comments: `npm run lint` checks them with TypeScript, and `npm pack` turns them into the `.d.ts` files of the package.
 
-To release a version, bump it in `package.json` and `CHANGELOG.md`, then publish a GitHub release: the `Publish` workflow publishes it to npm, with its provenance.
+Versions are released from the [monorepo](../../README.md#releases) with changesets.
 
 [badge-npm]: https://img.shields.io/npm/v/strava-sync.svg?style=flat-square
-[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
+[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=master&style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/strava-sync
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
