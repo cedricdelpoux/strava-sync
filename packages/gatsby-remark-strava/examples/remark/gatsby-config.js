@@ -1,5 +1,3 @@
-require("dotenv").config()
-
 module.exports = {
   plugins: [
     {
@@ -18,9 +16,6 @@ module.exports = {
             resolve: require.resolve(`../..`),
             options: {
               debug: true,
-              stravaClientId: process.env.STRAVA_CLIENT_ID,
-              stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
-              stravaToken: process.env.STRAVA_TOKEN,
             },
           },
         ],
