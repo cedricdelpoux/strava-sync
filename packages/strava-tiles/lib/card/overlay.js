@@ -1,4 +1,4 @@
-const {project} = require("./frame")
+import {project} from "./frame.js"
 
 const round = (n) => Math.round(n * 10) / 10
 
@@ -97,4 +97,4 @@ function renderOverlay({
   </svg>`
 }
 
-module.exports = {renderOverlay}
+export {renderOverlay}

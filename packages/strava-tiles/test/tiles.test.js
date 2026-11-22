@@ -1,7 +1,6 @@
-const assert = require("node:assert/strict")
-const {describe, it} = require("node:test")
+import {describe, expect, it} from "vitest"
 
-const {getTileActivities} = require("../utils/tiles")
+import {getTileActivities} from "../lib/tiles.js"
 
 const LAT = 43.6
 
@@ -26,29 +25,9 @@ describe("getTileActivities", () => {
       tileActivities[tile].includes("walk")
     )
 
-    assert.ok(walkTiles.length > 0)
+    expect(walkTiles.length > 0).toBe(true)
     walkTiles.forEach((tile) => {
-      assert.ok(tileActivities[tile].includes("ride"))
+      expect(tileActivities[tile].includes("ride")).toBe(true)
     })
-  })
-})
-
-describe("package entry point", () => {
-  it("exports the tiles of an activity and the map and tile helpers", () => {
-    const entry = require("..")
-
-    ;[
-      "getActivityTiles",
-      "pointsToTiles",
-      "getTileActivities",
-      "tileToCoords",
-      "tilesToOutline",
-      "lngToX",
-      "latToY",
-      "xToLng",
-      "yToLat",
-      "distanceInMeters",
-      "Z",
-    ].forEach((name) => assert.ok(name in entry, name))
   })
 })

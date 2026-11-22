@@ -1,4 +1,4 @@
-const {
+import {
   getSquare,
   getMaxRow,
   getMaxColumn,
@@ -6,7 +6,7 @@ const {
   getMonthly,
   distinctTiles,
   tilesToOutline,
-} = require("./tiles.js")
+} from "./tiles.js"
 
 function getAthleteTiles(tiles, tilesByMonth) {
   const square = getSquare(tiles)
@@ -44,6 +44,4 @@ function getAthleteTiles(tiles, tilesByMonth) {
   return athleteTiles
 }
 
-module.exports = {
-  getAthleteTiles,
-}
+export {getAthleteTiles}

@@ -1,7 +1,7 @@
-const fs = require("fs")
-const path = require("path")
-const {Z} = require("../map")
-const {getSharp} = require("./sharp")
+import fs from "node:fs"
+import path from "node:path"
+import {Z} from "../map.js"
+import {getSharp} from "./sharp.js"
 
 const TILE_PIXELS = 512 // what `@2x` returns for a 256 tile
 
@@ -23,7 +23,7 @@ async function fetchTile({url, cacheDir}) {
 
 // No map under the card: the frame is used as is, nothing is fetched
 async function getFlatBackground({frame, size, color}) {
-  const sharp = getSharp()
+  const sharp = await getSharp()
 
   return {
     image: await sharp({
@@ -45,7 +45,7 @@ async function getFlatBackground({frame, size, color}) {
 async function getBackground({frame, size, zoom, tileUrl, cacheDir, color}) {
   if (!tileUrl) return getFlatBackground({frame, size, color})
 
-  const sharp = getSharp()
+  const sharp = await getSharp()
 
   const span = Math.pow(2, Z - zoom) // tiles of zoom 14 per background tile
   const minX = Math.floor(frame.x0 / span)
@@ -103,4 +103,4 @@ async function getBackground({frame, size, zoom, tileUrl, cacheDir, color}) {
   }
 }
 
-module.exports = {getBackground}
+export {getBackground}

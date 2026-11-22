@@ -1,7 +1,4 @@
-const {getActivityTiles} = require("./utils/activity.js")
-const {getAthleteTiles} = require("./utils/athlete.js")
-const {getRouteTiles} = require("./utils/route.js")
-const {distinctTiles} = require("./utils/tiles.js")
+const loadTiles = () => import("strava-tiles")
 
 const ROUTE_NODE_TYPE_BY_SOURCE = {
   strava: "StravaRoute",
@@ -149,53 +146,52 @@ exports.createResolvers = ({createResolvers}, pluginOptions) => {
 const activityNodesById = new Map()
 const routeNodesById = new Map()
 let athleteNode = null
-let isNewTile = () => true
+let coveredTiles = []
 let hasSourced = false
 
-// New tiles only make sense in chronological order, which Strava doesn't
-// guarantee
-function recomputeTiles({createNodeField}) {
-  const sortedActivityNodes = [...activityNodesById.values()].sort((a, b) =>
-    a.start_date < b.start_date ? -1 : a.start_date > b.start_date ? 1 : 0
+const createLogger = (reporter) => ({
+  info: (message) => reporter.info(`strava-tiles: ${message}`),
+  warn: (message) => reporter.warn(`strava-tiles: ${message}`),
+  error: (message) => reporter.error(`strava-tiles: ${message}`),
+})
+
+async function recomputeTiles({createNodeField, reporter}) {
+  const {computeTiles} = await loadTiles()
+  const computed = computeTiles({
+    activities: [...activityNodesById.values()],
+    routes: [...routeNodesById.values()],
+    logger: createLogger(reporter),
+  })
+  const {activityTiles, athleteTiles, routeTiles} = computed
+
+  coveredTiles = computed.coveredTiles
+  activityTiles.forEach((value, id) =>
+    createNodeField({node: activityNodesById.get(id), name: "tiles", value})
   )
 
-  let tiles = []
-  const tilesByMonth = {}
-
-  sortedActivityNodes.forEach((node) => {
-    const newTiles = getActivityTiles(node, tiles)
-
-    createNodeField({node, name: "tiles", value: newTiles})
-
-    const yearMonth = node.start_date.substring(0, 7)
-
-    if (!tilesByMonth[yearMonth]) {
-      tilesByMonth[yearMonth] = {old: [...tiles], new: []}
-    }
-    tilesByMonth[yearMonth].new.push(...newTiles)
-
-    tiles.push(...newTiles)
-  })
-
   if (athleteNode) {
-    const athleteTiles = getAthleteTiles(tiles, tilesByMonth)
-
     createNodeField({node: athleteNode, name: "tiles", value: athleteTiles})
   }
 
-  isNewTile = distinctTiles(tiles)
-  routeNodesById.forEach((node) => updateRouteTiles(node, {createNodeField}))
+  routeTiles.forEach((value, id) =>
+    createNodeField({node: routeNodesById.get(id), name: "tiles", value})
+  )
 }
 
-function updateRouteTiles(node, {createNodeField}) {
+async function updateRouteTiles(node, {createNodeField}) {
+  const {distinctTiles, getRouteTiles} = await loadTiles()
+
   createNodeField({
     node,
     name: "tiles",
-    value: getRouteTiles(node, isNewTile),
+    value: getRouteTiles(node, distinctTiles(coveredTiles)),
   })
 }
 
-exports.onCreateNode = ({node, actions: {createNodeField}}, pluginOptions) => {
+exports.onCreateNode = async (
+  {node, actions: {createNodeField}, reporter},
+  pluginOptions
+) => {
   if (node.internal.type === "StravaActivity") {
     createNodeField({node, name: "tiles", value: []})
 
@@ -203,7 +199,7 @@ exports.onCreateNode = ({node, actions: {createNodeField}}, pluginOptions) => {
       activityNodesById.set(node.id, node)
 
       // A dev-mode refetch, after `createPages`
-      if (hasSourced) recomputeTiles({createNodeField})
+      if (hasSourced) await recomputeTiles({createNodeField, reporter})
     }
   }
 
@@ -211,7 +207,7 @@ exports.onCreateNode = ({node, actions: {createNodeField}}, pluginOptions) => {
     routeNodesById.set(node.id, node)
 
     if (hasSourced) {
-      updateRouteTiles(node, {createNodeField})
+      await updateRouteTiles(node, {createNodeField})
     } else {
       createNodeField({node, name: "tiles", value: {all: [], new: []}})
     }
@@ -224,7 +220,7 @@ exports.onCreateNode = ({node, actions: {createNodeField}}, pluginOptions) => {
 
 // Before the site's `createPages`, which Gatsby runs last. Not `sourceNodes`,
 // which warns "has generated no Gatsby nodes".
-exports.createPages = (
+exports.createPages = async (
   {actions: {createNodeField}, getNodesByType, reporter},
   pluginOptions
 ) => {
@@ -245,9 +241,8 @@ exports.createPages = (
     const [athlete] = getNodesByType("StravaAthlete")
     if (athlete) athleteNode = athlete
 
-    recomputeTiles({createNodeField})
+    await recomputeTiles({createNodeField, reporter})
     hasSourced = true
-    reporter.success("strava-tiles: tiles computed")
   } catch (e) {
     // Only fatal for `gatsby build`, not `gatsby develop`
     reporter.panicOnBuild(`strava-tiles: ${e.message}`, e)

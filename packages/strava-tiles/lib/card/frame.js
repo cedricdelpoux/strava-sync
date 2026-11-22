@@ -1,4 +1,4 @@
-const {lngToXf, latToYf, Z} = require("../map")
+import {lngToXf, latToYf, Z} from "../map.js"
 
 // The activity's extent plus a margin, grown to the card's shape
 function getCardFrame({activityTiles, padding = 2, minSize = 8, aspect = 2}) {
@@ -58,4 +58,4 @@ function clipToFrame(frame, tiles) {
   )
 }
 
-module.exports = {getCardFrame, getBackgroundZoom, clipToFrame, project}
+export {getCardFrame, getBackgroundZoom, clipToFrame, project}

@@ -1,4 +1,4 @@
-const {pointsToTiles} = require("./tiles")
+import {pointsToTiles} from "./tiles.js"
 
 // No stream for a route, so no gap to read as a GPS pause
 function getRouteTiles(route, isNewTile) {
@@ -7,6 +7,4 @@ function getRouteTiles(route, isNewTile) {
   return {all, new: all.filter(isNewTile)}
 }
 
-module.exports = {
-  getRouteTiles,
-}
+export {getRouteTiles}

@@ -1,4 +1,4 @@
-const {distinctTiles, pointsToTiles} = require("./tiles")
+import {distinctTiles, pointsToTiles} from "./tiles.js"
 
 function getActivityTiles(activity, allTiles) {
   // Only raw streams are dense enough for a gap to mean a GPS pause
@@ -12,6 +12,4 @@ function getActivityTiles(activity, allTiles) {
   return tiles.filter(distinctTiles(allTiles))
 }
 
-module.exports = {
-  getActivityTiles,
-}
+export {getActivityTiles}

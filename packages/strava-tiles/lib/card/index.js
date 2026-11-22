@@ -1,14 +1,14 @@
-const {
+import {
   distinctTiles,
   pointsToTiles,
   tileToCoords,
   tilesToOutline,
-} = require("../tiles")
-const {getActivityCards} = require("./activities")
-const {getBackground} = require("./background")
-const {getCardFrame, getBackgroundZoom, clipToFrame} = require("./frame")
-const {renderOverlay} = require("./overlay")
-const {getSharp} = require("./sharp")
+} from "../tiles.js"
+import {getActivityCards} from "./activities.js"
+import {getBackground} from "./background.js"
+import {getCardFrame, getBackgroundZoom, clipToFrame} from "./frame.js"
+import {renderOverlay} from "./overlay.js"
+import {getSharp} from "./sharp.js"
 
 const STYLE = {
   covered: "#2ca57e",
@@ -65,7 +65,7 @@ async function renderActivityCard({
   format = FORMAT,
   outlined = true,
 }) {
-  const sharp = getSharp()
+  const sharp = await getSharp()
   const style = {...STYLE, ...overrides}
   const tracks = asTracks(coordinates)
 
@@ -129,4 +129,4 @@ async function renderActivityCard({
   return {image, zoom, backgroundTiles: background.tiles}
 }
 
-module.exports = {getActivityCards, renderActivityCard, STYLE, SIZE}
+export {getActivityCards, renderActivityCard, STYLE, SIZE}

@@ -1,4 +1,4 @@
-const {getCluster, distinctTiles} = require("../tiles")
+import {getCluster, distinctTiles} from "../tiles.js"
 
 // What each card in `groups` needs, from one walk of the whole history.
 // `activities` is `{id, start_date, tiles}` for every activity. A group is
@@ -54,4 +54,4 @@ function getActivityCards({activities, groups}) {
   })
 }
 
-module.exports = {getActivityCards}
+export {getActivityCards}
