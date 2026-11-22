@@ -7,6 +7,28 @@
     "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
     "directory": "packages/gatsby-remark-strava"
   },
+  "homepage": "https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-remark-strava#readme",
+  "bugs": {
+    "url": "https://github.com/cedricdelpoux/strava-sync/issues"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/cedricdelpoux"
+    },
+    {
+      "type": "ko-fi",
+      "url": "https://ko-fi.com/cedricdelpoux"
+    },
+    {
+      "type": "thanks.dev",
+      "url": "https://thanks.dev/u/gh/cedricdelpoux"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/cedricdelpoux"
+    }
+  ],
   "author": {
     "name": "Cédric Delpoux",
     "email": "cedric.delpoux@gmail.com"

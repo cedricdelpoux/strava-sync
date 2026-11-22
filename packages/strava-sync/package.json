@@ -7,6 +7,28 @@
     "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
     "directory": "packages/strava-sync"
   },
+  "homepage": "https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-sync#readme",
+  "bugs": {
+    "url": "https://github.com/cedricdelpoux/strava-sync/issues"
+  },
+  "funding": [
+    {
+      "type": "github",
+      "url": "https://github.com/sponsors/cedricdelpoux"
+    },
+    {
+      "type": "ko-fi",
+      "url": "https://ko-fi.com/cedricdelpoux"
+    },
+    {
+      "type": "thanks.dev",
+      "url": "https://thanks.dev/u/gh/cedricdelpoux"
+    },
+    {
+      "type": "paypal",
+      "url": "https://paypal.me/cedricdelpoux"
+    }
+  ],
   "author": "Cédric Delpoux <cedric.delpoux@gmail.com>",
   "license": "MIT",
   "keywords": [
