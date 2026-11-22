@@ -36,6 +36,14 @@ jobs:
         if: matrix.node-version == 24
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/gatsby-remark-strava/coverage/lcov.info
+          flags: gatsby-remark-strava
+          fail_ci_if_error: false
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
           files: packages/gatsby-source-strava/coverage/lcov.info
           flags: gatsby-source-strava
           fail_ci_if_error: false

@@ -17,6 +17,9 @@ flag_management:
     - name: gatsby-source-strava
       paths:
         - packages/gatsby-source-strava/
+    - name: gatsby-remark-strava
+      paths:
+        - packages/gatsby-remark-strava/
     - name: gatsby-strava-declutter
       paths:
         - packages/gatsby-strava-declutter/
