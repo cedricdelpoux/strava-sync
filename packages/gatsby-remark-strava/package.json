@@ -1,7 +1,7 @@
 {
   "name": "gatsby-remark-strava",
   "version": "1.6.0",
-  "description": "Gatsby remark plugin to embed Strava activities and profile by their URL",
+  "description": "Gatsby remark plugin to embed Strava activities and routes by their URL",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
@@ -44,18 +44,18 @@
     "embed"
   ],
   "main": "index.js",
+  "engines": {
+    "node": ">=22.12"
+  },
   "files": [
+    "gatsby-browser.js",
     "utils"
   ],
   "dependencies": {
-    "express": "^4.17.3",
-    "glob": "^8.0.1",
-    "inquirer": "^8.2.2",
     "mdast-util-from-markdown": "^2",
     "mdast-util-mdx-jsx": "^3",
     "micromark-extension-mdx-jsx": "^2",
-    "open": "^8.4.0",
-    "strava-v3": "^2.1.0",
+    "strava-sync": "^0.1.0",
     "unist-util-visit": "^2.0.3"
   },
   "devDependencies": {
@@ -67,9 +67,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "prepublishOnly": "npm run lint"
-  },
-  "bin": {
-    "gatsby-remark-strava-token": "./utils/generate-token.js"
+    "test": "vitest run --coverage",
+    "prepublishOnly": "npm run lint && npm test"
   }
 }

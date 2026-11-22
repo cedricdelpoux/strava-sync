@@ -23,6 +23,9 @@ module.exports = {
               // Rendered by the `strava` component of src/templates/page.js
               render: ({id, name}) =>
                 `<strava id="${id}" name="${name.replace(/"/g, "&quot;")}" />`,
+              // Read first, so the token is only needed for an activity
+              // that gatsby-source-strava has not stored
+              storeDir: ".strava",
               stravaClientId: process.env.STRAVA_CLIENT_ID,
               stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
               stravaToken: process.env.STRAVA_TOKEN,

@@ -5,8 +5,7 @@
     "dev": "gatsby develop -p 8110",
     "start": "gatsby develop -p 8110",
     "build": "gatsby build",
-    "clean": "gatsby clean",
-    "token": "../../utils/generate-token.js"
+    "clean": "gatsby clean"
   },
   "dependencies": {
     "@mdx-js/react": "^2",
