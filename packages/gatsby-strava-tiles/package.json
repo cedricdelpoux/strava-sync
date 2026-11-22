@@ -31,7 +31,7 @@
   },
   "peerDependencies": {
     "gatsby": ">=3.0.0",
-    "gatsby-source-strava": "^4.3.0",
+    "gatsby-source-strava": ">=4.3.0",
     "sharp": ">=0.32.0"
   },
   "scripts": {
