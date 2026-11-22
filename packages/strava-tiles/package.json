@@ -1,0 +1,75 @@
+{
+  "name": "strava-tiles",
+  "version": "0.1.0",
+  "description": "Compute the map tiles covered by your Strava activities, and draw them as images",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
+    "directory": "packages/strava-tiles"
+  },
+  "author": "Cédric Delpoux <cedric.delpoux@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "strava",
+    "tiles",
+    "map",
+    "activities",
+    "explorer"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./index.js"
+    },
+    "./card": {
+      "types": "./types/card.d.ts",
+      "default": "./card.js"
+    },
+    "./map": {
+      "types": "./types/map.d.ts",
+      "default": "./map.js"
+    },
+    "./tiles": {
+      "types": "./types/tiles.d.ts",
+      "default": "./tiles.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "card.js",
+    "map.js",
+    "tiles.js",
+    "bin",
+    "lib",
+    "types"
+  ],
+  "bin": {
+    "strava-tiles": "bin/strava-tiles.js"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "strava-sync": "^0.1.0"
+  },
+  "devDependencies": {
+    "sharp": "^0.32.6"
+  },
+  "peerDependencies": {
+    "sharp": ">=0.32.0"
+  },
+  "peerDependenciesMeta": {
+    "sharp": {
+      "optional": true
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . && tsc --noEmit",
+    "test": "vitest run --coverage",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm test"
+  }
+}
