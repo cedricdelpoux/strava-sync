@@ -2,9 +2,9 @@
   "name": "gatsby-remark-strava-example-remark",
   "private": true,
   "scripts": {
-    "dev": "gatsby develop -p 8111",
-    "start": "gatsby develop -p 8111",
-    "build": "gatsby build",
+    "dev": "NODE_OPTIONS=--no-deprecation gatsby develop -p 8111",
+    "start": "NODE_OPTIONS=--no-deprecation gatsby develop -p 8111",
+    "build": "NODE_OPTIONS=--no-deprecation gatsby build",
     "clean": "gatsby clean"
   },
   "dependencies": {
