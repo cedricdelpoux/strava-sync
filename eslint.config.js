@@ -5,6 +5,7 @@ export default [
   {
     ignores: [
       ".claude/**",
+      "**/coverage/**",
       "**/types/**",
       "**/node_modules/**",
       "**/example/.cache/**",
@@ -31,6 +32,15 @@ export default [
     },
     rules: {
       "no-control-regex": "off",
+    },
+  },
+  {
+    files: [
+      "packages/gatsby-*/test/**/*.js",
+      "packages/gatsby-*/vitest.config.mjs",
+    ],
+    languageOptions: {
+      sourceType: "module",
     },
   },
   {

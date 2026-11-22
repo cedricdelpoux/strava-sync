@@ -61,7 +61,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "test": "node --test",
+    "test": "vitest run --coverage",
     "prepublishOnly": "npm run lint && npm test"
   },
   "peerDependenciesMeta": {
