@@ -21,7 +21,11 @@ export default [
     },
   },
   {
-    files: ["packages/strava-sync/**/*.js"],
+    files: [
+      "packages/strava-sync/**/*.js",
+      "packages/strava-declutter/**/*.js",
+      "packages/strava-tiles/**/*.js",
+    ],
     languageOptions: {
       sourceType: "module",
     },
