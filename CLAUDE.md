@@ -47,10 +47,12 @@ Run from the root.
 
 ## Releases
 
-Independent versions with changesets (`.changeset/config.json`, base branch `main`).
+Independent versions with changesets (`.changeset/config.json`, base branch `main`). There is no "Version packages" pull request: the repository has a single maintainer, so releases are versioned locally.
 
 - A change to a package comes with a changeset: `npm run changeset`.
-- `.github/workflows/release.yml` runs `changesets/action` on `main`: it opens the "Version packages" pull request (`npm run version-packages`, which also refreshes the lock), and when that is merged it publishes (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token).
-- A new package is published once by hand (`npm publish -w <name> --access public`), because npm only sets a trusted publisher on an existing package. Then set its trusted publisher on npmjs.com: `cedricdelpoux/strava-sync`, workflow `release.yml`, no environment.
+- To release, version locally and push to `main`: run `npx npm@11 run version-packages`, which applies the changesets and refreshes the lock, then commit `chore: version packages` and push it.
+- `.github/workflows/release.yml` runs `changesets/action` on `main`. With no pending changeset left, it publishes the new versions (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token). If it ever opens a "Version packages" pull request, close it and version locally instead.
+- A new package is published once by hand (`npm publish -w <name> --access public`), because npm only sets a trusted publisher on an existing package. Then set its trusted publisher on npmjs.com: `cedricdelpoux/strava-sync`, workflow `release.yml`, no environment. The trusted publisher stays "pending validation" until one CI publish succeeds.
+- Never publish a package that depends on a new version before that version is `latest` on npm.
 - Tags are `<package>@<version>`. The ones imported before the merge are `gatsby-strava-declutter@0.1.0`, `gatsby-strava-declutter@0.2.0` and `gatsby-remark-strava@1.0.0`, the gatsby plugin keeps its old `v1.0.0` tag.
 - `.github/workflows/ci.yml` runs lint and tests on Node 22 and 24 (Gatsby 5 does not support Node 26). The Node 24 job uploads the `coverage/lcov.info` of each package to Codecov, one flag per package (`codecov.yml`, informational statuses, `carryforward`), with the `CODECOV_TOKEN` secret and `fail_ci_if_error: false`.
