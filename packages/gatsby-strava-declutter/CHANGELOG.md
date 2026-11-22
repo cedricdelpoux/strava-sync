@@ -1,5 +1,12 @@
 # Changelog
 
+## 0.3.1
+
+### Patch Changes
+
+- 0cdc57c: Accept `gatsby-source-strava` 5 as a peer dependency.
+- 786017f: Delegate the declutter to `strava-declutter`, which works without Gatsby too. The options, the `Declutter` nodes, the `StravaActivity.declutter` field, the `.strava-declutter` store and the `declutter`, `simplify` and `getDeclutterNodeId` exports stay the same. The plugin no longer reloads the declutter when its file changes in development, and the first build after the update declutters every activity again, since the store digest changed.
+
 ## [0.3.0] - 2026-10-19
 
 ### Added

@@ -1,6 +1,6 @@
 {
   "name": "gatsby-remark-strava",
-  "version": "1.6.0",
+  "version": "2.0.0",
   "description": "Gatsby remark plugin to embed Strava activities and routes by their URL",
   "repository": {
     "type": "git",
