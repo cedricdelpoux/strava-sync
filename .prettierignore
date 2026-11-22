@@ -6,3 +6,5 @@ types
 **/examples/*/.cache
 **/examples/*/public
 package-lock.json
+.strava
+.strava-declutter
