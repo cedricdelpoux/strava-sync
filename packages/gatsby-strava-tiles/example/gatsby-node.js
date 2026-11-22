@@ -1,8 +1,9 @@
 const fs = require("fs")
 const path = require("path")
 
-// `require("gatsby-strava-tiles/images")` in a real site
-const {getActivityImages, renderActivityImage} = require("../images")
+// `import("strava-tiles/images")` in a real site: `require()` of an ES module
+// logs a warning on the older Node versions
+const loadImages = () => import("../../strava-tiles/images.js")
 
 // Only the most recent activities get an image
 const RECENT_ACTIVITIES = 20
@@ -124,6 +125,7 @@ async function createImagesPage({graphql, actions: {createPage}, reporter}) {
 
   // One image per activity. Group several ids to merge a multi-day trip.
   const activities = recent.data.allStravaActivity.nodes
+  const {getActivityImages, renderActivityImage} = await loadImages()
   const drawable = getActivityImages({
     activities: history.data.allStravaActivity.nodes,
     groups: activities.map(({id}) => [id]),
