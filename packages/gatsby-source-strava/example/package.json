@@ -13,10 +13,22 @@
     "@mapbox/polyline": "^1.2.1",
     "dotenv": "^8.2.0",
     "gatsby": "5.14.0",
-    "react": "link:../node_modules/react",
-    "react-dom": "link:../node_modules/react-dom"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "prettier": "3.4.1"
+  },
+  "allowScripts": {
+    "sharp": true,
+    "lmdb": false,
+    "@parcel/watcher": false,
+    "core-js": false,
+    "core-js-pure": false,
+    "es5-ext": false,
+    "gatsby": false,
+    "gatsby-cli": false,
+    "msgpackr-extract": false,
+    "fsevents": false
   }
 }
