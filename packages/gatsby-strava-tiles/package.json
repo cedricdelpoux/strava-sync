@@ -1,6 +1,6 @@
 {
   "name": "gatsby-strava-tiles",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "description": "Gatsby plugin to add tiles to your Strava activities",
   "repository": {
     "type": "git",
