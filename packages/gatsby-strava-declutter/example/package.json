@@ -4,8 +4,8 @@
   "scripts": {
     "build": "gatsby build",
     "clean": "gatsby clean",
-    "dev": "gatsby develop",
-    "serve": "gatsby serve",
+    "dev": "gatsby develop -p 8108",
+    "serve": "gatsby serve -p 8108",
     "strava-token": "../../gatsby-source-strava/scripts/token.js",
     "fetch-activity": "../../gatsby-source-strava/scripts/activity.js --streams latlng",
     "sync-activities": "../../gatsby-source-strava/scripts/activities.js"
