@@ -14,6 +14,16 @@ npm workspaces monorepo. The core packages (`strava-sync`, `strava-declutter`, `
 - Each package keeps its own `LICENCE.md` copy because npm packs it from the package folder.
 - Internal dependency ranges (`strava-sync: ^0.1.0`) stay as they are: npm links the workspace packages while the versions satisfy the ranges.
 
+## Logos
+
+Each package has a `logo.svg` (the README header) and a table icon in `.github/assets/icons/<package>.svg` (the root README table). The root `logo.svg` is the `strava-sync` one.
+
+- The logo is the Strava app icon: an orange `#FC4C02` tile (224 px, `rx` 56) with the white Strava chevron centred in it. The chevron never moves.
+- The bottom-right badge says what the package does. The bottom-left badge is the framework it plugs into, and only framework packages have one. Both are discs of radius 51 centred on the tile corners, (224, 224) and (0, 224), each with a transparent gap of radius 65 cut into the tile.
+- Every logo uses the same `viewBox="-53 -2 330 279"`, so the tile renders at the same size and place in every README header.
+- Badge colours, with a white glyph: sync `#0969DA`, declutter funnel `#1A7F37`, tiles grid `#BF3989`, remark M↓ `#5F6368`, Gatsby `#639`. A new feature or framework (Astro, Next) gets its own colour, distinct from these and from the Strava orange.
+- The table icon is the feature disc alone, or for a framework package, the framework disc on the left, partly hidden behind the feature disc on the right, both the same size, with a gap cut between them.
+
 ## Examples
 
 The example sites are not workspaces: each one installs on its own with `npm install` in its folder (its `package-lock.json` is git-ignored), then `npx gatsby build`. The tiles one has a `.npmrc` with `legacy-peer-deps` because `@urbica/react-map-gl` does not accept `mapbox-gl` 3.
