@@ -83,7 +83,8 @@ history and month by month.
 
 ## Helpers
 
-The functions behind the tiles are exported, for your own code or for a
+The logic of the plugin lives in [strava-tiles][strava-tiles], which works
+without Gatsby too. Its functions are exported, for your own code or for a
 plugin built on the tiles: the tiles an activity covers, the conversions
 between coordinates and tiles, and the outlines of a set of tiles.
 
@@ -121,8 +122,9 @@ const {
 } = require("gatsby-strava-tiles/card")
 ```
 
-> Read the [cards](./docs/cards.md) documentation. Cards need `sharp`, an
-> optional peer dependency -- a site using only the tile data never installs it.
+> Read the [cards](./docs/cards.md) documentation. Cards come from
+> [strava-tiles][strava-tiles], and need `sharp`, an optional peer dependency --
+> a site using only the tile data never installs it.
 
 ## Documentation
 
@@ -144,5 +146,6 @@ This project is licensed under the MIT License - see the [LICENCE](./LICENCE.md)
 [badge-prs-welcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/gatsby-strava-tiles
 [github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
+[strava-tiles]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-tiles
 [gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava
 [gatsby-source-ridewithgps]: https://github.com/cedricdelpoux/gatsby-source-ridewithgps
