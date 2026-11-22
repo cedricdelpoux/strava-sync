@@ -6,12 +6,20 @@ npm workspaces monorepo. The core `strava-sync` is ESM checked with tsc (JSDoc t
 
 - `packages/strava-sync`: the core, ESM with JSDoc types built into the git-ignored `types/`, tested with vitest.
 - `packages/gatsby-source-strava`: the Gatsby plugin (depends on `strava-sync`). Its `example/` is a Gatsby site with its own tooling, it is not a workspace.
-- `packages/gatsby-strava-declutter` and `packages/gatsby-strava-tiles`: plugins that read the nodes of `gatsby-source-strava` (peer dependency `^4.3.0`), tested with `node --test`. Each has an `example/` site.
+- `packages/gatsby-strava-declutter` and `packages/gatsby-strava-tiles`: plugins that read the nodes of `gatsby-source-strava` (peer dependency `>=4.3.0`), tested with `node --test`. Each has an `example/` site.
 - `packages/gatsby-remark-strava`: remark plugin, with `examples/` sites. It does not use `strava-sync` yet.
 - Shared at the root: `eslint.config.js` (one flat config with per-package overrides), `.prettierrc`, `.prettierignore`, `.editorconfig`, `.npmrc`, `.github/`, `.changeset/`, and the single `package-lock.json`.
 - The dev dependencies shared by the packages (eslint, prettier, typescript, vitest, coverage, `@types/node`, globals) live in the root `package.json`. A package declares only its own (react, sharp).
 - Each package keeps its own `LICENCE.md` copy because npm packs it from the package folder.
 - Internal dependency ranges (`strava-sync: ^0.1.0`) stay as they are: npm links the workspace packages while the versions satisfy the ranges.
+
+## Examples
+
+The example sites are not workspaces: each one installs on its own with `npm install` in its folder (its `package-lock.json` is git-ignored), then `npx gatsby build`. The tiles one has a `.npmrc` with `legacy-peer-deps` because `@urbica/react-map-gl` does not accept `mapbox-gl` 3.
+
+- They load the plugins by path in `gatsby-config.js` (`require.resolve("..")`, `require.resolve("../..")`, and `require.resolve("../../gatsby-source-strava")` for the declutter and tiles ones) instead of declaring them as dependencies. A `file:` dependency would make Gatsby follow the symlink and scan `packages/gatsby-source-strava`, including its `example/node_modules`, and fail on a TypeScript file of `rxjs`. The declutter and tiles plugins never import `gatsby-source-strava` at runtime, they only read its nodes.
+- They declare `react` and `react-dom` ^18 directly (Gatsby 5), and `allowScripts` in their `package.json`.
+- Their `.env` and store folders (`.strava`, `.strava-declutter`) are git-ignored and come from the previous repositories. The `token`, `fetch-activity` and `sync-activities` scripts of the declutter and tiles ones call the scripts of `gatsby-source-strava` by path.
 
 ## Commands
 

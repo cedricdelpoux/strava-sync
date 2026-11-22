@@ -13,8 +13,8 @@
     "gatsby": "^5.13.5",
     "gatsby-plugin-mdx": "^5",
     "gatsby-source-filesystem": "^5.13.1",
-    "react": "link:../../node_modules/react",
-    "react-dom": "link:../../node_modules/react-dom"
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "eslint-config-prettier": "^8.5.0",
@@ -22,5 +22,17 @@
   },
   "resolutions": {
     "sanitize-html": "2.16.0"
+  },
+  "allowScripts": {
+    "sharp": true,
+    "lmdb": false,
+    "@parcel/watcher": false,
+    "core-js": false,
+    "core-js-pure": false,
+    "es5-ext": false,
+    "gatsby": false,
+    "gatsby-cli": false,
+    "msgpackr-extract": false,
+    "fsevents": false
   }
 }

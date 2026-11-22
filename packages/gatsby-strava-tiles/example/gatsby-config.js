@@ -13,7 +13,7 @@ const preciseActivities = new Set(
 module.exports = {
   plugins: [
     {
-      resolve: "gatsby-source-strava",
+      resolve: require.resolve("../../gatsby-source-strava"),
       options: {
         stravaClientId: process.env.STRAVA_CLIENT_ID,
         stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
@@ -23,14 +23,14 @@ module.exports = {
           withRoutes: true,
         },
         activities: {
-          // Also read by `yarn sync-activities`
+          // Also read by `npm run sync-activities`
           streamsTypes: ["latlng"],
           withStreams: (activity) => preciseActivities.has(String(activity.id)),
         },
       },
     },
     {
-      resolve: require.resolve(`..`), // `gatsby-strava-tiles`
+      resolve: require.resolve(".."),
     },
   ],
 }

@@ -9,14 +9,14 @@ const preciseActivities = new Set(
 module.exports = {
   plugins: [
     {
-      resolve: "gatsby-source-strava",
+      resolve: require.resolve("../../gatsby-source-strava"),
       options: {
         stravaClientId: process.env.STRAVA_CLIENT_ID,
         stravaClientSecret: process.env.STRAVA_CLIENT_SECRET,
         stravaToken: process.env.STRAVA_TOKEN,
         debug: true,
         activities: {
-          // Also read by `yarn sync-activities`, which fetches the stream of
+          // Also read by `npm run sync-activities`, which fetches the stream of
           // the listed activities already in the store
           streamsTypes: ["latlng"],
           withStreams: (activity) => preciseActivities.has(String(activity.id)),
@@ -24,7 +24,7 @@ module.exports = {
       },
     },
     {
-      resolve: require.resolve(`..`), // `gatsby-strava-declutter`
+      resolve: require.resolve(".."),
     },
   ],
 }
