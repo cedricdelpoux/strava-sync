@@ -6,7 +6,7 @@
 
 `strava-sync` keeps a local copy of your [Strava](https://www.strava.com/) activities and routes up to date, within the rate limits.
 
-It powers [gatsby-source-strava](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava), and it works without Gatsby too, for any static site generator or script.
+It powers [gatsby-source-strava](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-source-strava), and it works without Gatsby too, for any static site generator or script.
 
 Strava allows 100 requests every 15 minutes and 1000 a day. A history fetched over and over burns that quota, so `strava-sync` fetches each activity once, writes it to a store you own, and only asks Strava for what is new.
 
@@ -180,7 +180,7 @@ The tests mock the HTTP layer and never call Strava. The code is plain JavaScrip
 Versions are released from the [monorepo](../../README.md#releases) with changesets.
 
 [badge-npm]: https://img.shields.io/npm/v/strava-sync.svg?style=flat-square
-[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=master&style=flat-square
+[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/strava-sync
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml

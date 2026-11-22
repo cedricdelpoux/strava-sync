@@ -56,7 +56,7 @@ module.exports = {
 Only activities with at least two points are ever compared. An activity left
 out by `filter` gets no `declutter` (`null`).
 
-The zoom options, the order of the activities and the store are those of [strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter/docs/declutter.md). `filter` receives the `StravaActivity` node.
+The zoom options, the order of the activities and the store are those of [strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-declutter/docs/declutter.md). `filter` receives the `StravaActivity` node.
 
 ## `StravaActivity.declutter`
 
@@ -133,9 +133,9 @@ The result is kept in a `.strava-declutter` directory next to your
 any plugin changes. Add it to your `.gitignore`, and keep it in your continuous
 integration cache along with the `.strava` store of `gatsby-source-strava`.
 Use the `storeDir` option to put it somewhere else. Unlike `.strava`, it can be
-deleted at any time. See [Store](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter/docs/declutter.md#store)
+deleted at any time. See [Store](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-declutter/docs/declutter.md#store)
 for what it holds.
 
 ## Outside of the plugin
 
-To declutter without Gatsby, use [strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter). The plugin re-exports its `declutter` and `simplify`.
+To declutter without Gatsby, use [strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-declutter). The plugin re-exports its `declutter` and `simplify`.
