@@ -49,7 +49,7 @@
     "docs"
   ],
   "dependencies": {
-    "chokidar": "^3.5.3",
+    "chokidar": "^6.0.0",
     "strava-sync": "^0.1.0"
   },
   "devDependencies": {
