@@ -20,6 +20,7 @@ The example sites are not workspaces: each one installs on its own with `npm ins
 
 - They load the plugins by path in `gatsby-config.js` (`require.resolve("..")`, `require.resolve("../..")`, and `require.resolve("../../gatsby-source-strava")` for the declutter and tiles ones) instead of declaring them as dependencies. A `file:` dependency would make Gatsby follow the symlink and scan `packages/gatsby-source-strava`, including its `example/node_modules`, and fail on a TypeScript file of `rxjs`. The declutter and tiles plugins never import `gatsby-source-strava` at runtime, they only read its nodes.
 - They declare `react` and `react-dom` ^18 directly (Gatsby 5), and `allowScripts` in their `package.json`.
+- Each one pins its dev server (`gatsby develop -p`, and `gatsby serve -p` when it has a `serve` script) to its own port: `gatsby-source-strava/example` 8107, `gatsby-strava-declutter/example` 8108, `gatsby-strava-tiles/example` 8109, `gatsby-remark-strava/examples/mdx` 8110 and `gatsby-remark-strava/examples/remark` 8111. Gatsby has no strict port option, it offers another port when the pinned one is busy.
 - Their `.env` and store folders (`.strava`, `.strava-declutter`) are git-ignored and come from the previous repositories. The `token`, `fetch-activity` and `sync-activities` scripts of the declutter and tiles ones call the scripts of `gatsby-source-strava` by path.
 
 ## Commands

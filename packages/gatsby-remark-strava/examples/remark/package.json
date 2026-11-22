@@ -2,8 +2,8 @@
   "name": "gatsby-remark-strava-example-remark",
   "private": true,
   "scripts": {
-    "dev": "gatsby develop",
-    "start": "gatsby develop",
+    "dev": "gatsby develop -p 8111",
+    "start": "gatsby develop -p 8111",
     "build": "gatsby build",
     "clean": "gatsby clean",
     "token": "../../utils/generate-token.js"

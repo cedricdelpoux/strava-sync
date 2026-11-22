@@ -4,8 +4,8 @@
   "scripts": {
     "build": "gatsby build",
     "clean": "gatsby clean",
-    "dev": "gatsby develop",
-    "serve": "gatsby serve",
+    "dev": "gatsby develop -p 8107",
+    "serve": "gatsby serve -p 8107",
     "token": "../scripts/token.js",
     "fetch-activity": "../scripts/activity.js --streams latlng"
   },
