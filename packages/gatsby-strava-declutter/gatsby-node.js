@@ -1,17 +1,7 @@
-const fs = require("fs")
 const path = require("path")
 
 const {getDeclutterNodeId} = require("./utils/nodes.js")
 const {checkPlugins} = require("./utils/plugins.js")
-const {createStore} = require("./utils/store.js")
-
-const DECLUTTER_PATH = require.resolve("./utils/declutter.js")
-
-// Loaded again when it changes in development, see `watchDeclutter`. Its
-// source is part of the store digest, since it can change under the same
-// version, in development or with yalc.
-let declutterModule = require(DECLUTTER_PATH)
-let declutterSource = fs.readFileSync(DECLUTTER_PATH, "utf8")
 
 exports.pluginOptionsSchema = ({Joi}) =>
   Joi.object({
@@ -67,49 +57,11 @@ exports.createResolvers = ({createResolvers}) => {
 
 let hasBootstrapped = false
 
-async function getDeclutterResults(
-  activities,
-  {minZoom, maxZoom, storeDir = ".strava-declutter"},
-  {createContentDigest, reporter, store}
-) {
-  const timer = reporter.activityTimer(
-    "strava-declutter: declutter the activities"
-  )
-
-  timer.start()
-
-  const declutterStore = createStore({
-    dir: path.resolve(store.getState().program.directory, storeDir),
-  })
-  const digest = createContentDigest([declutterSource, minZoom, maxZoom])
-  const previous = await declutterStore.read(digest)
-  const {results, entries, reused} = declutterModule.declutterWithState(
-    activities,
-    {minZoom, maxZoom},
-    previous
-  )
-
-  if (
-    !previous ||
-    reused < entries.length ||
-    entries.length < previous.entries.length
-  ) {
-    await declutterStore.write(digest, {entries, results})
-  }
-
-  const hiddenCount = [...results.values()].filter(
-    (result) => result.hidden
-  ).length
-
-  timer.setStatus(
-    `${results.size - hiddenCount} shown, ${hiddenCount} hidden, ${
-      entries.length - reused
-    } decluttered`
-  )
-  timer.end()
-
-  return results
-}
+const createLogger = (reporter) => ({
+  info: (message) => reporter.info(`strava-declutter: ${message}`),
+  warn: (message) => reporter.warn(`strava-declutter: ${message}`),
+  error: (message) => reporter.error(`strava-declutter: ${message}`),
+})
 
 // Every activity from the store, not only those `onCreateNode` saw: with
 // Gatsby's cache kept, it only sees the new or changed ones. Nodes rather than
@@ -121,8 +73,12 @@ async function runUpdate(args, options) {
     actions: {createNode, deleteNode},
     createContentDigest,
     getNodesByType,
+    reporter,
+    store,
   } = args
-  const {filter = () => true} = options
+  const {minZoom, maxZoom, filter, storeDir = ".strava-declutter"} = options
+  const {createDeclutterStore, declutterActivities} =
+    await import("strava-declutter")
   const activityNodesById = new Map(
     getNodesByType("StravaActivity").map((activity) => [activity.id, activity])
   )
@@ -130,13 +86,16 @@ async function runUpdate(args, options) {
   // A dev-mode refetch, the latest version of the node
   if (node) activityNodesById.set(node.id, node)
 
-  const activities = [...activityNodesById.values()].filter(
-    (activity) =>
-      activity.coordinates &&
-      activity.coordinates.length > 1 &&
-      filter(activity)
-  )
-  const results = await getDeclutterResults(activities, options, args)
+  const {results} = await declutterActivities({
+    activities: [...activityNodesById.values()],
+    store: createDeclutterStore({
+      dir: path.resolve(store.getState().program.directory, storeDir),
+    }),
+    filter,
+    minZoom,
+    maxZoom,
+    logger: createLogger(reporter),
+  })
   const nodeIds = new Set()
 
   results.forEach((value, activityId) => {
@@ -183,36 +142,6 @@ exports.onCreateNode = async (args, options) => {
   }
 }
 
-// Gatsby doesn't reload a plugin's code in development. The declutter is
-// loaded again when its file changes, and the `Declutter` nodes it changes
-// rerun the page queries. The directory is watched, since yalc replaces the
-// file.
-function watchDeclutter(args, options) {
-  let timeout = null
-
-  fs.watch(path.dirname(DECLUTTER_PATH), (event, filename) => {
-    if (filename !== path.basename(DECLUTTER_PATH)) return
-
-    // An editor saves in several writes
-    clearTimeout(timeout)
-    timeout = setTimeout(async () => {
-      try {
-        const source = fs.readFileSync(DECLUTTER_PATH, "utf8")
-
-        if (source === declutterSource) return
-
-        delete require.cache[DECLUTTER_PATH]
-        declutterModule = require(DECLUTTER_PATH)
-        declutterSource = source
-        args.reporter.info("strava-declutter: utils/declutter.js changed")
-        await updateDeclutter(args, options)
-      } catch (e) {
-        args.reporter.error(`strava-declutter: ${e.message}`, e)
-      }
-    }, 200)
-  })
-}
-
 // Only the page queries read the declutter, and they run after this hook
 exports.onPostBootstrap = async (args, options) => {
   hasBootstrapped = true
@@ -222,9 +151,5 @@ exports.onPostBootstrap = async (args, options) => {
   } catch (e) {
     // Only fatal for `gatsby build`, not `gatsby develop`
     args.reporter.panicOnBuild(`strava-declutter: ${e.message}`, e)
-  }
-
-  if (process.env.gatsby_executing_command === "develop") {
-    watchDeclutter(args, options)
   }
 }

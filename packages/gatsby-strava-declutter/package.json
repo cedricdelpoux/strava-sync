@@ -24,6 +24,9 @@
     "utils",
     "docs"
   ],
+  "dependencies": {
+    "strava-declutter": "^0.1.0"
+  },
   "peerDependencies": {
     "gatsby": ">=3.0.0",
     "gatsby-source-strava": ">=4.3.0"
