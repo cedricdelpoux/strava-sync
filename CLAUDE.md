@@ -39,5 +39,6 @@ Independent versions with changesets (`.changeset/config.json`, base branch `mas
 
 - A change to a package comes with a changeset: `npm run changeset`.
 - `.github/workflows/release.yml` runs `changesets/action` on `master`: it opens the "Version packages" pull request (`npm run version-packages`, which also refreshes the lock), and when that is merged it publishes (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token).
+- A new package is published once by hand (`npm publish -w <name> --access public`), because npm only sets a trusted publisher on an existing package. Then set its trusted publisher on npmjs.com: `cedricdelpoux/strava-sync`, workflow `release.yml`, no environment.
 - Tags are `<package>@<version>`. The ones imported before the merge are `gatsby-strava-declutter@0.1.0`, `gatsby-strava-declutter@0.2.0` and `gatsby-remark-strava@1.0.0`, the gatsby plugin keeps its old `v1.0.0` tag.
 - `.github/workflows/ci.yml` runs lint and tests on Node 22 and 24 (Gatsby 5 does not support Node 26).
