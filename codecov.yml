@@ -1,0 +1,34 @@
+coverage:
+  status:
+    project:
+      default:
+        informational: true
+    patch:
+      default:
+        informational: true
+
+comment:
+  layout: "condensed_header, flags"
+
+flag_management:
+  default_rules:
+    carryforward: true
+  individual_flags:
+    - name: gatsby-source-strava
+      paths:
+        - packages/gatsby-source-strava/
+    - name: gatsby-strava-declutter
+      paths:
+        - packages/gatsby-strava-declutter/
+    - name: gatsby-strava-tiles
+      paths:
+        - packages/gatsby-strava-tiles/
+    - name: strava-declutter
+      paths:
+        - packages/strava-declutter/
+    - name: strava-sync
+      paths:
+        - packages/strava-sync/
+    - name: strava-tiles
+      paths:
+        - packages/strava-tiles/

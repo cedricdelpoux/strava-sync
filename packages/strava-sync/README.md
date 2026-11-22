@@ -2,6 +2,7 @@
 
 [![Npm][badge-npm]][npm]
 [![Build Status][badge-build]][actions]
+[![Coverage][badge-coverage]][codecov]
 [![MIT license][badge-licence]](./LICENCE.md)
 
 `strava-sync` keeps a local copy of your [Strava](https://www.strava.com/) activities and routes up to date, within the rate limits.
@@ -182,6 +183,8 @@ Versions are released from the [monorepo](../../README.md#releases) with changes
 [badge-npm]: https://img.shields.io/npm/v/strava-sync.svg?style=flat-square
 [badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/codecov/c/github/cedricdelpoux/strava-sync/main.svg?flag=strava-sync&style=flat-square
 [npm]: https://www.npmjs.org/package/strava-sync
+[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/strava-sync
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
 [github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new

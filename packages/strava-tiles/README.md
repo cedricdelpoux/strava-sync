@@ -2,6 +2,7 @@
 
 [![Npm][badge-npm]][npm]
 [![Build Status][badge-build]][actions]
+[![Coverage][badge-coverage]][codecov]
 [![MIT license][badge-licence]](./LICENCE.md)
 
 `strava-tiles` computes the map tiles covered by your [Strava](https://www.strava.com/) activities, like the explorer maps do, and draws an activity as an image.
@@ -89,6 +90,8 @@ Versions are released from the [monorepo](../../README.md#releases) with changes
 [badge-npm]: https://img.shields.io/npm/v/strava-tiles.svg?style=flat-square
 [badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/codecov/c/github/cedricdelpoux/strava-sync/main.svg?flag=strava-tiles&style=flat-square
 [npm]: https://www.npmjs.org/package/strava-tiles
+[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/strava-tiles
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
 [github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
