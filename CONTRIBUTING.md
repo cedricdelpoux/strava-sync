@@ -14,7 +14,7 @@ npm run changeset # describe your change, it drives the release
 
 With npm 10, a fresh resolution without a lock file fails on the Gatsby peer dependencies because of an npm bug. Use npm 11 (`npx npm@11 install`) when the lock file needs to be regenerated.
 
-Every change to a package comes with a changeset. When the pull request is merged into `main`, the `Release` workflow opens a "Version packages" pull request, and merging it publishes the new versions to npm.
+Every change to a package comes with a changeset. The maintainer versions the packages locally and pushes the result to `main`, and the `Release` workflow then publishes the new versions to npm.
 
 ## Examples
 
