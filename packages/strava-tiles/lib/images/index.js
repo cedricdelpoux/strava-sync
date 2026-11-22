@@ -4,9 +4,9 @@ import {
   tileToCoords,
   tilesToOutline,
 } from "../tiles.js"
-import {getActivityCards} from "./activities.js"
+import {getActivityImages} from "./activities.js"
 import {getBackground} from "./background.js"
-import {getCardFrame, getBackgroundZoom, clipToFrame} from "./frame.js"
+import {getImageFrame, getBackgroundZoom, clipToFrame} from "./frame.js"
 import {renderOverlay} from "./overlay.js"
 import {getSharp} from "./sharp.js"
 
@@ -34,7 +34,7 @@ function toShapes(tiles, outlined) {
     : tiles.map((tile) => [tileToCoords(tile)])
 }
 
-// One track (`[[lng, lat], ...]`), or several for a merged card, nested
+// One track (`[[lng, lat], ...]`), or several for a merged image, nested
 // like a GeoJSON LineString/MultiLineString
 function asTracks(coordinates) {
   return typeof coordinates[0][0] === "number" ? [coordinates] : coordinates
@@ -45,10 +45,10 @@ const SIZE = {width: 600, height: 300}
 // About seven times smaller than PNG with a map background
 const FORMAT = {type: "webp", options: {quality: 85}}
 
-// One activity card as an image buffer: covered ground, added and closed
+// One activity image as a buffer: covered ground, added and closed
 // in tiles, and the track(s), on a background
-async function renderActivityCard({
-  // One track, or several for a merged card (see `asTracks`)
+async function renderActivityImage({
+  // One track, or several for a merged image (see `asTracks`)
   coordinates,
   added = [],
   clustered = [],
@@ -69,7 +69,7 @@ async function renderActivityCard({
   const style = {...STYLE, ...overrides}
   const tracks = asTracks(coordinates)
 
-  const frame = getCardFrame({
+  const frame = getImageFrame({
     // Per track, so no tiles are filled in between two days
     activityTiles:
       activityTiles || tracks.flatMap((track) => pointsToTiles(track)),
@@ -129,4 +129,4 @@ async function renderActivityCard({
   return {image, zoom, backgroundTiles: background.tiles}
 }
 
-export {getActivityCards, renderActivityCard, STYLE, SIZE}
+export {getActivityImages, renderActivityImage, STYLE, SIZE}

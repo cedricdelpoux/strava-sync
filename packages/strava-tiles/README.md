@@ -63,21 +63,21 @@ Every function that logs takes a `logger` with `info`, `warn` and `error` method
 
 The `strava-tiles/map` and `strava-tiles/tiles` entry points hold the helpers above and nothing else, for code running in the browser.
 
-## Activity cards
+## Activity images
 
-`strava-tiles/card` draws an activity as a single image: the ground already covered around it, the tiles it was the first to cover, the tiles it closed in, and the track.
+`strava-tiles/images` draws an activity as a single image: the ground already covered around it, the tiles it was the first to cover, the tiles it closed in, and the track.
 
 ```js
-import {getActivityCards, renderActivityCard} from "strava-tiles/card"
+import {getActivityImages, renderActivityImage} from "strava-tiles/images"
 
-const [card] = getActivityCards({
+const [activityImage] = getActivityImages({
   activities: [{id, start_date, tiles}], // every activity, `tiles` being its `activityTiles`
   groups: [[id]],
 })
-const {image} = await renderActivityCard({...card, coordinates})
+const {image} = await renderActivityImage({...activityImage, coordinates})
 ```
 
-Cards need [`sharp`](https://sharp.pixelplumbing.com), an optional peer dependency: a project using only the tiles never installs it. `npm install sharp` to draw cards. The options are described in the [cards documentation](https://github.com/cedricdelpoux/strava-sync/blob/master/packages/gatsby-strava-tiles/docs/cards.md).
+Images need [`sharp`](https://sharp.pixelplumbing.com), an optional peer dependency: a project using only the tiles never installs it. `npm install sharp` to draw images. The options are described in the [images documentation](https://github.com/cedricdelpoux/strava-sync/blob/master/packages/gatsby-strava-tiles/docs/images.md).
 
 ## Contributing
 

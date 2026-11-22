@@ -107,29 +107,29 @@ const {
 > `gatsby-strava-tiles/utils/map`, which don't load anything else, for code
 > running in the browser.
 
-## Activity cards
+## Activity images
 
 The plugin can also draw an activity as a single image at build time: the ground
 already covered around it, the tiles it was the first to cover, the tiles it
 closed in, and the track.
 
-![An activity card](./docs/card.webp)
+![An activity image](./docs/image.webp)
 
 ```js
 const {
-  getActivityCards,
-  renderActivityCard,
-} = require("gatsby-strava-tiles/card")
+  getActivityImages,
+  renderActivityImage,
+} = require("gatsby-strava-tiles/images")
 ```
 
-> Read the [cards](./docs/cards.md) documentation. Cards come from
+> Read the [images](./docs/images.md) documentation. Images come from
 > [strava-tiles][strava-tiles], and need `sharp`, an optional peer dependency --
 > a site using only the tile data never installs it.
 
 ## Documentation
 
 - [Data](./docs/data.md), the GraphQL fields this plugin adds and what they mean
-- [Cards](./docs/cards.md), drawing an activity as an image at build time
+- [Images](./docs/images.md), drawing an activity as an image at build time
 
 ## Contributing
 

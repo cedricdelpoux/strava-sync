@@ -28,7 +28,7 @@ function lineToPath(coordinates, to) {
   )
 }
 
-// One subpath per track, so the days of a merged card aren't joined
+// One subpath per track, so the days of a merged image aren't joined
 function tracksToPath(tracks, to) {
   return tracks.map((track) => lineToPath(track, to)).join(" ")
 }

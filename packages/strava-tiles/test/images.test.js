@@ -1,10 +1,10 @@
 import {describe, expect, it} from "vitest"
 
-import {renderActivityCard} from "../card.js"
+import {renderActivityImage} from "../images.js"
 
-describe("renderActivityCard", () => {
-  it("draws a card on a flat background", async () => {
-    const {image, backgroundTiles} = await renderActivityCard({
+describe("renderActivityImage", () => {
+  it("draws an image on a flat background", async () => {
+    const {image, backgroundTiles} = await renderActivityImage({
       coordinates: [
         [1.4, 43.6],
         [1.42, 43.61],

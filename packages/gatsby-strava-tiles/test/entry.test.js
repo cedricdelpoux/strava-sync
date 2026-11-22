@@ -25,12 +25,12 @@ describe("package entry point", () => {
     )
   })
 
-  it("keeps the utils and card entry points", () => {
+  it("keeps the utils and images entry points", () => {
     assert.equal(require("../utils/map").lngToX, core.lngToX)
     assert.equal(require("../utils/tiles").pointsToTiles, core.pointsToTiles)
     assert.equal(
-      require("../card").renderActivityCard,
-      require("strava-tiles/card").renderActivityCard
+      require("../images").renderActivityImage,
+      require("strava-tiles/images").renderActivityImage
     )
   })
 })

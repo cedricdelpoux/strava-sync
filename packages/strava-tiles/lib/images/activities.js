@@ -1,10 +1,10 @@
 import {getCluster, distinctTiles} from "../tiles.js"
 
-// What each card in `groups` needs, from one walk of the whole history.
+// What each image in `groups` needs, from one walk of the whole history.
 // `activities` is `{id, start_date, tiles}` for every activity. A group is
 // an array of ids (several for a multi-day trip), drawn as one activity
 // spanning from its first member to its last.
-function getActivityCards({activities, groups}) {
+function getActivityImages({activities, groups}) {
   // Ids can be numbers or strings
   const groupIndexByActivityId = new Map()
   groups.forEach((ids, groupIndex) => {
@@ -54,4 +54,4 @@ function getActivityCards({activities, groups}) {
   })
 }
 
-export {getActivityCards}
+export {getActivityImages}
