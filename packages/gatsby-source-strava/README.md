@@ -28,7 +28,7 @@ what it stores into Gatsby nodes.
 1. Download `gatsby-source-strava` from the NPM registry:
 
 ```shell
-yarn add gatsby-source-strava
+npm install gatsby-source-strava
 ```
 
 2. [Generate a token](./docs/token.md)

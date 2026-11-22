@@ -12,7 +12,7 @@
 1. Download `gatsby-remark-strava` from the NPM registry:
 
 ```shell
-yarn add gatsby-remark-strava
+npm install gatsby-remark-strava
 ```
 
 2. Generate a token
