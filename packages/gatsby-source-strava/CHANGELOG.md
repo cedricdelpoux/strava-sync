@@ -1,17 +1,3 @@
-# Unreleased
-
-## Breaking changes
-
-- Changed: the Strava logic moved to [strava-sync](https://github.com/cedricdelpoux/strava-sync),
-  and `strava-v3`, `express`, `inquirer`, `glob`, `open`, `json-bigint` and
-  `@mapbox/polyline` are no longer dependencies
-- Changed: the `utils/strava.js`, `utils/routes.js`, `utils/store.js` and the
-  other helpers are gone, use the functions of `strava-sync` instead (`createClient`,
-  `fetchRoutes`, `getRoutesVersion`, `createFileStore`...)
-- Changed: requires Node 22.12 or later
-- Changed: the three commands are thin wrappers of `strava-sync`, with the same
-  flags and the same store layout
-
 # 4.5.0
 
 ## Features
