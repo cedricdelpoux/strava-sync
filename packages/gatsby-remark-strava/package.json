@@ -54,7 +54,7 @@
   "dependencies": {
     "mdast-util-from-markdown": "^2",
     "mdast-util-mdx-jsx": "^3",
-    "micromark-extension-mdx-jsx": "^2",
+    "micromark-extension-mdx-jsx": "^3",
     "strava-sync": "^0.1.0",
     "unist-util-visit": "^2.0.3"
   },
