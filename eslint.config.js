@@ -44,6 +44,13 @@ export default [
     },
   },
   {
+    files: [
+      "packages/gatsby-remark-strava/gatsby-browser.js",
+      "packages/gatsby-remark-strava/test/gatsby-browser.test.js",
+    ],
+    languageOptions: {globals: {...globals.node, ...globals.browser}},
+  },
+  {
     files: ["packages/*/example/**/*.js", "packages/*/examples/**/*.js"],
     languageOptions: {
       sourceType: "module",
