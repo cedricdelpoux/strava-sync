@@ -2,10 +2,10 @@
   "name": "gatsby-source-strava-example",
   "private": true,
   "scripts": {
-    "build": "gatsby build",
+    "build": "NODE_OPTIONS=--no-deprecation gatsby build",
     "clean": "gatsby clean",
-    "dev": "gatsby develop -p 8107",
-    "serve": "gatsby serve -p 8107",
+    "dev": "NODE_OPTIONS=--no-deprecation gatsby develop -p 8107",
+    "serve": "NODE_OPTIONS=--no-deprecation gatsby serve -p 8107",
     "token": "../scripts/token.js",
     "fetch-activity": "../scripts/activity.js --streams latlng"
   },

@@ -2,10 +2,10 @@
   "name": "gatsby-source-strava-example",
   "private": true,
   "scripts": {
-    "build": "gatsby build",
+    "build": "NODE_OPTIONS=--no-deprecation gatsby build",
     "clean": "gatsby clean",
-    "dev": "gatsby develop -p 8109",
-    "serve": "gatsby serve -p 8109",
+    "dev": "NODE_OPTIONS=--no-deprecation gatsby develop -p 8109",
+    "serve": "NODE_OPTIONS=--no-deprecation gatsby serve -p 8109",
     "strava-token": "../../gatsby-source-strava/scripts/token.js",
     "fetch-activity": "../../gatsby-source-strava/scripts/activity.js --streams latlng",
     "sync-activities": "../../gatsby-source-strava/scripts/activities.js"
