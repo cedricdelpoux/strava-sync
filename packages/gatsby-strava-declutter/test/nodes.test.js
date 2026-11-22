@@ -1,24 +1,22 @@
-const assert = require("node:assert/strict")
-const {describe, it} = require("node:test")
+import {describe, expect, it} from "vitest"
 
-const {getDeclutterNodeId} = require("..")
+import entry, {getDeclutterNodeId} from ".."
 
 describe("getDeclutterNodeId", () => {
   it("derives the node id from the activity id", () => {
-    assert.equal(getDeclutterNodeId("12345"), "declutter-12345")
+    expect(getDeclutterNodeId("12345")).toBe("declutter-12345")
   })
 })
 
 describe("package entry point", () => {
   it("calls the declutter functions of strava-declutter", () => {
-    const entry = require("..")
     const coordinates = [
       [1.4, 43.6],
       [1.41, 43.6],
     ]
 
-    assert.deepEqual(entry.simplify(coordinates), coordinates)
-    assert.equal(entry.getDeclutterNodeId("1"), "declutter-1")
-    assert.equal(typeof entry.declutter, "function")
+    expect(entry.simplify(coordinates)).toEqual(coordinates)
+    expect(entry.getDeclutterNodeId("1")).toBe("declutter-1")
+    expect(typeof entry.declutter).toBe("function")
   })
 })

@@ -1,7 +1,6 @@
-const assert = require("node:assert/strict")
-const {describe, it} = require("node:test")
+import {describe, expect, it} from "vitest"
 
-const {checkPlugins} = require("../utils/plugins")
+import {checkPlugins} from "../utils/plugins"
 
 const plugin = (name) => ({name})
 
@@ -12,7 +11,7 @@ describe("checkPlugins", () => {
       plugin("gatsby-strava-declutter"),
     ])
 
-    assert.deepEqual(errors, [])
+    expect(errors).toEqual([])
   })
 
   it("rejects gatsby-source-strava declared after it", () => {
@@ -21,7 +20,7 @@ describe("checkPlugins", () => {
       plugin("gatsby-source-strava"),
     ])
 
-    assert.deepEqual(errors, [
+    expect(errors).toEqual([
       "gatsby-source-strava must come before gatsby-strava-declutter in gatsby-config.js",
     ])
   })
@@ -29,6 +28,6 @@ describe("checkPlugins", () => {
   it("rejects a missing gatsby-source-strava", () => {
     const errors = checkPlugins([plugin("gatsby-strava-declutter")])
 
-    assert.match(errors.join(), /gatsby-source-strava is missing/)
+    expect(errors.join()).toMatch(/gatsby-source-strava is missing/)
   })
 })
