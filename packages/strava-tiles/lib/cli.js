@@ -41,6 +41,7 @@ export const runCli = async (argv, {logger = consoleLogger} = {}) => {
     logger,
   })
 
+  await fs.mkdir(path.dirname(values.out), {recursive: true})
   await fs.writeFile(
     values.out,
     JSON.stringify({
