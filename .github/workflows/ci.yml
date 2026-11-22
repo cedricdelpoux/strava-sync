@@ -31,3 +31,51 @@ jobs:
       - run: npm run lint
 
       - run: npm test
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/gatsby-source-strava/coverage/lcov.info
+          flags: gatsby-source-strava
+          fail_ci_if_error: false
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/gatsby-strava-declutter/coverage/lcov.info
+          flags: gatsby-strava-declutter
+          fail_ci_if_error: false
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/gatsby-strava-tiles/coverage/lcov.info
+          flags: gatsby-strava-tiles
+          fail_ci_if_error: false
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/strava-declutter/coverage/lcov.info
+          flags: strava-declutter
+          fail_ci_if_error: false
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/strava-sync/coverage/lcov.info
+          flags: strava-sync
+          fail_ci_if_error: false
+
+      - uses: codecov/codecov-action@v7
+        if: matrix.node-version == 24
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: packages/strava-tiles/coverage/lcov.info
+          flags: strava-tiles
+          fail_ci_if_error: false

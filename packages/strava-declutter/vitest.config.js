@@ -4,7 +4,7 @@ export default defineConfig({
   test: {
     coverage: {
       include: ["index.js", "lib/**"],
-      reporter: ["text"],
+      reporter: ["text", "lcov"],
     },
   },
 })

@@ -8,6 +8,7 @@
 
 [![Npm version][badge-npm]][npm]
 [![Npm downloads][badge-npm-dl]][npm]
+[![Coverage][badge-coverage]][codecov]
 [![MIT license][badge-licence]](./LICENCE.md)
 [![PRs welcome][badge-prs-welcome]](#contributing)
 
@@ -132,6 +133,8 @@ This project is licensed under the MIT License - see the
 [badge-npm]: https://img.shields.io/npm/v/gatsby-source-strava.svg?style=flat-square
 [badge-npm-dl]: https://img.shields.io/npm/dt/gatsby-source-strava.svg?style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-coverage]: https://img.shields.io/codecov/c/github/cedricdelpoux/strava-sync/main.svg?flag=gatsby-source-strava&style=flat-square
 [badge-prs-welcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/gatsby-source-strava
+[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/gatsby-source-strava
 [github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new

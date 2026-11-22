@@ -9,3 +9,4 @@ types
 **/examples/*/public
 packages/*/example/package-lock.json
 packages/*/examples/*/package-lock.json
+coverage
