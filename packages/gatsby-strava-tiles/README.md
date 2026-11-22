@@ -22,7 +22,7 @@ Gatsby plugin that adds tiles to your Strava data
 1. Download [gatsby-source-strava][gatsby-source-strava] and `gatsby-strava-tiles` from the NPM registry:
 
 ```shell
-yarn add gatsby-source-strava gatsby-strava-tiles
+npm install gatsby-source-strava gatsby-strava-tiles
 ```
 
 2.  Add [gatsby-source-strava][gatsby-source-strava] and `gatsby-strava-tiles` plugin in your `gatsby-config.js` file

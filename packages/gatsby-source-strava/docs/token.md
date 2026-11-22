@@ -45,7 +45,5 @@ Add an `npm` script to your `package.json`:
 Then generate a token:
 
 ```
-yarn token
-# or
 npm run token
 ```

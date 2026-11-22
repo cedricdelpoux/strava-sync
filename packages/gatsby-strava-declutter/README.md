@@ -29,7 +29,7 @@ through a place.
 1. Download [gatsby-source-strava][gatsby-source-strava] and `gatsby-strava-declutter` from the NPM registry:
 
 ```shell
-yarn add gatsby-source-strava gatsby-strava-declutter
+npm install gatsby-source-strava gatsby-strava-declutter
 ```
 
 2.  Add both plugins in your `gatsby-config.js` file

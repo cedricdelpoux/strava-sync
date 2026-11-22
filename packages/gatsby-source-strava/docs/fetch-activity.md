@@ -125,8 +125,6 @@ Presetting the options you always use leaves only the activity id to type:
 ```
 
 ```shell
-yarn fetch-activity 4291234567
-# npm needs a double dash before the id
 npm run fetch-activity -- 4291234567
 ```
 

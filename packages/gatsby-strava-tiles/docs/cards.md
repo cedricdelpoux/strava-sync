@@ -13,7 +13,7 @@ drawn onto the image.
 
 > Cards need [`sharp`](https://sharp.pixelplumbing.com), which the plugin
 > declares as an **optional** peer dependency -- a site using only the tile data
-> never installs it. `yarn add sharp` if you want cards.
+> never installs it. `npm install sharp` if you want cards.
 
 ## Drawing one
 

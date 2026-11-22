@@ -3,20 +3,20 @@
 1. Install deps
 
 ```
-yarn
+npm install
 ```
 
 2. Generate `stravaClientId` , `stravaClientSecret`, `stravaToken`
 
 ```
-gatsby-source-strava-token
+npm run strava-token
 
 ```
 
 3. Launch dev env
 
 ```
-yarn dev
+npm run dev
 ```
 
 ## Pages
