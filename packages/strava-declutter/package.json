@@ -1,6 +1,6 @@
 {
   "name": "strava-declutter",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Draw each road of your Strava activities only once on a map",
   "repository": {
     "type": "git",
@@ -60,7 +60,7 @@
     "node": ">=22.12"
   },
   "dependencies": {
-    "strava-sync": "^0.1.0"
+    "strava-sync": "^0.1.1"
   },
   "scripts": {
     "build": "tsc",
