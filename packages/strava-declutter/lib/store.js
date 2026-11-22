@@ -1,7 +1,7 @@
-const fs = require("fs")
-const path = require("path")
+import fs from "node:fs"
+import path from "node:path"
 
-// Unlike `.strava`, a missing or unreadable store only means a full declutter
+// Unlike the strava-sync store, a missing or unreadable store only means a full declutter
 const readJson = async (file) => {
   try {
     return JSON.parse(await fs.promises.readFile(file, "utf8"))
@@ -12,7 +12,7 @@ const readJson = async (file) => {
   }
 }
 
-// Renamed once written, so that an interrupted build never leaves a truncated
+// Renamed once written, so that an interrupted run never leaves a truncated
 // file
 const writeJson = async (file, content) => {
   const temporaryFile = `${file}.tmp`
@@ -22,7 +22,7 @@ const writeJson = async (file, content) => {
   await fs.promises.rename(temporaryFile, file)
 }
 
-const createStore = ({dir}) => {
+export const createDeclutterStore = ({dir}) => {
   const stateFile = path.join(dir, "state.json")
   const resultsFile = path.join(dir, "results.json")
 
@@ -47,5 +47,3 @@ const createStore = ({dir}) => {
     },
   }
 }
-
-module.exports = {createStore}

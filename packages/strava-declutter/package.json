@@ -1,0 +1,50 @@
+{
+  "name": "strava-declutter",
+  "version": "0.1.0",
+  "description": "Draw each road of your Strava activities only once on a map",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cedricdelpoux/strava-sync.git",
+    "directory": "packages/strava-declutter"
+  },
+  "author": "Cédric Delpoux <cedric.delpoux@gmail.com>",
+  "license": "MIT",
+  "keywords": [
+    "strava",
+    "map",
+    "declutter",
+    "activities",
+    "tracks"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./types/index.d.ts",
+      "default": "./index.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "index.js",
+    "bin",
+    "lib",
+    "docs",
+    "types"
+  ],
+  "bin": {
+    "strava-declutter": "bin/strava-declutter.js"
+  },
+  "engines": {
+    "node": ">=22.12"
+  },
+  "dependencies": {
+    "strava-sync": "^0.1.0"
+  },
+  "scripts": {
+    "build": "tsc",
+    "lint": "eslint . && tsc --noEmit",
+    "test": "vitest run --coverage",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run lint && npm test"
+  }
+}

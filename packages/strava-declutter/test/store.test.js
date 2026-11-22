@@ -1,13 +1,13 @@
-const assert = require("node:assert/strict")
-const fs = require("node:fs")
-const os = require("node:os")
-const path = require("node:path")
-const {describe, it} = require("node:test")
+import fs from "node:fs"
+import os from "node:os"
+import path from "node:path"
 
-const {createStore} = require("../utils/store")
+import {describe, expect, it} from "vitest"
+
+import {createDeclutterStore} from "../lib/store.js"
 
 const createTemporaryStore = () =>
-  createStore({
+  createDeclutterStore({
     dir: path.join(
       fs.mkdtempSync(path.join(os.tmpdir(), "strava-declutter-")),
       ".strava-declutter"
@@ -27,7 +27,7 @@ describe("store", () => {
 
     await store.write("digest", declutter)
 
-    assert.deepEqual(await store.read("digest"), declutter)
+    expect(await store.read("digest")).toEqual(declutter)
   })
 
   it("reads nothing with another digest", async () => {
@@ -35,17 +35,17 @@ describe("store", () => {
 
     await store.write("digest", declutter)
 
-    assert.equal(await store.read("other"), null)
+    expect(await store.read("other")).toBe(null)
   })
 
   it("reads nothing from a missing or unreadable store", async () => {
     const store = createTemporaryStore()
 
-    assert.equal(await store.read("digest"), null)
+    expect(await store.read("digest")).toBe(null)
 
     await store.write("digest", declutter)
     fs.writeFileSync(path.join(store.dir, "results.json"), "{")
 
-    assert.equal(await store.read("digest"), null)
+    expect(await store.read("digest")).toBe(null)
   })
 })

@@ -1,8 +1,6 @@
-const assert = require("node:assert/strict")
-const {describe, it} = require("node:test")
+import {describe, expect, it} from "vitest"
 
-const {declutter, declutterWithState, simplify} = require("../utils/declutter")
-const {getDeclutterNodeId} = require("../utils/nodes")
+import {declutter, declutterWithState, simplify} from "../lib/declutter.js"
 
 const LAT = 43.6
 
@@ -39,12 +37,12 @@ describe("declutter, start date order", () => {
   const results = declutter(activities)
 
   it("draws a road with the first activity going through it", () => {
-    assert.equal(results.get("walk").hidden, false)
-    assert.ok(results.get("walk").parts.length > 0)
+    expect(results.get("walk").hidden).toBe(false)
+    expect(results.get("walk").parts.length > 0).toBe(true)
   })
 
   it("hides an activity whose whole track is already drawn", () => {
-    assert.deepEqual(results.get("second-walk"), {
+    expect(results.get("second-walk")).toEqual({
       hidden: true,
       reason: "already-traced",
       parts: null,
@@ -55,18 +53,18 @@ describe("declutter, start date order", () => {
   it("cuts a later activity where it follows a road already drawn", () => {
     const {hidden, stubs} = results.get("ride")
 
-    assert.equal(hidden, false)
-    assert.ok(stubs.length > 0)
+    expect(hidden).toBe(false)
+    expect(stubs.length > 0).toBe(true)
     // The walk's road, drawn by the walk only
     const drawn = linesAt(new Map([["ride", results.get("ride")]]), 16)
-    assert.ok(drawn.flat().every(([lng]) => lng < 1.401 || lng > 1.409))
+    expect(drawn.flat().every(([lng]) => lng < 1.401 || lng > 1.409)).toBe(true)
   })
 
   it("never depends on later activities", () => {
     const before = declutter([walk, secondWalk])
 
-    assert.deepEqual(before.get("walk"), results.get("walk"))
-    assert.deepEqual(before.get("second-walk"), results.get("second-walk"))
+    expect(before.get("walk")).toEqual(results.get("walk"))
+    expect(before.get("second-walk")).toEqual(results.get("second-walk"))
   })
 })
 
@@ -91,11 +89,11 @@ describe("declutter, out and back", () => {
       .filter(([lng, lat]) => lat > LAT + 0.0005 && lng < 1.405)
 
   it("draws the way back zoomed in, next to the way out", () => {
-    assert.ok(wayBack(16).length > 0)
+    expect(wayBack(16).length > 0).toBe(true)
   })
 
   it("draws a single road zoomed out", () => {
-    assert.deepEqual(wayBack(9), [])
+    expect(wayBack(9)).toEqual([])
   })
 
   it("draws the lines of `minZoom` below it", () => {
@@ -105,8 +103,8 @@ describe("declutter, out and back", () => {
         .flat()
         .filter(([lng, lat]) => lat > LAT + 0.0005 && lng < 1.405)
 
-    assert.ok(wayBackAt(12).length > 0)
-    assert.ok(wayBackAt(7).length > 0)
+    expect(wayBackAt(12).length > 0).toBe(true)
+    expect(wayBackAt(7).length > 0).toBe(true)
   })
 
   it("draws the full tracks above `maxZoom`", () => {
@@ -116,12 +114,12 @@ describe("declutter, out and back", () => {
         .flat()
         .filter(([lng, lat]) => lat > LAT + 0.0005 && lng < 1.405)
 
-    assert.ok(wayBackAt(10).length > 0)
-    assert.deepEqual(wayBackAt(9), [])
+    expect(wayBackAt(10).length > 0).toBe(true)
+    expect(wayBackAt(9)).toEqual([])
   })
 
   it("rejects a `minZoom` above `maxZoom`", () => {
-    assert.throws(() => declutter([outAndBack], {minZoom: 10, maxZoom: 8}))
+    expect(() => declutter([outAndBack], {minZoom: 10, maxZoom: 8})).toThrow()
   })
 })
 
@@ -166,7 +164,7 @@ describe("declutter, no gap", () => {
           )
         )
 
-        assert.ok(isDrawn, `${id} at zoom ${zoom}, [${point}]`)
+        expect(isDrawn, `${id} at zoom ${zoom}, [${point}]`).toBe(true)
       })
     }
   }
@@ -177,8 +175,8 @@ describe("declutter, no gap", () => {
       .flatMap((line) => [line[0], line[line.length - 1]])
       .map(([lng]) => lng)
 
-    assert.ok(ends.some((lng) => lng >= 1.4 && lng < 1.405))
-    assert.ok(ends.some((lng) => lng > 1.405 && lng <= 1.41))
+    expect(ends.some((lng) => lng >= 1.4 && lng < 1.405)).toBe(true)
+    expect(ends.some((lng) => lng > 1.405 && lng <= 1.41)).toBe(true)
   })
 
   it("leaves no gap in a cut track", () => {
@@ -216,8 +214,8 @@ describe("declutter, no gap", () => {
         )
         .reduce((length, [a, b]) => length + Math.abs(b[0] - a[0]), 0)
 
-    assert.ok(middleLengthAt(16) > 0.05)
-    assert.ok(middleLengthAt(8) < 0.01)
+    expect(middleLengthAt(16) > 0.05).toBe(true)
+    expect(middleLengthAt(8) < 0.01).toBe(true)
     assertNoGap(results, parallel)
   })
 
@@ -241,7 +239,7 @@ describe("declutter, no gap", () => {
     const results = declutter([road, detour])
     const drawn = linesAt(results, 16).flat()
 
-    assert.ok(drawn.some(([, lat]) => lat > LAT + 0.0015))
+    expect(drawn.some(([, lat]) => lat > LAT + 0.0015)).toBe(true)
     assertNoGap(results, detour)
   })
 })
@@ -254,7 +252,7 @@ describe("declutter", () => {
       walk,
     ])
 
-    assert.deepEqual([...results.keys()], ["walk"])
+    expect([...results.keys()]).toEqual(["walk"])
   })
 })
 
@@ -267,8 +265,8 @@ describe("declutterWithState", () => {
   const assertSame = (list, previous, reused) => {
     const next = declutterWithState(list, {}, readBack(previous))
 
-    assert.deepEqual(next.results, declutter(list))
-    assert.equal(next.reused, reused)
+    expect(next.results).toEqual(declutter(list))
+    expect(next.reused).toBe(reused)
   }
 
   it("only declutters the activities after the last one", () => {
@@ -305,15 +303,9 @@ describe("declutterWithState", () => {
 
 describe("simplify", () => {
   it("drops the points of a straight line", () => {
-    assert.deepEqual(simplify(walk.coordinates), [
+    expect(simplify(walk.coordinates)).toEqual([
       [1.4, LAT],
       [1.41, LAT],
     ])
-  })
-})
-
-describe("package entry point", () => {
-  it("exports declutter, getDeclutterNodeId and simplify", () => {
-    assert.deepEqual(require(".."), {declutter, getDeclutterNodeId, simplify})
   })
 })

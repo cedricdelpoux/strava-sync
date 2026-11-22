@@ -8,3 +8,17 @@ describe("getDeclutterNodeId", () => {
     assert.equal(getDeclutterNodeId("12345"), "declutter-12345")
   })
 })
+
+describe("package entry point", () => {
+  it("calls the declutter functions of strava-declutter", () => {
+    const entry = require("..")
+    const coordinates = [
+      [1.4, 43.6],
+      [1.41, 43.6],
+    ]
+
+    assert.deepEqual(entry.simplify(coordinates), coordinates)
+    assert.equal(entry.getDeclutterNodeId("1"), "declutter-1")
+    assert.equal(typeof entry.declutter, "function")
+  })
+})

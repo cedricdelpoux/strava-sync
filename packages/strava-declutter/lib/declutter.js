@@ -1,4 +1,4 @@
-const crypto = require("crypto")
+import crypto from "node:crypto"
 
 const DENSIFY_STEP_METERS = 20
 const NEAR_METERS = 40 // Wider than GPS drift, narrower than two parallel roads
@@ -62,6 +62,8 @@ function densify(coordinates) {
   return points
 }
 
+/** @typedef {{range: [number, number], join: any}} Piece */
+
 // Hash grid: a near point can only be in a neighbouring cell
 function createTrace(cellSize = NEAR_METERS) {
   const cells = new Map()
@@ -76,6 +78,7 @@ function createTrace(cellSize = NEAR_METERS) {
       if (!cells.has(key)) cells.set(key, [])
       cells.get(key).push(point)
     },
+    /** @param {(other: any) => boolean} [accept] */
     findNearest(point, radius, accept = () => true) {
       const cx = Math.floor(point.x / cellSize)
       const cy = Math.floor(point.y / cellSize)
@@ -150,6 +153,7 @@ function mergeRuns(runs) {
 
 // A short new stretch between two drawn roads is a detour, and a short shared
 // one a crossing: both are absorbed by their neighbours
+/** @returns {[number, number][]} */
 function getKeptRanges(points, covered, [start, end], near) {
   let runs = getRuns(points, covered, start, end)
 
@@ -193,6 +197,7 @@ function getCumulativeDistances(points) {
 // earlier passes, testing every `every` points. A new cut end goes on along the
 // track to where it meets the line, and is joined to it there. With
 // `dropBumps`, small pieces and pieces close to a line all along are left out.
+/** @param {Piece[]} pieces */
 function cutPieces(track, pieces, trace, {near, every = 1, dropBumps = false}) {
   const {points, cumulative} = track
   const covered = new Uint8Array(points.length).fill(1)
@@ -303,13 +308,13 @@ function cutPieces(track, pieces, trace, {near, every = 1, dropBumps = false}) {
         const before = start === range[0] ? null : meet(start, -1, range)
         const after = end === range[1] ? null : meet(end, 1, range)
 
-        return {
+        return /** @type {Piece} */ ({
           range: [before ? before.index : start, after ? after.index : end],
           join: {
             before: start === range[0] ? join.before : before && before.coord,
             after: end === range[1] ? join.after : after && after.coord,
           },
-        }
+        })
       })
       .filter((piece) => !(dropBumps && isSmall(piece)))
       .reduce(mergeOverlaps, [])
@@ -317,6 +322,10 @@ function cutPieces(track, pieces, trace, {near, every = 1, dropBumps = false}) {
 }
 
 // Extended to meet a line, two pieces of a track can overlap
+/**
+ * @param {Piece[]} merged
+ * @param {Piece} piece
+ */
 function mergeOverlaps(merged, piece) {
   const last = merged[merged.length - 1]
 
@@ -333,7 +342,7 @@ function mergeOverlaps(merged, piece) {
 }
 
 // Iterative Douglas-Peucker, on the coordinates projected in meters
-function simplify(coordinates, tolerance = SIMPLIFY_METERS) {
+export function simplify(coordinates, tolerance = SIMPLIFY_METERS) {
   if (coordinates.length < 3) return coordinates
 
   const projected = coordinates.map(toMeters)
@@ -632,12 +641,12 @@ function getUnchangedEntries(previous, candidates, fingerprints) {
 // Walks the activities by start date: a road is drawn by the first activity
 // going through it, and an activity only depends on the earlier ones. See
 // docs/declutter.md.
-function declutter(activities, options) {
+export function declutter(activities, options) {
   return declutterWithState(activities, options).results
 }
 
 // `previous`: the `entries` and `results` of an earlier call with the same zooms
-function declutterWithState(
+export function declutterWithState(
   activities,
   {minZoom = DEFAULT_MIN_ZOOM, maxZoom = DEFAULT_MAX_ZOOM} = {},
   previous = null
@@ -714,7 +723,10 @@ function declutterWithState(
 
   changed.forEach((activity) => {
     const track = createTrack(activity, rank)
-    const whole = {range: [0, track.points.length - 1], join: {}}
+    const whole = /** @type {Piece} */ ({
+      range: [0, track.points.length - 1],
+      join: {},
+    })
     const pieces = cutPieces(track, [whole], trace, {near: NEAR_METERS})
 
     if (pieces.length === 0) {
@@ -791,5 +803,3 @@ function declutterWithState(
 
   return {results, entries, reused: unchanged.length}
 }
-
-module.exports = {declutter, declutterWithState, simplify}

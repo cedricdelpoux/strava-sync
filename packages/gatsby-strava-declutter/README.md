@@ -71,8 +71,9 @@ that depend on the zoom.
 
 ## Functions
 
-The declutter and the track simplification can also be called from your own
-`gatsby-node.js`, outside of the plugin:
+The logic of the plugin lives in [strava-declutter][strava-declutter], which
+works without Gatsby too. The declutter and the track simplification can be
+called from your own `gatsby-node.js`:
 
 ```js
 const {declutter, simplify} = require("gatsby-strava-declutter")
@@ -102,4 +103,5 @@ This project is licensed under the MIT License - see the [LICENCE](./LICENCE.md)
 [badge-prs-welcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/gatsby-strava-declutter
 [github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
+[strava-declutter]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter
 [gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava

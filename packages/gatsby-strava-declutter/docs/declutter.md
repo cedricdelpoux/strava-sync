@@ -56,22 +56,7 @@ module.exports = {
 Only activities with at least two points are ever compared. An activity left
 out by `filter` gets no `declutter` (`null`).
 
-### `minZoom` and `maxZoom`
-
-Each zoom from `maxZoom` down to `minZoom` is generalized, cut again from the
-one above. Below `minZoom`, the map draws the lines of `minZoom`, which get
-denser as you zoom out. A lower `minZoom` keeps the same density further out,
-at the cost of gaps: a few pixels at such zooms are kilometers of track.
-
-### Which activity draws a road
-
-The activities are walked by `start_date`: a road is drawn by the first
-activity that went through it.
-
-An activity only ever depends on the ones before it: the map of a given month
-is exactly the declutter of every activity up to that month, and adding an
-activity never changes how the earlier ones are drawn. It makes a timeline, or
-a replay of your history month by month, possible.
+The zoom options, the order of the activities and the store are those of [strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter/docs/declutter.md). `filter` receives the `StravaActivity` node.
 
 ## `StravaActivity.declutter`
 
@@ -147,46 +132,10 @@ The result is kept in a `.strava-declutter` directory next to your
 `gatsby-config.js`, rather than in Gatsby's cache, which is emptied whenever
 any plugin changes. Add it to your `.gitignore`, and keep it in your continuous
 integration cache along with the `.strava` store of `gatsby-source-strava`.
-Use the `storeDir` option to put it somewhere else.
+Use the `storeDir` option to put it somewhere else. Unlike `.strava`, it can be
+deleted at any time. See [Store](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter/docs/declutter.md#store)
+for what it holds.
 
-```
-.strava-declutter/
-├── results.json
-└── state.json
-```
+## Outside of the plugin
 
-Unlike `.strava`, it can be deleted at any time: the next build declutters
-every activity again.
-
-Since an activity only depends on the earlier ones, only the activities from
-the first one added, changed or removed since the last build are decluttered
-again. The roads drawn by the earlier ones are rebuilt from `state.json`, only
-around the activities to declutter. A new activity, after the others, takes
-less than a second. An activity changed or added a year back declutters again
-everything after it. Removing a hidden activity declutters nothing again.
-
-`filter` picking other activities works the same way. Changing `minZoom`,
-`maxZoom` or the declutter itself, with a new version of the plugin,
-declutters every activity again.
-
-## Full tracks
-
-The declutter only draws each road once. To show a whole track when an
-activity is selected, write the tracks to a file from your own
-`gatsby-node.js`, in the format your site needs:
-
-```js
-const {simplify} = require("gatsby-strava-declutter")
-
-// A full track, a few hundred points instead of thousands
-simplify(activity.coordinates)
-```
-
-The declutter itself can also be called directly, outside of Gatsby:
-
-```js
-const {declutter} = require("gatsby-strava-declutter")
-
-// Map of activity id to {hidden, reason, parts, stubs}
-const results = declutter(activities, {minZoom: 6, maxZoom: 12})
-```
+To declutter without Gatsby, use [strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter). The plugin re-exports its `declutter` and `simplify`.
