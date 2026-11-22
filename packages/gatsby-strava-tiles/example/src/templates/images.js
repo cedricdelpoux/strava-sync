@@ -7,7 +7,7 @@ const formatDate = (startDate) =>
     day: "numeric",
   })
 
-const Card = ({card, size}) => (
+const ActivityImage = ({activityImage, size}) => (
   <li
     style={{
       background: "#fff",
@@ -17,26 +17,26 @@ const Card = ({card, size}) => (
     }}
   >
     <img
-      src={card.image}
-      alt={`Tiles covered by ${card.name}`}
+      src={activityImage.image}
+      alt={`Tiles covered by ${activityImage.name}`}
       width={size.width}
       height={size.height}
       loading="lazy"
       style={{display: "block", width: "100%", height: "auto"}}
     />
     <div style={{padding: "10px 12px"}}>
-      <div style={{fontWeight: 600}}>{card.name}</div>
+      <div style={{fontWeight: 600}}>{activityImage.name}</div>
       <div style={{color: "#666", fontSize: 14, marginTop: 2}}>
-        {formatDate(card.startDate)}
+        {formatDate(activityImage.startDate)}
         {" · "}
-        {(card.distance / 1000).toFixed(1)} km
-        {card.added > 0 && ` · ${card.added} new tiles`}
+        {(activityImage.distance / 1000).toFixed(1)} km
+        {activityImage.added > 0 && ` · ${activityImage.added} new tiles`}
       </div>
     </div>
   </li>
 )
 
-const Cards = ({pageContext: {cards, size}}) => (
+const ActivityImages = ({pageContext: {images, size}}) => (
   <main
     style={{
       fontFamily: "system-ui, sans-serif",
@@ -46,7 +46,7 @@ const Cards = ({pageContext: {cards, size}}) => (
     }}
   >
     <h1 style={{fontSize: 20, margin: "0 0 16px"}}>
-      {cards.length} latest activities
+      {images.length} latest activities
     </h1>
     <ul
       style={{
@@ -60,11 +60,15 @@ const Cards = ({pageContext: {cards, size}}) => (
         padding: 0,
       }}
     >
-      {cards.map((card) => (
-        <Card key={card.id} card={card} size={size} />
+      {images.map((activityImage) => (
+        <ActivityImage
+          key={activityImage.id}
+          activityImage={activityImage}
+          size={size}
+        />
       ))}
     </ul>
   </main>
 )
 
-export default Cards
+export default ActivityImages

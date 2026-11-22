@@ -22,9 +22,9 @@
       "types": "./types/index.d.ts",
       "default": "./index.js"
     },
-    "./card": {
-      "types": "./types/card.d.ts",
-      "default": "./card.js"
+    "./images": {
+      "types": "./types/images.d.ts",
+      "default": "./images.js"
     },
     "./map": {
       "types": "./types/map.d.ts",
@@ -38,7 +38,7 @@
   },
   "files": [
     "index.js",
-    "card.js",
+    "images.js",
     "map.js",
     "tiles.js",
     "bin",

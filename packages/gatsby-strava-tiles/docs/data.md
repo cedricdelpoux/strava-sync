@@ -267,7 +267,7 @@ one -- see [`tile-activities.js`](../example/src/tile-activities.js).
 [`routes.js`](../example/src/pages/routes.js) draws every route over the
 coverage, with the tiles it would earn.
 
-The [`cards`](./cards.md) documentation covers drawing an activity as an image
+The [`images`](./images.md) documentation covers drawing an activity as an image
 at build time, which uses `tiles` and `outlines` from above.
 
 [gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava

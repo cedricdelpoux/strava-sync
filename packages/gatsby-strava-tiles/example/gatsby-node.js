@@ -1,20 +1,20 @@
 const fs = require("fs")
 const path = require("path")
 
-// `require("gatsby-strava-tiles/card")` in a real site
-const {getActivityCards, renderActivityCard} = require("../card")
+// `require("gatsby-strava-tiles/images")` in a real site
+const {getActivityImages, renderActivityImage} = require("../images")
 
-// Only the most recent activities get a card
-const CARDS = 20
+// Only the most recent activities get an image
+const RECENT_ACTIVITIES = 20
 
 const SIZE = {width: 600, height: 300}
 
 // Neutral, so the green tiles drawn over it stay readable
 const STYLE = "mapbox/light-v11"
 
-// Not `public/cards`, where the /cards page is written
-const IMAGES_DIR = path.join(__dirname, "public", "activity-cards")
-const TILE_CACHE_DIR = path.join(__dirname, ".cache", "card-background-tiles")
+// Not `public/images`, where the /images page is written
+const IMAGES_DIR = path.join(__dirname, "public", "activity-images")
+const TILE_CACHE_DIR = path.join(__dirname, ".cache", "image-background-tiles")
 
 const tileUrl = ({z, x, y}) =>
   `https://api.mapbox.com/styles/v1/${STYLE}/tiles/256/${z}/${x}/${y}@2x` +
@@ -27,7 +27,7 @@ let activityIdsWithNewTiles = []
 
 exports.createPages = async (args) => {
   await collectActivityIdsWithNewTiles(args)
-  await createCardsPage(args)
+  await createImagesPage(args)
 }
 
 // `createPages` runs before the pages of src/pages are created
@@ -62,13 +62,15 @@ async function collectActivityIdsWithNewTiles({graphql, reporter}) {
     .map(({id}) => id)
 }
 
-async function createCardsPage({graphql, actions: {createPage}, reporter}) {
+async function createImagesPage({graphql, actions: {createPage}, reporter}) {
   if (!process.env.GATSBY_MAPBOX_TOKEN) {
-    reporter.warn("GATSBY_MAPBOX_TOKEN is missing, skipping the activity cards")
+    reporter.warn(
+      "GATSBY_MAPBOX_TOKEN is missing, skipping the activity images"
+    )
     return
   }
 
-  // Every activity's tiles, so a card shows the coverage on the day
+  // Every activity's tiles, so an image shows the coverage on the day
   const history = await graphql(`
     {
       allStravaActivity(filter: {coordinates: {ne: null}}) {
@@ -95,7 +97,7 @@ async function createCardsPage({graphql, actions: {createPage}, reporter}) {
       allStravaActivity(
         sort: {start_date: DESC}
         filter: {coordinates: {ne: null}}
-        limit: ${CARDS}
+        limit: ${RECENT_ACTIVITIES}
       ) {
         nodes {
           id
@@ -120,35 +122,37 @@ async function createCardsPage({graphql, actions: {createPage}, reporter}) {
     return
   }
 
-  // One card per activity. Group several ids to merge a multi-day trip.
+  // One image per activity. Group several ids to merge a multi-day trip.
   const activities = recent.data.allStravaActivity.nodes
-  const drawable = getActivityCards({
+  const drawable = getActivityImages({
     activities: history.data.allStravaActivity.nodes,
     groups: activities.map(({id}) => [id]),
   })
-  const byId = new Map(drawable.map((card) => [card.ids[0], card]))
+  const byId = new Map(
+    drawable.map((activityImage) => [activityImage.ids[0], activityImage])
+  )
 
   fs.mkdirSync(IMAGES_DIR, {recursive: true})
 
-  const cards = []
+  const images = []
 
   for (const activity of activities) {
     const name = `${activity.id}.webp`.replace(/[^a-zA-Z0-9.\-_]/g, "_")
     const file = path.join(IMAGES_DIR, name)
 
-    cards.push({
+    images.push({
       id: activity.id,
       name: activity.name,
       distance: activity.distance,
       startDate: activity.start_date,
       added: activity.tiles.length,
-      image: `/activity-cards/${name}`,
+      image: `/activity-images/${name}`,
     })
 
-    // A drawn card never changes
+    // A drawn image never changes
     if (fs.existsSync(file)) continue
 
-    const {image} = await renderActivityCard({
+    const {image} = await renderActivityImage({
       ...byId.get(activity.id),
       coordinates: activity.coordinates,
       size: SIZE,
@@ -159,11 +163,11 @@ async function createCardsPage({graphql, actions: {createPage}, reporter}) {
     fs.writeFileSync(file, image)
   }
 
-  reporter.info(`Activity cards: ${cards.length} drawn or already on disk`)
+  reporter.info(`Activity images: ${images.length} drawn or already on disk`)
 
   createPage({
-    path: "/cards",
-    component: path.resolve("./src/templates/cards.js"),
-    context: {cards, size: SIZE},
+    path: "/images",
+    component: path.resolve("./src/templates/images.js"),
+    context: {images, size: SIZE},
   })
 }

@@ -18,8 +18,8 @@
   ],
   "main": "index.js",
   "files": [
-    "card.js",
     "gatsby-node.js",
+    "images.js",
     "index.js",
     "utils",
     "docs"

@@ -21,7 +21,7 @@ async function fetchTile({url, cacheDir}) {
   return buffer
 }
 
-// No map under the card: the frame is used as is, nothing is fetched
+// No map under the image: the frame is used as is, nothing is fetched
 async function getFlatBackground({frame, size, color}) {
   const sharp = await getSharp()
 

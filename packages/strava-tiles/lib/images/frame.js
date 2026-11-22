@@ -1,7 +1,7 @@
 import {lngToXf, latToYf, Z} from "../map.js"
 
-// The activity's extent plus a margin, grown to the card's shape
-function getCardFrame({activityTiles, padding = 2, minSize = 8, aspect = 2}) {
+// The activity's extent plus a margin, grown to the image's shape
+function getImageFrame({activityTiles, padding = 2, minSize = 8, aspect = 2}) {
   const xs = activityTiles.map(({x}) => x)
   const ys = activityTiles.map(({y}) => y)
 
@@ -44,7 +44,7 @@ function project(frame, size) {
   ]
 }
 
-// The background zoom matches the card's resolution, not the tile zoom
+// The background zoom matches the image's resolution, not the tile zoom
 function getBackgroundZoom(frame, size) {
   const scale = size.width / (frame.x1 - frame.x0)
 
@@ -58,4 +58,4 @@ function clipToFrame(frame, tiles) {
   )
 }
 
-export {getCardFrame, getBackgroundZoom, clipToFrame, project}
+export {getImageFrame, getBackgroundZoom, clipToFrame, project}

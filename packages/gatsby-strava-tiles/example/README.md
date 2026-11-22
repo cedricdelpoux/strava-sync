@@ -29,4 +29,4 @@ what they draw with it.
 | `/`                 | The whole coverage, with a settings panel: theme, outlines, layers |
 | `/dynamic_month`    | The same, month by month, with that month's new tiles highlighted  |
 | `/dynamic_activity` | The same, activity by activity                                     |
-| `/cards`            | One image per recent activity, drawn at build time                 |
+| `/images`           | One image per recent activity, drawn at build time                 |
