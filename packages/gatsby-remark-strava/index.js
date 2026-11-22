@@ -53,7 +53,14 @@ module.exports = async ({markdownAST, cache, reporter}, pluginOptions) => {
         try {
           const markup =
             render && type === "activity"
-              ? render(await getActivity({id, options: pluginOptions, cache}))
+              ? render(
+                  await getActivity({
+                    id,
+                    options: pluginOptions,
+                    cache,
+                    reporter,
+                  })
+                )
               : getEmbedMarkup({type, id, jsx: isJsx})
 
           // The markup replaces the whole paragraph, because a <div> cannot
