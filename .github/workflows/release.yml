@@ -31,5 +31,5 @@ jobs:
         with:
           version-script: npm run version-packages
           publish-script: npm run release
-          pr-title: "chore: version packages"
-          commit-message: "chore: version packages"
+          pr-title: "chore: bump packages versions"
+          commit-message: "chore: bump packages versions"
