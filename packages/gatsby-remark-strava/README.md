@@ -123,8 +123,10 @@ module.exports = {
 }
 ```
 
-- The activity is read from the `storeDir` folder first, so a site that uses `gatsby-source-strava` needs no request, and no token. The store holds what that plugin fetched: details such as `calories` or the primary photo are there only if it fetched them.
-- An activity missing from the store is fetched with `strava-sync`, which needs `stravaClientId`, `stravaClientSecret` and `stravaToken`. Up to 4 requests run at once, and the activity is kept in the Gatsby cache.
+- `render` always receives a detailed activity, the shape of `GET /activities/{id}` (`calories`, `photos.primary.urls`...). The activity is read from the `storeDir` folder first, so a site that uses `gatsby-source-strava` makes no request for the activities it has stored with their details (`resource_state` 3).
+- The API is called, with `strava-sync`, for an activity that is missing from the store or that the store only holds as a summary of the list (`resource_state` 2). It needs `stravaClientId`, `stravaClientSecret` and `stravaToken`. Up to 4 requests run at once, and the activity is kept in the Gatsby cache, so the next builds do not fetch it again.
+- Without the token options, a summary of the store is passed to `render` as it is, with one warning, and a missing activity stays a link.
+- When `gatsby-source-strava` stores the list of photos, `photos` is that list and the summary is under `photos_summary`. `render` gets the shape of the API, with the summary back under `photos`.
 - Generate the token with `npx strava-sync token`, see the [strava-sync](https://github.com/cedricdelpoux/strava-sync) documentation.
 
 ## Usage with MDX
@@ -154,7 +156,7 @@ A link that cannot be turned into an embed, because of a failing `render` or a m
 - The iframe `https://www.strava.com/activities/<id>/embed/<token>` stopped displaying, Strava no longer supports it. The default is now the official embed, which needs a public activity and no token. Remove the three Strava options if you do not use `render`.
 - Routes links are embedded too.
 - The `gatsby-remark-strava-token` command is gone. Run `npx strava-sync token` instead, it writes the same `STRAVA_CLIENT_ID`, `STRAVA_CLIENT_SECRET` and `STRAVA_TOKEN` variables.
-- `render` is kept, and now switches to render mode. The activity is read from the `gatsby-source-strava` store before Strava is called, so the token is only needed for an activity that is not in it. Set `storeDir` if you moved the store.
+- `render` is kept, and now switches to render mode. The activity is read from the `gatsby-source-strava` store before Strava is called, so the token is only needed for an activity that is not in it, or that it only holds as a summary. Set `storeDir` if you moved the store.
 - `output` and `debug` are kept. The fetched activity is cached, not the markup.
 - Node 22.12 or later is required.
 

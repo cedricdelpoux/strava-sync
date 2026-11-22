@@ -18,6 +18,7 @@ const createSession = async ({storeDir = ".strava"}) => {
     store: createFileStore({dir: path.resolve(process.cwd(), storeDir)}),
     limit: createLimiter(MAX_CONCURRENT_REQUESTS),
     client: null,
+    hasWarnedSummary: false,
   }
 }
 
@@ -54,12 +55,24 @@ const getClient = (session, options) => {
   return session.client
 }
 
-exports.getActivity = async ({id, options, cache}) => {
+const DETAILED_RESOURCE_STATE = 3
+
+const isDetailed = (activity) =>
+  activity.resource_state >= DETAILED_RESOURCE_STATE
+
+// gatsby-source-strava moves the photos summary aside when it stores the list
+// of photos, while the API puts the summary under `photos`
+const toApiShape = (activity) =>
+  Array.isArray(activity.photos) && activity.photos_summary
+    ? {...activity, photos: activity.photos_summary}
+    : activity
+
+exports.getActivity = async ({id, options, cache, reporter}) => {
   const session = await getSession(options)
   const stored = await session.store.readActivity(id)
 
-  if (stored) {
-    return stored
+  if (stored && isDetailed(stored)) {
+    return toApiShape(stored)
   }
 
   const cacheKey = `activity:${id}`
@@ -70,6 +83,17 @@ exports.getActivity = async ({id, options, cache}) => {
   }
 
   const client = getClient(session, options)
+
+  if (!client && stored) {
+    if (!session.hasWarnedSummary) {
+      session.hasWarnedSummary = true
+      reporter.warn(
+        "remark-strava: The activities of the store are summaries, add the `stravaClientId`, `stravaClientSecret` and `stravaToken` options to fetch their details"
+      )
+    }
+
+    return toApiShape(stored)
+  }
 
   if (!client) {
     throw new Error(

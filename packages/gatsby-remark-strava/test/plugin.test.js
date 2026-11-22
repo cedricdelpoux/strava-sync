@@ -202,7 +202,11 @@ describe("render mode", () => {
   let storeDir
 
   beforeEach(async () => {
-    storeDir = await createStoreDir({id: 123, name: "Morning ride"})
+    storeDir = await createStoreDir({
+      id: 123,
+      name: "Morning ride",
+      resource_state: 3,
+    })
   })
 
   afterEach(async () => {
@@ -412,5 +416,90 @@ describe("render mode", () => {
     await run(tree, {render: renderName, storeDir})
 
     expect(tree.children.map(({type}) => type)).toEqual(["paragraph", "html"])
+  })
+})
+
+describe("render mode with a summary in the store", () => {
+  const tokenOptions = {
+    stravaClientId: "1",
+    stravaClientSecret: "secret",
+    stravaToken: TOKEN,
+  }
+  const renderPhoto = ({name, photos}) =>
+    `<div class="activity">${name} ${photos?.primary?.urls["600"]}</div>`
+  const detail = {
+    id: 123,
+    name: "Detailed ride",
+    resource_state: 3,
+    photos: {primary: {urls: {600: "photo.jpg"}}},
+  }
+  let storeDir
+
+  afterEach(async () => {
+    await fs.rm(storeDir, {recursive: true, force: true})
+  })
+
+  it("fetches the details of a summary", async () => {
+    storeDir = await createStoreDir({id: 123, name: "Ride", resource_state: 2})
+    const fetch = stubFetch({123: detail})
+    const tree = createTree(createLinkParagraph(ACTIVITY_URL))
+
+    await run(tree, {render: renderPhoto, storeDir, ...tokenOptions})
+
+    expect(tree.children[0].value).toBe(
+      '<div class="activity">Detailed ride photo.jpg</div>'
+    )
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it("does not fetch a detailed activity again on the next build", async () => {
+    storeDir = await createStoreDir({id: 123, name: "Ride", resource_state: 2})
+    const fetch = stubFetch({123: detail})
+    const cache = createCache()
+    const options = {render: renderPhoto, storeDir, ...tokenOptions}
+
+    await run(createTree(createLinkParagraph(ACTIVITY_URL)), options, {cache})
+    await run(createTree(createLinkParagraph(ACTIVITY_URL)), options, {cache})
+
+    expect(fetch).toHaveBeenCalledTimes(1)
+  })
+
+  it("gives the photos in the shape of the API", async () => {
+    storeDir = await createStoreDir({
+      ...detail,
+      photos: [{unique_id: "a"}],
+      photos_summary: {primary: {urls: {600: "summary.jpg"}}},
+    })
+    const tree = createTree(createLinkParagraph(ACTIVITY_URL))
+
+    await run(tree, {render: renderPhoto, storeDir})
+
+    expect(tree.children[0].value).toContain("summary.jpg")
+  })
+
+  it("renders the summary and warns once without a token", async () => {
+    storeDir = await createStoreDir(
+      {id: 123, name: "Ride", resource_state: 2},
+      {id: 124, name: "Other ride", resource_state: 2}
+    )
+    const reporter = createReporter()
+    const tree = createTree(
+      createLinkParagraph(ACTIVITY_URL),
+      createLinkParagraph("https://www.strava.com/activities/124")
+    )
+
+    await remarkStrava(
+      {markdownAST: tree, cache: createCache(), reporter},
+      {render: renderName, storeDir}
+    )
+
+    expect(tree.children.map(({value}) => value)).toEqual([
+      '<div class="activity">Ride</div>',
+      '<div class="activity">Other ride</div>',
+    ])
+    expect(reporter.warn).toHaveBeenCalledTimes(1)
+    expect(reporter.warn).toHaveBeenCalledWith(
+      expect.stringContaining("add the `stravaClientId`")
+    )
   })
 })
