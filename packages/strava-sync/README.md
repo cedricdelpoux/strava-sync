@@ -116,6 +116,7 @@ const {activities, fetchedCount} = await syncActivities({
 | `syncRoutes({client, store, ...})`        | Lists the routes, and fetches the streams of the new and edited ones                                      |
 | `getRoutesVersion(routes)`                | A short hash that changes when a route is added, edited or deleted                                        |
 | `fetchAthlete({client, details})`         | The athlete, with koms, stats and zones on demand                                                         |
+| `getAuthorizationUrl`, `exchangeCode`     | The two steps of the OAuth flow, and `generateToken` runs it from the terminal                            |
 | `verifyChallenge`, `handleEvent`          | Webhook helpers                                                                                           |
 
 Every function that logs takes a `logger` with `debug`, `info` and `warn` methods. Nothing is logged by default, `consoleLogger` prints to the console.

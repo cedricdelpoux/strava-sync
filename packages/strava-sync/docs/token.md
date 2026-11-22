@@ -16,6 +16,17 @@ npx strava-sync token
 
 It asks for the Client ID and Secret of your [Strava application](https://www.strava.com/settings/api), opens Strava to authorize it, and writes the variables to your `.env` files. When you have several `.env` files for different environments, it writes them at the end of each one. Add them to your `.gitignore`, since they hold sensitive information.
 
+## From your own code
+
+The command is built on three functions that `strava-sync` exports. `getAuthorizationUrl({clientId, redirectUri})` returns the Strava page where the user authorizes your application, and Strava redirects to `redirectUri` with a `code`. `exchangeCode({clientId, clientSecret, code})` trades that code for the token. `generateToken()` runs the whole flow in the terminal, like the command.
+
+```js
+import {exchangeCode, getAuthorizationUrl} from "strava-sync"
+
+const url = getAuthorizationUrl({clientId, redirectUri})
+const token = await exchangeCode({clientId, clientSecret, code})
+```
+
 ## What the token can read
 
 The command asks Strava for the `read_all`, `activity:read_all` and `profile:read_all` scopes. The token can then read your private activities, your full profile and your private routes. Without `read_all`, Strava leaves the private routes out without any error.

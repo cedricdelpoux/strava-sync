@@ -1,3 +1,4 @@
+export {exchangeCode, generateToken, getAuthorizationUrl} from "./lib/auth.js"
 export {syncActivities} from "./lib/activities.js"
 export {fetchAthlete} from "./lib/athlete.js"
 export {createClient} from "./lib/client.js"

@@ -57,6 +57,10 @@ export const startCallbackServer = async () => {
   }
 }
 
+/**
+ * @param {{clientId: string, redirectUri: string}} options
+ * @returns {string} The Strava page where the user authorizes the application
+ */
 export const getAuthorizationUrl = ({clientId, redirectUri}) =>
   "https://www.strava.com/oauth/authorize?" +
   new URLSearchParams({
@@ -67,6 +71,10 @@ export const getAuthorizationUrl = ({clientId, redirectUri}) =>
     scope: SCOPE,
   })
 
+/**
+ * @param {{clientId: string, clientSecret: string, code: string, fetch?: typeof globalThis.fetch}} options
+ * @returns {Promise<any>} The token Strava returns for the authorization code
+ */
 export const exchangeCode = async ({
   clientId,
   clientSecret,
