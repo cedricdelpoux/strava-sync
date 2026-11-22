@@ -103,5 +103,5 @@ This project is licensed under the MIT License - see the [LICENCE](./LICENCE.md)
 [badge-prs-welcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/gatsby-strava-declutter
 [github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
-[strava-declutter]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-declutter
-[gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-source-strava
+[strava-declutter]: https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-declutter
+[gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-source-strava

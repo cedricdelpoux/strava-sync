@@ -6,7 +6,7 @@
 
 `strava-tiles` computes the map tiles covered by your [Strava](https://www.strava.com/) activities, like the explorer maps do, and draws an activity as an image.
 
-It powers [gatsby-strava-tiles](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-strava-tiles), and it works without Gatsby too, for any static site generator or script. It reads the activities and routes that [strava-sync](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-sync) stores.
+It powers [gatsby-strava-tiles](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-strava-tiles), and it works without Gatsby too, for any static site generator or script. It reads the activities and routes that [strava-sync](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-sync) stores.
 
 All the `x`/`y` pairs are [slippy map](https://wiki.openstreetmap.org/wiki/Slippy_map_tilenames) tile coordinates at zoom level 14.
 
@@ -77,7 +77,7 @@ const [activityImage] = getActivityImages({
 const {image} = await renderActivityImage({...activityImage, coordinates})
 ```
 
-Images need [`sharp`](https://sharp.pixelplumbing.com), an optional peer dependency: a project using only the tiles never installs it. `npm install sharp` to draw images. The options are described in the [images documentation](https://github.com/cedricdelpoux/strava-sync/blob/master/packages/gatsby-strava-tiles/docs/images.md).
+Images need [`sharp`](https://sharp.pixelplumbing.com), an optional peer dependency: a project using only the tiles never installs it. `npm install sharp` to draw images. The options are described in the [images documentation](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/gatsby-strava-tiles/docs/images.md).
 
 ## Contributing
 
@@ -87,7 +87,7 @@ Images need [`sharp`](https://sharp.pixelplumbing.com), an optional peer depende
 Versions are released from the [monorepo](../../README.md#releases) with changesets.
 
 [badge-npm]: https://img.shields.io/npm/v/strava-tiles.svg?style=flat-square
-[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=master&style=flat-square
+[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/strava-tiles
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml

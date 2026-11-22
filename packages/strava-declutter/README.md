@@ -8,7 +8,7 @@
 
 Drawing every track of a long Strava history gives a map of blobs. It cuts the parts of a track following a road already drawn, so that zoomed in every street you went through is drawn once, and zoomed out the lines stay as fine and as far apart everywhere, however many times you went through a place.
 
-It powers [gatsby-strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-strava-declutter), and it works without Gatsby too, for any static site generator or script. It reads the activities that [strava-sync](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/strava-sync) stores.
+It powers [gatsby-strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-strava-declutter), and it works without Gatsby too, for any static site generator or script. It reads the activities that [strava-sync](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-sync) stores.
 
 ## Installation
 
@@ -74,7 +74,7 @@ Every function that logs takes a `logger` with `info`, `warn` and `error` method
 Versions are released from the [monorepo](../../README.md#releases) with changesets.
 
 [badge-npm]: https://img.shields.io/npm/v/strava-declutter.svg?style=flat-square
-[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=master&style=flat-square
+[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
 [badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [npm]: https://www.npmjs.org/package/strava-declutter
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml

@@ -75,7 +75,7 @@ minutes to under 2 seconds.
 
 `onPostBootstrap` runs after every plugin has created its nodes and fields, so
 the summary can also take fields from other plugins, like the `Declutter`
-nodes of [gatsby-strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/master/packages/gatsby-strava-declutter).
+nodes of [gatsby-strava-declutter](https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-strava-declutter).
 Declare its types explicitly, as above.
 
 The summary is rebuilt at every build, and its page queries only run again
