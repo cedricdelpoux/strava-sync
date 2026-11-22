@@ -2,15 +2,17 @@
   <h1>gatsby-strava-tiles</h1>
   <br/>
   <p>
-    <img src="./logo.png" alt="gatsby-strava-tiles" height="100px">
+    <img src="./logo.svg" alt="gatsby-strava-tiles" height="100px">
   </p>
   <br/>
 
-[![Npm version][badge-npm]][npm]
-[![Npm downloads][badge-npm-dl]][npm]
+[![Npm][badge-npm]][npm]
+[![Build Status][badge-build]][actions]
 [![Coverage][badge-coverage]][codecov]
-[![MIT license][badge-licence]](./LICENCE.md)
-[![PRs welcome][badge-prs-welcome]](#contributing)
+[![Downloads][badge-downloads]][npm]
+[![PRs welcome][badge-prs]][contributing]
+[![MIT license][badge-licence]][licence]
+[![Sponsor][badge-sponsor]][sponsor]
 
 </div>
 
@@ -80,7 +82,7 @@ the largest fully covered square, its surrounding cluster, and the rest, plus
 the longest unbroken row and column of tiles -- all of it across your whole
 history and month by month.
 
-> Read the [data](./docs/data.md) documentation for the full field reference.
+> Read the [data](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/gatsby-strava-tiles/docs/data.md) documentation for the full field reference.
 
 ## Helpers
 
@@ -114,7 +116,7 @@ The plugin can also draw an activity as a single image at build time: the ground
 already covered around it, the tiles it was the first to cover, the tiles it
 closed in, and the track.
 
-![An activity image](./docs/image.webp)
+![An activity image](https://raw.githubusercontent.com/cedricdelpoux/strava-sync/main/packages/gatsby-strava-tiles/docs/image.webp)
 
 ```js
 const {
@@ -123,32 +125,48 @@ const {
 } = require("gatsby-strava-tiles/images")
 ```
 
-> Read the [images](./docs/images.md) documentation. Images come from
+> Read the [images](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/gatsby-strava-tiles/docs/images.md) documentation. Images come from
 > [strava-tiles][strava-tiles], and need `sharp`, an optional peer dependency --
 > a site using only the tile data never installs it.
 
 ## Documentation
 
-- [Data](./docs/data.md), the GraphQL fields this plugin adds and what they mean
-- [Images](./docs/images.md), drawing an activity as an image at build time
+- [Data](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/gatsby-strava-tiles/docs/data.md), the GraphQL fields this plugin adds and what they mean
+- [Images](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/gatsby-strava-tiles/docs/images.md), drawing an activity as an image at build time
 
-## Contributing
+## Support this project
 
-- ⇄ Pull/Merge requests and ★ Stars are always welcome.
-- For bugs and feature requests, please [create an issue][github-issue].
+<p align="center">
+  <a href="https://github.com/cedricdelpoux"><img src="https://images.weserv.nl/?url=github.com/cedricdelpoux.png&w=128&h=128&fit=cover&mask=circle" width="64" height="64" alt="Cédric Delpoux"></a>
+</p>
 
-## License
+<p align="center">
+  Hi, I'm <a href="https://cedricdelpoux.fr/en">Cédric</a>.<br>
+  Between my three kids, I maintain <a href="https://github.com/cedricdelpoux?tab=repositories">open source projects</a> during my free time.<br>
+  If my work is useful to you, a star, a one-time tip or a monthly sponsorship all help a lot.<br>
+  Thank you very much!
+</p>
 
-This project is licensed under the MIT License - see the [LICENCE](./LICENCE.md) file for details
+<p align="center">
+  <a href="https://thanks.dev/u/gh/cedricdelpoux"><img src="https://img.shields.io/badge/thanks.dev-000000?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyMCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNiIgZD0iTTkgMkM2IDIgNS41IDMgNS41IDUuNVY4QzUuNSA5LjMgNC41IDEwIDIgMTBDNC41IDEwIDUuNSAxMC43IDUuNSAxMlYxNC41QzUuNSAxNyA2IDE4IDkgMThNMTUgMkMxOCAyIDE4LjUgMyAxOC41IDUuNVY4QzE4LjUgOS4zIDE5LjUgMTAgMjIgMTBDMTkuNSAxMCAxOC41IDEwLjcgMTguNSAxMlYxNC41QzE4LjUgMTcgMTggMTggMTUgMTgiLz48L3N2Zz4%3D" alt="thanks.dev"></a>
+  <a href="https://github.com/sponsors/cedricdelpoux"><img src="https://img.shields.io/badge/GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
+  <a href="https://ko-fi.com/cedricdelpoux"><img src="https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Ko-fi"></a>
+  <a href="https://paypal.me/cedricdelpoux"><img src="https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
+</p>
 
 [badge-npm]: https://img.shields.io/npm/v/gatsby-strava-tiles.svg?style=flat-square
-[badge-npm-dl]: https://img.shields.io/npm/dt/gatsby-strava-tiles.svg?style=flat-square
-[badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/npm/dt/gatsby-strava-tiles.svg?style=flat-square
+[badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
 [badge-coverage]: https://img.shields.io/codecov/c/github/cedricdelpoux/strava-sync/main.svg?flag=gatsby-strava-tiles&style=flat-square
-[badge-prs-welcome]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
-[npm]: https://www.npmjs.org/package/gatsby-strava-tiles
+[badge-prs]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-sponsor]: https://img.shields.io/badge/sponsor-%E2%99%A5-ea4aaa.svg?style=flat-square
+[npm]: https://www.npmjs.com/package/gatsby-strava-tiles
+[actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
 [codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/gatsby-strava-tiles
-[github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
+[contributing]: https://github.com/cedricdelpoux/strava-sync/blob/main/CONTRIBUTING.md
+[licence]: https://github.com/cedricdelpoux/strava-sync/blob/main/LICENCE.md
+[sponsor]: #support-this-project
 [strava-tiles]: https://github.com/cedricdelpoux/strava-sync/tree/main/packages/strava-tiles
 [gatsby-source-strava]: https://github.com/cedricdelpoux/strava-sync/tree/main/packages/gatsby-source-strava
 [gatsby-source-ridewithgps]: https://github.com/cedricdelpoux/gatsby-source-ridewithgps

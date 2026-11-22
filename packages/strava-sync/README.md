@@ -1,9 +1,22 @@
-# strava-sync
+<div align="center">
+  <h1>strava-sync</h1>
+  <br/>
+  <p>
+    <img src="./logo.svg" alt="strava-sync" height="100px">
+  </p>
+  <br/>
 
 [![Npm][badge-npm]][npm]
 [![Build Status][badge-build]][actions]
 [![Coverage][badge-coverage]][codecov]
-[![MIT license][badge-licence]](./LICENCE.md)
+[![Downloads][badge-downloads]][npm]
+[![PRs welcome][badge-prs]][contributing]
+[![MIT license][badge-licence]][licence]
+[![Sponsor][badge-sponsor]][sponsor]
+
+</div>
+
+---
 
 `strava-sync` keeps a local copy of your [Strava](https://www.strava.com/) activities and routes up to date, within the rate limits.
 
@@ -109,26 +122,19 @@ Every function that logs takes a `logger` with `debug`, `info` and `warn` method
 
 ### Rate limits
 
-`stopOnRateLimit` makes a sync throw instead of stopping quietly with what it has. Without it, a sync stops on the first rate limit, keeps what it wrote, and leaves the cursor where it was, so the next run picks up the rest. With `waitOnRateLimit` on the client, the short limit is waited out instead, until the next quarter hour plus 5 seconds.
+Strava allows 100 requests every 15 minutes and 1000 a day. Without `stopOnRateLimit`, a sync stops on the first rate limit, keeps what it wrote and leaves the cursor where it was, so the next run picks up the rest. With `waitOnRateLimit` on the client, the short limit is waited out instead, until the next quarter hour plus 5 seconds. Read the [rate limits](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/strava-sync/docs/rate-limits.md) documentation before fetching more details of every activity.
 
-### Token refresh
+### Token
 
-Strava access tokens last 6 hours. The client refreshes an expired one and calls `onTokenRefresh` with the new token, which you should keep. `persistTokenToEnvFiles` rewrites `STRAVA_TOKEN` in the `.env` files that already hold it. The command line does it for you.
+Strava access tokens last 6 hours. The client refreshes an expired one and calls `onTokenRefresh` with the new token, which you should keep. `persistTokenToEnvFiles` rewrites `STRAVA_TOKEN` in the `.env` files that already hold it, and the command line does it for you. Read the [token](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/strava-sync/docs/token.md) documentation for the scopes.
 
 ### Store
 
-`createFileStore({dir})` writes one JSON file per activity, written to a temporary file then renamed so an interrupted run never leaves a truncated one:
+`createFileStore({dir})` writes one JSON file per activity in a directory you own, `.strava` in the examples. A run only fetches the activities started since the previous one. Any object with the same methods is a store, so a database can be plugged in. Read the [store](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/strava-sync/docs/store.md) documentation for the layout and the methods.
 
-```
-.strava/
-  activities/<id>.json
-  state.json            the lastFetch cursor
-  athlete.json
-  routes.json
-  route-streams/<id>.json
-```
+### Keeping the store in line with Strava
 
-Any object with the same methods is a store: `readActivities`, `readActivity`, `writeActivity`, `deleteActivity`, `readState`, `writeState`, `readAthlete`, `writeAthlete`, `readRoutes`, `writeRoutes`, `readRouteStream` and `writeRouteStream`. A database store can be plugged in that way.
+An activity edited or deleted on strava.com, or uploaded again, does not change on its own in the store. [`strava-sync activity`](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/strava-sync/docs/fetch-activity.md) fetches one activity again, and [`strava-sync activities --reconcile`](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/strava-sync/docs/sync-activities.md) compares the whole store with your account.
 
 ### Webhooks
 
@@ -171,20 +177,36 @@ An activity created or updated is fetched and written to the store, a deleted on
 - **Coordinates**: taken from the `latlng` stream, then `polyline`, then `summary_polyline`, rounded to 5 decimals, as `[lng, lat]`.
 - **Cursor**: `lastFetch` means everything older is stored, so it only moves after a complete walk of the history.
 
-## Contributing
+## Support this project
 
-- ⇄ Pull requests and ★ Stars are always welcome.
-- For bugs and feature requests, please [create an issue][github-issue].
+<p align="center">
+  <a href="https://github.com/cedricdelpoux"><img src="https://images.weserv.nl/?url=github.com/cedricdelpoux.png&w=128&h=128&fit=cover&mask=circle" width="64" height="64" alt="Cédric Delpoux"></a>
+</p>
 
-The tests mock the HTTP layer and never call Strava. The code is plain JavaScript. The types of the public API are written as [JSDoc](https://www.typescriptlang.org/docs/handbook/jsdoc-supported-types.html) comments: `npm run lint` checks them with TypeScript, and `npm pack` turns them into the `.d.ts` files of the package.
+<p align="center">
+  Hi, I'm <a href="https://cedricdelpoux.fr/en">Cédric</a>.<br>
+  Between my three kids, I maintain <a href="https://github.com/cedricdelpoux?tab=repositories">open source projects</a> during my free time.<br>
+  If my work is useful to you, a star, a one-time tip or a monthly sponsorship all help a lot.<br>
+  Thank you very much!
+</p>
 
-Versions are released from the [monorepo](../../README.md#releases) with changesets.
+<p align="center">
+  <a href="https://thanks.dev/u/gh/cedricdelpoux"><img src="https://img.shields.io/badge/thanks.dev-000000?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyMCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNiIgZD0iTTkgMkM2IDIgNS41IDMgNS41IDUuNVY4QzUuNSA5LjMgNC41IDEwIDIgMTBDNC41IDEwIDUuNSAxMC43IDUuNSAxMlYxNC41QzUuNSAxNyA2IDE4IDkgMThNMTUgMkMxOCAyIDE4LjUgMyAxOC41IDUuNVY4QzE4LjUgOS4zIDE5LjUgMTAgMjIgMTBDMTkuNSAxMCAxOC41IDEwLjcgMTguNSAxMlYxNC41QzE4LjUgMTcgMTggMTggMTUgMTgiLz48L3N2Zz4%3D" alt="thanks.dev"></a>
+  <a href="https://github.com/sponsors/cedricdelpoux"><img src="https://img.shields.io/badge/GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
+  <a href="https://ko-fi.com/cedricdelpoux"><img src="https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Ko-fi"></a>
+  <a href="https://paypal.me/cedricdelpoux"><img src="https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
+</p>
 
 [badge-npm]: https://img.shields.io/npm/v/strava-sync.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/npm/dt/strava-sync.svg?style=flat-square
 [badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
-[badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [badge-coverage]: https://img.shields.io/codecov/c/github/cedricdelpoux/strava-sync/main.svg?flag=strava-sync&style=flat-square
-[npm]: https://www.npmjs.org/package/strava-sync
-[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/strava-sync
+[badge-prs]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-sponsor]: https://img.shields.io/badge/sponsor-%E2%99%A5-ea4aaa.svg?style=flat-square
+[npm]: https://www.npmjs.com/package/strava-sync
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
-[github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
+[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/strava-sync
+[contributing]: https://github.com/cedricdelpoux/strava-sync/blob/main/CONTRIBUTING.md
+[licence]: https://github.com/cedricdelpoux/strava-sync/blob/main/LICENCE.md
+[sponsor]: #support-this-project

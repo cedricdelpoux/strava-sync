@@ -1,9 +1,22 @@
-# strava-declutter
+<div align="center">
+  <h1>strava-declutter</h1>
+  <br/>
+  <p>
+    <img src="./logo.svg" alt="strava-declutter" height="100px">
+  </p>
+  <br/>
 
 [![Npm][badge-npm]][npm]
 [![Build Status][badge-build]][actions]
 [![Coverage][badge-coverage]][codecov]
-[![MIT license][badge-licence]](./LICENCE.md)
+[![Downloads][badge-downloads]][npm]
+[![PRs welcome][badge-prs]][contributing]
+[![MIT license][badge-licence]][licence]
+[![Sponsor][badge-sponsor]][sponsor]
+
+</div>
+
+---
 
 `strava-declutter` draws each road of your [Strava](https://www.strava.com/) activities only once on a map.
 
@@ -65,20 +78,38 @@ An activity is any object with an `id`, a `start_date` and `coordinates`, a list
 
 Every function that logs takes a `logger` with `info`, `warn` and `error` methods. Nothing is logged by default, `consoleLogger` prints to the console.
 
-> Read the [declutter](./docs/declutter.md) documentation for the options, the result and the store.
+> Read the [declutter](https://github.com/cedricdelpoux/strava-sync/blob/main/packages/strava-declutter/docs/declutter.md) documentation for the options, the result and the store.
 
-## Contributing
+## Support this project
 
-- ⇄ Pull requests and ★ Stars are always welcome.
-- For bugs and feature requests, please [create an issue][github-issue].
+<p align="center">
+  <a href="https://github.com/cedricdelpoux"><img src="https://images.weserv.nl/?url=github.com/cedricdelpoux.png&w=128&h=128&fit=cover&mask=circle" width="64" height="64" alt="Cédric Delpoux"></a>
+</p>
 
-Versions are released from the [monorepo](../../README.md#releases) with changesets.
+<p align="center">
+  Hi, I'm <a href="https://cedricdelpoux.fr/en">Cédric</a>.<br>
+  Between my three kids, I maintain <a href="https://github.com/cedricdelpoux?tab=repositories">open source projects</a> during my free time.<br>
+  If my work is useful to you, a star, a one-time tip or a monthly sponsorship all help a lot.<br>
+  Thank you very much!
+</p>
+
+<p align="center">
+  <a href="https://thanks.dev/u/gh/cedricdelpoux"><img src="https://img.shields.io/badge/thanks.dev-000000?style=for-the-badge&logo=data:image/svg%2bxml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyMCI%2BPHBhdGggZmlsbD0ibm9uZSIgc3Ryb2tlPSIjZmZmIiBzdHJva2Utd2lkdGg9IjIuNiIgZD0iTTkgMkM2IDIgNS41IDMgNS41IDUuNVY4QzUuNSA5LjMgNC41IDEwIDIgMTBDNC41IDEwIDUuNSAxMC43IDUuNSAxMlYxNC41QzUuNSAxNyA2IDE4IDkgMThNMTUgMkMxOCAyIDE4LjUgMyAxOC41IDUuNVY4QzE4LjUgOS4zIDE5LjUgMTAgMjIgMTBDMTkuNSAxMCAxOC41IDEwLjcgMTguNSAxMlYxNC41QzE4LjUgMTcgMTggMTggMTUgMTgiLz48L3N2Zz4%3D" alt="thanks.dev"></a>
+  <a href="https://github.com/sponsors/cedricdelpoux"><img src="https://img.shields.io/badge/GitHub%20Sponsors-ea4aaa?style=for-the-badge&logo=githubsponsors&logoColor=white" alt="GitHub Sponsors"></a>
+  <a href="https://ko-fi.com/cedricdelpoux"><img src="https://img.shields.io/badge/Ko--fi-FF5E5B?style=for-the-badge&logo=kofi&logoColor=white" alt="Ko-fi"></a>
+  <a href="https://paypal.me/cedricdelpoux"><img src="https://img.shields.io/badge/PayPal-00457C?style=for-the-badge&logo=paypal&logoColor=white" alt="PayPal"></a>
+</p>
 
 [badge-npm]: https://img.shields.io/npm/v/strava-declutter.svg?style=flat-square
+[badge-downloads]: https://img.shields.io/npm/dt/strava-declutter.svg?style=flat-square
 [badge-build]: https://img.shields.io/github/actions/workflow/status/cedricdelpoux/strava-sync/ci.yml?branch=main&style=flat-square
-[badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
 [badge-coverage]: https://img.shields.io/codecov/c/github/cedricdelpoux/strava-sync/main.svg?flag=strava-declutter&style=flat-square
-[npm]: https://www.npmjs.org/package/strava-declutter
-[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/strava-declutter
+[badge-prs]: https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square
+[badge-licence]: https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square
+[badge-sponsor]: https://img.shields.io/badge/sponsor-%E2%99%A5-ea4aaa.svg?style=flat-square
+[npm]: https://www.npmjs.com/package/strava-declutter
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
-[github-issue]: https://github.com/cedricdelpoux/strava-sync/issues/new
+[codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync/tree/main/packages/strava-declutter
+[contributing]: https://github.com/cedricdelpoux/strava-sync/blob/main/CONTRIBUTING.md
+[licence]: https://github.com/cedricdelpoux/strava-sync/blob/main/LICENCE.md
+[sponsor]: #support-this-project
