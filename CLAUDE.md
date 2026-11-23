@@ -45,16 +45,12 @@ Run from the root.
 - `npm run format`: `prettier --write .`.
 - `npm pack --dry-run -w <package>`: check the published files.
 
-## Commits
-
-Commits follow Conventional Commits. When a commit touches a single package, the package name is its scope, as in `fix(strava-tiles): create the folder of the output file` or `feat(strava-sync): export the OAuth helpers`. A commit that spans several packages or only root files has no scope, as in `ci: ...` or `docs: ...`. The release commit is `chore: bump packages versions`.
-
 ## Releases
 
 Independent versions with changesets (`.changeset/config.json`, base branch `main`). There is no "Version packages" pull request: the repository has a single maintainer, so releases are versioned locally.
 
 - A change to a package comes with a changeset: `npm run changeset`.
-- To release, version locally and push to `main`: run `npx npm@11 run version-packages`, which applies the changesets and refreshes the lock, then commit `chore: bump packages versions` and push it.
+- To release, version locally and push to `main`: run `npx npm@11 run version-packages`, which applies the changesets and refreshes the lock, then commit one `chore(<package>): bump version to vX.Y.Z` per bumped package (the root lock in the last one) and push to `main`.
 - `.github/workflows/release.yml` runs `changesets/action` on `main`. With no pending changeset left, it publishes the new versions (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token). If it ever opens a "Version packages" pull request, close it and version locally instead.
 - A new package is published once by hand (`npm publish -w <name> --access public`), because npm only sets a trusted publisher on an existing package. Then set its trusted publisher on npmjs.com: `cedricdelpoux/strava-sync`, workflow `release.yml`, no environment. The trusted publisher stays "pending validation" until one CI publish succeeds.
 - Never publish a package that depends on a new version before that version is `latest` on npm.

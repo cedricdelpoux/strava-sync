@@ -32,6 +32,8 @@ Gatsby has no strict port option, so it offers another port when the pinned one 
 
 ## Commit messages
 
+## Commit messages
+
 Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `type: subject`, for example `fix:`, `feat:`, `chore:` or `docs:`. The subject starts with a verb in the imperative mood, such as `fix: refresh the token before it expires`.
 
-When a commit touches a single package, the package name goes in the scope, for example `feat(strava-sync): export the OAuth helpers`. A commit that spans several packages or only root files has no scope, for example `ci: run the tests on Node 24`.
+When a commit touches a single package, use the package name as the scope, for example `fix(strava-tiles): create the folder of the output file`. A commit that spans several packages or only root files has no scope.
