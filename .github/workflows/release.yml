@@ -8,7 +8,6 @@ concurrency: ${{ github.workflow }}-${{ github.ref }}
 
 permissions:
   contents: write
-  pull-requests: write
   # Lets npm authenticate the workflow without a token (trusted publishing)
   id-token: write
 
@@ -27,9 +26,14 @@ jobs:
 
       - run: npm ci --ignore-scripts
 
+      - name: Refuse to run with a pending changeset
+        run: |
+          pending=$(find .changeset -maxdepth 1 -name '*.md' ! -name README.md)
+          if [ -n "$pending" ]; then
+            echo "::error::A changeset is pending: version the packages locally with \`npx npm@11 run version-packages\`, commit one \`chore(<package>): bump version to vX.Y.Z\` per package and push."
+            exit 1
+          fi
+
       - uses: changesets/action@v2
         with:
-          version-script: npm run version-packages
           publish-script: npm run release
-          pr-title: "chore: bump packages versions"
-          commit-message: "chore: bump packages versions"

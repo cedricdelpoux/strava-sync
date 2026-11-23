@@ -51,7 +51,7 @@ Independent versions with changesets (`.changeset/config.json`, base branch `mai
 
 - A change to a package comes with a changeset: `npm run changeset`.
 - To release, version locally and push to `main`: run `npx npm@11 run version-packages`, which applies the changesets and refreshes the lock, then commit one `chore(<package>): bump version to vX.Y.Z` per bumped package (the root lock in the last one) and push to `main`.
-- `.github/workflows/release.yml` runs `changesets/action` on `main`. With no pending changeset left, it publishes the new versions (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token). If it ever opens a "Version packages" pull request, close it and version locally instead.
+- `.github/workflows/release.yml` runs `changesets/action` on `main`. With no pending changeset left, it publishes the new versions (`npm run release`, i.e. `changeset publish`) through npm trusted publishing (OIDC, no token). A step before it fails the workflow when a changeset is still pending, so the action never opens a "Version packages" pull request.
 - A new package is published once by hand (`npm publish -w <name> --access public`), because npm only sets a trusted publisher on an existing package. Then set its trusted publisher on npmjs.com: `cedricdelpoux/strava-sync`, workflow `release.yml`, no environment. The trusted publisher stays "pending validation" until one CI publish succeeds.
 - Never publish a package that depends on a new version before that version is `latest` on npm.
 - Tags are `<package>@<version>`. The ones imported before the merge are `gatsby-strava-declutter@0.1.0`, `gatsby-strava-declutter@0.2.0` and `gatsby-remark-strava@1.0.0`, the gatsby plugin keeps its old `v1.0.0` tag.
