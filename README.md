@@ -1,16 +1,12 @@
-<div>
-  <h1>strava-sync<br/><a href="https://www.strava.com"><picture><source media="(prefers-color-scheme: dark)" srcset=".github/assets/powered-by-strava-white.svg"><img src=".github/assets/powered-by-strava-orange.svg" alt="Powered by Strava" height="12"></picture></a></h1>
+<div align="center">
+  <h1 align="center">strava-sync<br/><a href="https://www.strava.com"><img src=".github/assets/powered-by-strava.svg" alt="Powered by Strava" height="12"></a></h1>
   <br/>
   <p>
     <img src="./logo.svg" alt="strava-sync" height="100px">
   </p>
   <br/>
 
-[![Build Status][badge-build]][actions]
-[![Coverage][badge-coverage]][codecov]
-[![MIT license][badge-licence]](./LICENCE.md)
-[![PRs welcome][badge-prs]](./CONTRIBUTING.md)
-[![Sponsor][badge-sponsor]](#support-this-project)
+[![Build Status][badge-build]][actions] [![Coverage][badge-coverage]][codecov] [![MIT license][badge-licence]](./LICENCE.md) [![PRs welcome][badge-prs]](./CONTRIBUTING.md) [![Sponsor][badge-sponsor]](#support-this-project)
 
 </div>
 
