@@ -14,15 +14,64 @@
 
 Use Strava as a content source. This monorepo holds the packages that keep a local copy of your Strava activities and routes within the rate limits, turn that copy into maps, and put all of it in Gatsby pages and embeds.
 
-|                                     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;                                     | Package                                                  | Version                                | Downloads          | Use it for                                 |
-| :----------------------------------------------------------------------------------------------------------------------------------------------: | -------------------------------------------------------- | -------------------------------------- | ------------------ | ------------------------------------------ |
-|             <a href="./packages/strava-sync"><img src=".github/assets/icons/strava-sync.svg" width="24" height="24" align="top"></a>             | [![][b-sync]](./packages/strava-sync)                    | [![npm][v-sync]][n-sync]               | ![][d-sync]        | Local cache, rate limits, incremental sync |
-|        <a href="./packages/strava-declutter"><img src=".github/assets/icons/strava-declutter.svg" width="24" height="24" align="top"></a>        | [![][b-declutter]](./packages/strava-declutter)          | [![npm][v-declutter]][n-declutter]     | ![][d-declutter]   | Decluttered activities on map              |
-|            <a href="./packages/strava-tiles"><img src=".github/assets/icons/strava-tiles.svg" width="24" height="24" align="top"></a>            | [![][b-tiles]](./packages/strava-tiles)                  | [![npm][v-tiles]][n-tiles]             | ![][d-tiles]       | Tiles on map                               |
-|    <a href="./packages/gatsby-source-strava"><img src=".github/assets/icons/gatsby-source-strava.svg" width="46" height="24" align="top"></a>    | [![][b-source]](./packages/gatsby-source-strava)         | [![npm][v-source]][n-source]           | ![][d-source]      | Gatsby site                                |
-| <a href="./packages/gatsby-strava-declutter"><img src=".github/assets/icons/gatsby-strava-declutter.svg" width="46" height="24" align="top"></a> | [![][b-g-declutter]](./packages/gatsby-strava-declutter) | [![npm][v-g-declutter]][n-g-declutter] | ![][d-g-declutter] | Gatsby decluttered map                     |
-|     <a href="./packages/gatsby-strava-tiles"><img src=".github/assets/icons/gatsby-strava-tiles.svg" width="46" height="24" align="top"></a>     | [![][b-g-tiles]](./packages/gatsby-strava-tiles)         | [![npm][v-g-tiles]][n-g-tiles]         | ![][d-g-tiles]     | Gatsby covered tiles                       |
-|    <a href="./packages/gatsby-remark-strava"><img src=".github/assets/icons/gatsby-remark-strava.svg" width="46" height="24" align="top"></a>    | [![][b-remark]](./packages/gatsby-remark-strava)         | [![npm][v-remark]][n-remark]           | ![][d-remark]      | Markdown / MDX                             |
+<table>
+  <tr>
+    <th></th>
+    <th align="left">Package</th>
+    <th align="left">Version</th>
+    <th align="left">Downloads</th>
+    <th align="left">Use it for</th>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/strava-sync"><img align="texttop" src=".github/assets/icons/strava-sync.svg" width="20" height="20" alt="strava-sync"></a></td>
+    <td valign="middle"><a href="./packages/strava-sync"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=strava-sync&color=000605&logo=github&logoColor=white&labelColor=000605" alt="strava-sync"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/strava-sync"><img align="texttop" src="https://img.shields.io/npm/v/strava-sync.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/strava-sync.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Local cache, rate limits, incremental sync</td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/strava-declutter"><img align="texttop" src=".github/assets/icons/strava-declutter.svg" width="20" height="20" alt="strava-declutter"></a></td>
+    <td valign="middle"><a href="./packages/strava-declutter"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=strava-declutter&color=000605&logo=github&logoColor=white&labelColor=000605" alt="strava-declutter"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/strava-declutter"><img align="texttop" src="https://img.shields.io/npm/v/strava-declutter.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/strava-declutter.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Decluttered activities on map</td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/strava-tiles"><img align="texttop" src=".github/assets/icons/strava-tiles.svg" width="20" height="20" alt="strava-tiles"></a></td>
+    <td valign="middle"><a href="./packages/strava-tiles"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=strava-tiles&color=000605&logo=github&logoColor=white&labelColor=000605" alt="strava-tiles"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/strava-tiles"><img align="texttop" src="https://img.shields.io/npm/v/strava-tiles.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/strava-tiles.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Tiles on map</td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/gatsby-source-strava"><img align="texttop" src=".github/assets/icons/gatsby-source-strava.svg" width="38" height="20" alt="gatsby-source-strava"></a></td>
+    <td valign="middle"><a href="./packages/gatsby-source-strava"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-source-strava&color=000605&logo=github&logoColor=white&labelColor=000605" alt="gatsby-source-strava"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/gatsby-source-strava"><img align="texttop" src="https://img.shields.io/npm/v/gatsby-source-strava.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/gatsby-source-strava.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Gatsby site</td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/gatsby-strava-declutter"><img align="texttop" src=".github/assets/icons/gatsby-strava-declutter.svg" width="38" height="20" alt="gatsby-strava-declutter"></a></td>
+    <td valign="middle"><a href="./packages/gatsby-strava-declutter"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-strava-declutter&color=000605&logo=github&logoColor=white&labelColor=000605" alt="gatsby-strava-declutter"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/gatsby-strava-declutter"><img align="texttop" src="https://img.shields.io/npm/v/gatsby-strava-declutter.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/gatsby-strava-declutter.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Gatsby decluttered map</td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/gatsby-strava-tiles"><img align="texttop" src=".github/assets/icons/gatsby-strava-tiles.svg" width="38" height="20" alt="gatsby-strava-tiles"></a></td>
+    <td valign="middle"><a href="./packages/gatsby-strava-tiles"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-strava-tiles&color=000605&logo=github&logoColor=white&labelColor=000605" alt="gatsby-strava-tiles"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/gatsby-strava-tiles"><img align="texttop" src="https://img.shields.io/npm/v/gatsby-strava-tiles.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/gatsby-strava-tiles.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Gatsby covered tiles</td>
+  </tr>
+  <tr>
+    <td align="center" valign="middle"><a href="./packages/gatsby-remark-strava"><img align="texttop" src=".github/assets/icons/gatsby-remark-strava.svg" width="38" height="20" alt="gatsby-remark-strava"></a></td>
+    <td valign="middle"><a href="./packages/gatsby-remark-strava"><img align="texttop" src="https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-remark-strava&color=000605&logo=github&logoColor=white&labelColor=000605" alt="gatsby-remark-strava"></a></td>
+    <td valign="middle"><a href="https://www.npmjs.com/package/gatsby-remark-strava"><img align="texttop" src="https://img.shields.io/npm/v/gatsby-remark-strava.svg?style=flat-square" alt="npm"></a></td>
+    <td valign="middle"><img align="texttop" src="https://img.shields.io/npm/dt/gatsby-remark-strava.svg?style=flat-square&label=Downloads" alt="Downloads"></td>
+    <td valign="middle">Markdown / MDX</td>
+  </tr>
+</table>
 
 ## Support this project
 
@@ -32,7 +81,7 @@ Use Strava as a content source. This monorepo holds the packages that keep a loc
 
 <p align="center">
   Hi, I'm <a href="https://cedricdelpoux.fr/en">Cédric</a>.<br>
-  Between my three kids, I maintain <a href="https://github.com/cedricdelpoux?tab=repositories">open source projects</a> during my free time.<br>
+  Between my three kids, I maintain <a href="https://github.com/cedricdelpoux">open source projects</a> during my free time.<br>
   If my work is useful to you, a star, a one-time tip or a monthly sponsorship all help a lot.<br>
   Thank you very much!
 </p>
@@ -51,31 +100,3 @@ Use Strava as a content source. This monorepo holds the packages that keep a loc
 [badge-sponsor]: https://img.shields.io/badge/sponsor-%E2%99%A5-ea4aaa.svg?style=flat-square
 [actions]: https://github.com/cedricdelpoux/strava-sync/actions/workflows/ci.yml
 [codecov]: https://app.codecov.io/gh/cedricdelpoux/strava-sync
-[b-sync]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=strava-sync&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-sync]: https://img.shields.io/npm/dt/strava-sync.svg?style=flat-square&label=Downloads
-[b-declutter]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=strava-declutter&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-declutter]: https://img.shields.io/npm/dt/strava-declutter.svg?style=flat-square&label=Downloads
-[b-tiles]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=strava-tiles&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-tiles]: https://img.shields.io/npm/dt/strava-tiles.svg?style=flat-square&label=Downloads
-[b-source]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-source-strava&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-source]: https://img.shields.io/npm/dt/gatsby-source-strava.svg?style=flat-square&label=Downloads
-[b-g-declutter]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-strava-declutter&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-g-declutter]: https://img.shields.io/npm/dt/gatsby-strava-declutter.svg?style=flat-square&label=Downloads
-[b-g-tiles]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-strava-tiles&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-g-tiles]: https://img.shields.io/npm/dt/gatsby-strava-tiles.svg?style=flat-square&label=Downloads
-[b-remark]: https://img.shields.io/static/v1?style=flat-square&label=%20&message=gatsby-remark-strava&color=000605&logo=github&logoColor=white&labelColor=000605
-[d-remark]: https://img.shields.io/npm/dt/gatsby-remark-strava.svg?style=flat-square&label=Downloads
-[v-sync]: https://img.shields.io/npm/v/strava-sync.svg?style=flat-square
-[n-sync]: https://www.npmjs.com/package/strava-sync
-[v-declutter]: https://img.shields.io/npm/v/strava-declutter.svg?style=flat-square
-[n-declutter]: https://www.npmjs.com/package/strava-declutter
-[v-tiles]: https://img.shields.io/npm/v/strava-tiles.svg?style=flat-square
-[n-tiles]: https://www.npmjs.com/package/strava-tiles
-[v-source]: https://img.shields.io/npm/v/gatsby-source-strava.svg?style=flat-square
-[n-source]: https://www.npmjs.com/package/gatsby-source-strava
-[v-g-declutter]: https://img.shields.io/npm/v/gatsby-strava-declutter.svg?style=flat-square
-[n-g-declutter]: https://www.npmjs.com/package/gatsby-strava-declutter
-[v-g-tiles]: https://img.shields.io/npm/v/gatsby-strava-tiles.svg?style=flat-square
-[n-g-tiles]: https://www.npmjs.com/package/gatsby-strava-tiles
-[v-remark]: https://img.shields.io/npm/v/gatsby-remark-strava.svg?style=flat-square
-[n-remark]: https://www.npmjs.com/package/gatsby-remark-strava
