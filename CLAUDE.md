@@ -21,7 +21,7 @@ Each package has a `logo.svg` (the README header) and a table icon in `.github/a
 - The logo is the Strava app icon: an orange `#FC4C02` tile (224 px, `rx` 56) with the white Strava chevron centred in it. The chevron never moves.
 - The bottom-right badge says what the package does. The bottom-left badge is the framework it plugs into, and only framework packages have one. Both are discs of radius 51 centred on the tile corners, (224, 224) and (0, 224), each with a transparent gap of radius 65 cut into the tile.
 - Every logo uses the same `viewBox="-53 -2 330 279"`, so the tile renders at the same size and place in every README header.
-- Badge colours, with a white glyph: sync `#0969DA`, declutter funnel `#1A7F37`, tiles grid `#BF3989`, remark M↓ `#5F6368`, Gatsby `#639`. A new feature or framework (Astro, Next) gets its own colour, distinct from these and from the Strava orange.
+- Badge colours, with a white glyph: sync `#0969DA`, declutter funnel `#1A7F37`, tiles grid `#BF3989`, remark M↓ `#3D444D` at 90% opacity, Gatsby `#639`. A new feature or framework (Astro, Next) gets its own colour, distinct from these and from the Strava orange.
 - The table icon is the feature disc alone, or for a framework package, the framework disc on the left, partly hidden behind the feature disc on the right, both the same size, with a gap cut between them.
 
 ## Examples
